@@ -121,3 +121,122 @@
     max-height: 420px;
   }
 }
+.aiDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.dropZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  font: inherit;
+}
+.dropZone:hover,
+.dropZoneActive {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: var(--brand-tint);
+}
+.draftList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.draftRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.draftRow:hover {
+  background: var(--brand-tint);
+}
+.draftRowActive {
+  background: var(--row-selected);
+  box-shadow: inset 3px 0 0 var(--accent-ems);
+}
+.draftTitle {
+  font-weight: 600;
+}
+.draftDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.sourceText {
+  white-space: pre-wrap;
+  max-height: 320px;
+  overflow: auto;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--brand-tint);
+  font-size: 12px;
+}
+.itemCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.itemDone {
+  opacity: 0.75;
+}
+.itemHead {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.gqm {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.gqm dt {
+  color: var(--ink-3);
+}
+.gqm dd {
+  margin: 0;
+}
+.quote {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent-ems);
+  background: var(--brand-tint);
+  border-radius: 0 8px 8px 0;
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--ink-2);
+}
+.warning {
+  font-size: 12px;
+  color: var(--status-warn-ink, var(--ink-2));
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--status-warn) 12%, transparent);
+}
+.itemActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

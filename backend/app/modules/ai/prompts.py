@@ -162,3 +162,54 @@ def experiment_messages(design: dict[str, Any], result: dict[str, Any]) -> list[
 def widget_messages(title: str, columns: list[str], rows: list[list[Any]]) -> list[dict[str, str]]:
     table = "\n".join([" | ".join(columns), *(" | ".join(str(v) for v in r) for r in rows[:60])])
     return [{"role": "system", "content": WIDGET_SYSTEM}, {"role": "user", "content": f"{title}\n\n{table}"}]
+
+
+TRACKING_SYSTEM = """Ты — аналитик продукта мобильной игры. Тебе дают документ с описанием новой версии \
+(фичи, изменения, эксперименты) и текущий реестр событий аналитики. Предложи разметку: какие события \
+нужно завести или изменить, чтобы измерить фичи из документа.
+
+Правила:
+- Имена событий в snake_case по схеме объект_действие: shop_open, offer_purchase, quest_complete.
+- Сначала ищи подходящее событие в реестре. Если оно есть — предлагай "update" с недостающими параметрами, \
+а не новое событие с похожим смыслом.
+- Глобальные параметры (они уже есть в каждом событии) в params не включай.
+- Типы параметров: string, int, float, bool, enum (тогда перечисли значения в enum), timestamp, json.
+- Для каждого события укажи цель (goal) и вопрос, на который оно отвечает (question), и дословную цитату \
+из документа (quote), на которой основано предложение.
+- Не придумывай фичи, которых нет в документе. Если документ не про продукт — верни пустой список.
+
+Ответ — только JSON без пояснений:
+{"summary": "2–3 предложения: что меняется в версии и что предлагается разметить",
+ "events": [{"action": "create" | "update", "name": "...", "description": "...", "category": "...",
+   "goal": "...", "question": "...", "rationale": "почему это событие нужно",
+   "quote": "цитата из документа",
+   "params": [{"name": "...", "type": "string", "required": true, "description": "...", "enum": []}]}]}
+Для "update" в params перечисли только новые или изменённые параметры."""
+
+
+def tracking_messages(
+    document: str, registry: list[dict[str, Any]], global_params: list[str], app_version: str = ""
+) -> list[dict[str, str]]:
+    reg = "\n".join(
+        f"- {e['name']}: {e.get('description', '')} | params: "
+        + (", ".join(f"{p['name']}:{p['type']}" for p in e.get("params", [])) or "—")
+        for e in registry[:200]
+    )
+    user = (
+        f"Версия приложения: {app_version or 'не указана'}\n\n"
+        f"Глобальные параметры: {', '.join(global_params) or '—'}\n\n"
+        f"Текущий реестр событий:\n{reg or '— пусто —'}\n\n"
+        f"Документ:\n<<<\n{document}\n>>>"
+    )
+    return [{"role": "system", "content": TRACKING_SYSTEM}, {"role": "user", "content": user}]
+
+
+def parse_json_object(text: str) -> dict[str, Any]:
+    """The first JSON object in a model answer (tolerates ```json fences and surrounding prose)."""
+    start, end = text.find("{"), text.rfind("}")
+    if start < 0 or end <= start:
+        raise ValueError("в ответе нет JSON-объекта")
+    data = json.loads(text[start : end + 1])
+    if not isinstance(data, dict):
+        raise ValueError("ожидался JSON-объект")
+    return data

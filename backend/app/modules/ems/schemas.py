@@ -222,3 +222,53 @@ class ChannelOut(Schema):
     project_ids: list[uuid.UUID] | None
     enabled: bool
     has_secrets: bool = False
+
+
+class TrackingDraftItemOut(Schema):
+    id: uuid.UUID
+    action: Literal["create", "update"]
+    name: str
+    event_id: uuid.UUID | None
+    description: str
+    category: str
+    goal: str
+    question: str
+    params: list[ParamIn]
+    rationale: str
+    quote: str
+    warnings: list[str]
+    status: Literal["pending", "accepted", "rejected"]
+    reviewed_by: str
+    result_version: str
+    # for updates: what changes against the current version
+    diff: dict[str, Any] | None = None
+
+
+class TrackingDraftSummary(Schema):
+    id: uuid.UUID
+    project_id: uuid.UUID
+    title: str
+    filename: str
+    app_version: str
+    summary: str
+    created_by: str
+    created_at: datetime
+    model: str
+    pending: int = 0
+    accepted: int = 0
+    rejected: int = 0
+
+
+class TrackingDraftOut(TrackingDraftSummary):
+    truncated: bool
+    source_text: str
+    items: list[TrackingDraftItemOut]
+
+
+class TrackingDraftItemPatch(Schema):
+    name: str | None = None
+    description: str | None = None
+    category: str | None = None
+    goal: str | None = None
+    question: str | None = None
+    params: list[ParamIn] | None = None

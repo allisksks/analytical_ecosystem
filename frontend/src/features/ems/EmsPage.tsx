@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Download, FileUp, Plus, ScanSearch, ShieldCheck } from "lucide-react";
+import { Download, FileUp, Plus, ScanSearch, ShieldCheck, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import { downloadGet as download } from "../../shared/api/download";
@@ -21,15 +21,17 @@ import {
   useToast,
 } from "../../shared/ui";
 import { useCan } from "../auth/AuthProvider";
+import { useAiStatus } from "../ai/api";
 import { useProject } from "../projects/ProjectProvider";
 import { AlertsTab, GlobalParamsTab, GovernanceTab, SettingsTab } from "./EmsTabs";
+import { AiDraftDialog, AiDraftsTab } from "./AiDrafts";
 import { DiscoverDialog, ImportDialog, NewEventDialog } from "./EmsDialogs";
 import { EventDetail } from "./EventDetail";
-import { useAlerts, useEmsMutations, useEvents, useRuns } from "./api";
+import { useAiDrafts, useAlerts, useEmsMutations, useEvents, useRuns } from "./api";
 import { HEALTH_TONE, STATUS_TONE } from "./emsStyle";
 import s from "./ems.module.css";
 
-type Section = "registry" | "alerts" | "governance" | "globalParams" | "settings";
+type Section = "registry" | "aiDrafts" | "alerts" | "governance" | "globalParams" | "settings";
 const FORMATS = [
   ["json_schema", "JSON Schema"],
   ["typescript", "TypeScript"],
@@ -51,7 +53,10 @@ export function EmsPage() {
   const runs = useRuns(pid);
   const m = useEmsMutations();
   const [q, setQ] = useState("");
-  const [dialog, setDialog] = useState<"new" | "import" | "discover" | null>(null);
+  const [dialog, setDialog] = useState<"new" | "import" | "discover" | "ai" | null>(null);
+  const ai = useAiStatus();
+  const aiDrafts = useAiDrafts(pid);
+  const aiPending = (aiDrafts.data ?? []).reduce((n, d) => n + d.pending, 0);
   const list = useMemo(
     () => (events.data ?? []).filter((e) => !q || e.name.includes(q.toLowerCase())),
     [events.data, q],
@@ -71,7 +76,7 @@ export function EmsPage() {
     <PageBody wide>
       <PageHeader
         crumbs={[t("ems.title"), project.name]}
-        title={t(`ems.${section}` as TKey)}
+        title={section === "aiDrafts" ? t("ems.ai.tab") : t(`ems.${section}` as TKey)}
         subtitle={
           lastRun
             ? t("ems.lastRun", {
@@ -120,6 +125,11 @@ export function EmsPage() {
             )}
             {can("events:edit", pid) && (
               <>
+                {ai.data?.enabled && (
+                  <Button icon={<Sparkles size={16} />} onClick={() => setDialog("ai")}>
+                    {t("ems.ai.title")}
+                  </Button>
+                )}
                 <Button icon={<FileUp size={16} />} onClick={() => setDialog("import")}>
                   {t("ems.import")}
                 </Button>
@@ -152,6 +162,9 @@ export function EmsPage() {
         onChange={(k) => setParams({ tab: k })}
         items={[
           { key: "registry", label: t("ems.registry"), count: events.data?.length },
+          ...(ai.data?.enabled || aiDrafts.data?.length
+            ? [{ key: "aiDrafts" as const, label: t("ems.ai.tab"), count: aiPending || undefined }]
+            : []),
           { key: "alerts", label: t("ems.alerts"), count: alerts.data?.length },
           { key: "governance", label: t("ems.governance") },
           { key: "globalParams", label: t("ems.globalParams") },
@@ -228,12 +241,23 @@ export function EmsPage() {
               )}
             </div>
           ))}
+        {section === "aiDrafts" && <AiDraftsTab projectId={project.id} onNew={() => setDialog("ai")} />}
         {section === "alerts" && <AlertsTab projectId={project.id} />}
         {section === "governance" && <GovernanceTab projectId={project.id} />}
         {section === "globalParams" && <GlobalParamsTab />}
         {section === "settings" && <SettingsTab projectId={project.id} />}
       </div>
       {dialog === "new" && <NewEventDialog projectId={project.id} onClose={() => setDialog(null)} />}
+      {dialog === "ai" && (
+        <AiDraftDialog
+          projectId={project.id}
+          onClose={() => setDialog(null)}
+          onCreated={(id) => {
+            setDialog(null);
+            setParams({ tab: "aiDrafts", draft: id });
+          }}
+        />
+      )}
       {dialog === "import" && <ImportDialog projectId={project.id} onClose={() => setDialog(null)} />}
       {dialog === "discover" && <DiscoverDialog projectId={project.id} onClose={() => setDialog(null)} />}
     </PageBody>
