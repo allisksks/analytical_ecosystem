@@ -9,7 +9,7 @@
 Шлюз говорит с любым **OpenAI-совместимым API** (`/v1/chat/completions`, `/v1/embeddings`), поэтому
 модель меняется только переменными окружения. Ниже — два проверенных варианта.
 
-| | A. Yandex AI Studio, Qwen3 235B | B. Локальный Ollama, Qwen3 8B |
+| | A. Yandex AI Studio, Qwen3.6 35B | B. Локальный Ollama, Qwen3 8B |
 |---|---|---|
 | Где работает модель | облако Yandex Cloud | ваш сервер, данные не уходят наружу |
 | Что нужно | аккаунт Yandex Cloud, API-ключ | ~8 ГБ RAM (лучше GPU), 6 ГБ диска |
@@ -23,7 +23,7 @@
 
 ---
 
-## Вариант A. Yandex AI Studio (Qwen3 235B)
+## Вариант A. Yandex AI Studio (Qwen3.6 35B)
 
 ### 1. Получить ключ (≈ 5 минут, в консоли Yandex Cloud)
 
@@ -41,13 +41,17 @@ AI_BASE_URL=https://llm.api.cloud.yandex.net/v1
 AI_API_KEY=<секрет API-ключа>
 AI_PROJECT_HEADER=OpenAI-Project
 AI_PROJECT_ID=<folder_id>
-AI_CHAT_MODEL=gpt://<folder_id>/qwen3-235b-a22b-fp8/latest
+AI_CHAT_MODEL=gpt://<folder_id>/qwen3.6-35b-a3b/latest
 # семантический поиск по базе знаний (можно оставить пустым — будет полнотекстовый поиск)
 AI_EMBEDDING_MODEL=emb://<folder_id>/text-search-doc/latest
 AI_ALLOW_CLOUD=true
 ```
 
 Если провайдер ответит `401` на заголовок `Bearer`, поставьте `AI_AUTH_SCHEME=Api-Key`.
+
+Каталог моделей AI Studio меняется. Если модель отвечает `403 Forbidden`, а ключ рабочий (например,
+`gpt://<folder_id>/yandexgpt/latest` отвечает), значит модели с таким именем больше нет: откройте
+**AI Studio → Model Gallery → Модели**, карточку нужной модели, и скопируйте её URI в `AI_CHAT_MODEL`.
 
 ### 3. Запустить и проверить
 
