@@ -19,3 +19,15 @@ async def test_healthz_and_readyz() -> None:
         r = await client.get("/api/v1/openapi.json")
         assert r.status_code == 200
         assert r.json()["openapi"].startswith("3.1")
+
+
+def test_cors_origins_from_plain_env(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Docker Compose passes CORS_ORIGINS as a plain URL — the API must start with it."""
+    from app.core.config import Settings
+
+    monkeypatch.setenv("CORS_ORIGINS", "http://localhost:8080")
+    assert Settings().cors_origins == ["http://localhost:8080"]
+    monkeypatch.setenv("CORS_ORIGINS", "https://a.example, https://b.example")
+    assert Settings().cors_origins == ["https://a.example", "https://b.example"]
+    monkeypatch.setenv("CORS_ORIGINS", '["https://c.example"]')
+    assert Settings().cors_origins == ["https://c.example"]
