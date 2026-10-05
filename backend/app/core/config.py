@@ -32,9 +32,19 @@ class Settings(BaseSettings):
     access_token_ttl_minutes: int = 60
     refresh_token_ttl_days: int = 14
     auth_mode: Literal["local", "oidc"] = "local"
+    mfa_required_for_admins: bool = True
+    cookie_secure: bool = True
     oidc_issuer: str | None = None
     oidc_audience: str | None = None
     oidc_jwks_url: str | None = None
+
+    # --- first start ---
+    bootstrap_admin_email: str = "admin@example.com"
+    bootstrap_admin_password: SecretStr | None = None
+    bootstrap_demo: bool = False
+    # password for demo users of every role (only when bootstrap_demo is on)
+    bootstrap_demo_password: SecretStr = SecretStr("demo-pass-2026")
+    clickhouse_demo_url: str | None = None
 
     # --- query service ---
     query_default_limit: int = 10_000

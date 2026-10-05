@@ -10,8 +10,17 @@ from scripts.generate_demo_data import generate
 
 def test_generator_produces_all_tables_and_stories(tmp_path: Path) -> None:
     counts = generate(tmp_path, scale=0.05, days=91, end=date(2026, 5, 31), seed=7)
-    expected = {"users", "events", "payments", "ad_revenue", "ab_assignments", "mart_retention",
-                "mart_monetisation", "mart_portfolio", "mart_ua"}  # fmt: skip
+    expected = {
+        "users",
+        "events",
+        "payments",
+        "ad_revenue",
+        "ab_assignments",
+        "mart_retention",
+        "mart_monetisation",
+        "mart_portfolio",
+        "mart_ua",
+    }
     assert expected <= set(counts)
     assert all(counts[t] > 0 for t in expected)
     con = duckdb.connect()

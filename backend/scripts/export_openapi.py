@@ -1,6 +1,6 @@
 """Dump the OpenAPI 3.1 schema to a file (the frontend generates its typed client from it).
 
-    uv run python -m scripts.export_openapi ../frontend/src/shared/api/openapi.json
+uv run python -m scripts.export_openapi ../frontend/src/shared/api/openapi.json
 """
 
 from __future__ import annotations

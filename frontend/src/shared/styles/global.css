@@ -88,3 +88,7 @@ kbd {
     animation: none !important;
   }
 }
+
+.muted {
+  color: var(--ink-3);
+}

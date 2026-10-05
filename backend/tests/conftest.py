@@ -21,6 +21,7 @@ os.environ.setdefault("ENV", "test")
 os.environ.setdefault("REDIS_URL", "")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-test-secret-key-0123456789")
 os.environ.setdefault("AI_ENABLED", "false")
+os.environ.setdefault("COOKIE_SECURE", "false")
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 
@@ -58,3 +59,95 @@ async def _database() -> AsyncIterator[None]:
     from app.core.db import dispose_engine
 
     await dispose_engine()
+
+
+# ----------------------------------------------------------------------------- app & data fixtures
+from collections.abc import Callable  # noqa: E402
+from datetime import timedelta  # noqa: E402
+from typing import Any  # noqa: E402
+
+from httpx import ASGITransport, AsyncClient  # noqa: E402
+from sqlalchemy import text  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+
+
+@pytest.fixture
+async def db() -> AsyncIterator[AsyncSession]:
+    from app.core.db import Base, get_sessionmaker
+    from app.models import load_all_models
+
+    load_all_models()
+    async with get_sessionmaker()() as session:
+        yield session
+        await session.rollback()
+        tables = ", ".join(f'"{t.name}"' for t in Base.metadata.sorted_tables)
+        await session.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+        await session.commit()
+
+
+@pytest.fixture
+async def client() -> AsyncIterator[AsyncClient]:
+    from app.main import create_app
+
+    app = create_app()
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test/api/v1") as c:
+        yield c
+
+
+class World:
+    """A small organisation: 2 projects and users for several roles."""
+
+    def __init__(self, db: AsyncSession) -> None:
+        self.db = db
+        self.users: dict[str, Any] = {}
+        self.projects: dict[str, Any] = {}
+
+    async def setup(self) -> World:
+        from app.modules.iam.models import Project
+        from app.modules.iam.service import create_organization, grant
+
+        self.org = await create_organization(self.db, "Test Org", "test-org")
+        from app.modules.iam.service import ensure_builtin_roles
+
+        self.roles = await ensure_builtin_roles(self.db, self.org.id)
+        for key in ("alpha", "beta"):
+            p = Project(org_id=self.org.id, key=key, name=key.title(), data_scope={"app_id": [key]})
+            self.db.add(p)
+            self.projects[key] = p
+        await self.db.flush()
+        await self.add_user("admin", "admin", None)
+        await self.add_user("analyst", "analyst", ["alpha"])
+        await self.add_user("marketing", "marketing", ["beta"])
+        await self.add_user("ceo", "executive", None)
+        await self.db.commit()
+        _ = grant
+        return self
+
+    async def add_user(self, name: str, role: str, projects: list[str] | None, password: str = "Passw0rd-123"):  # type: ignore[no-untyped-def]
+        from app.modules.iam.service import create_user, grant
+
+        user = await create_user(self.db, self.org.id, f"{name}@test.io", name.title(), password)
+        if projects is None:
+            await grant(self.db, user, self.roles[role], None)
+        else:
+            for p in projects:
+                await grant(self.db, user, self.roles[role], self.projects[p])
+        self.users[name] = user
+        return user
+
+    def headers(self, name: str) -> dict[str, str]:
+        from app.modules.iam.security import issue_token
+
+        user = self.users[name]
+        token = issue_token("access", user.id, timedelta(minutes=5), org=str(user.org_id))
+        return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+async def world(db: AsyncSession) -> World:
+    return await World(db).setup()
+
+
+@pytest.fixture
+def as_user(world: World) -> Callable[[str], dict[str, str]]:
+    return world.headers

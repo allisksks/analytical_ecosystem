@@ -5,7 +5,9 @@
 import createClient, { type Middleware } from "openapi-fetch";
 import type { paths } from "./schema";
 
-export const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "/api/v1";
+/** Origin of the API ("" = same origin, nginx/vite proxy /api). Schema paths already contain /api/v1. */
+export const API_ORIGIN = (import.meta.env.VITE_API_ORIGIN as string | undefined) ?? "";
+export const API_BASE = `${API_ORIGIN}/api/v1`;
 
 export interface Problem {
   type: string;
@@ -71,7 +73,9 @@ export async function authFetch(input: Request): Promise<Response> {
     return fetch(r, { credentials: "include" });
   };
   let res = await attempt(input);
-  const isAuthCall = new URL(input.url, window.location.origin).pathname.startsWith(`${API_BASE}/auth/`);
+  const isAuthCall = /^\/api\/v1\/auth\/(login|refresh|logout|mfa)/.test(
+    new URL(input.url, window.location.origin).pathname,
+  );
   if (res.status === 401 && !isAuthCall) {
     if (await refreshAccessToken()) res = await attempt(input);
     else onUnauthorized?.();
@@ -92,7 +96,7 @@ const throwOnError: Middleware = {
   },
 };
 
-export const api = createClient<paths>({ baseUrl: API_BASE, fetch: authFetch });
+export const api = createClient<paths>({ baseUrl: API_ORIGIN || window.location.origin, fetch: authFetch });
 api.use(throwOnError);
 
 /** Unwraps openapi-fetch result (errors are already thrown by middleware). */

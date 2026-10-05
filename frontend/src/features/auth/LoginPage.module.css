@@ -1,0 +1,74 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, color-mix(in srgb, var(--brand) 22%, transparent), transparent),
+    radial-gradient(900px 500px at 110% 110%, color-mix(in srgb, var(--accent-ab) 16%, transparent), transparent),
+    var(--bg);
+}
+.panel {
+  width: min(420px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 32px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  color: var(--ink-2);
+  margin-bottom: 24px;
+}
+.mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--accent-ab));
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sub {
+  color: var(--ink-3);
+  margin-top: -8px;
+}
+.qr {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  border: 1px solid var(--line-soft);
+}
+.qr img {
+  border-radius: 6px;
+  background: #fff;
+}
+.secretLabel {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.secret {
+  font-size: 12px;
+  word-break: break-all;
+}
