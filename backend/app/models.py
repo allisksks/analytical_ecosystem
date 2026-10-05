@@ -11,6 +11,7 @@ MODEL_MODULES: list[str] = [
     "app.modules.query.models",
     "app.modules.semantic.models",
     "app.modules.bi.models",
+    "app.modules.kb.models",
 ]
 
 

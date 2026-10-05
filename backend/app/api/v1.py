@@ -8,6 +8,7 @@ from app.modules.bi.router import router as bi_router
 from app.modules.connectors.router import router as connectors_router
 from app.modules.iam.router_admin import router as admin_router
 from app.modules.iam.router_auth import router as auth_router
+from app.modules.kb.router import router as kb_router
 from app.modules.query.router import router as query_router
 from app.modules.semantic.router import router as semantic_router
 
@@ -18,3 +19,4 @@ api_router.include_router(connectors_router)
 api_router.include_router(query_router)
 api_router.include_router(semantic_router)
 api_router.include_router(bi_router)
+api_router.include_router(kb_router)

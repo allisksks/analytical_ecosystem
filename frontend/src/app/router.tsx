@@ -2,6 +2,9 @@ import { createBrowserRouter } from "react-router";
 import { AdminPage } from "../features/admin/AdminPage";
 import { BiPage } from "../features/bi/BiPage";
 import { PublicDashboardPage } from "../features/bi/PublicDashboardPage";
+import { KbEditorPage } from "../features/kb/KbEditorPage";
+import { KbItemPage } from "../features/kb/KbItemPage";
+import { KbPage } from "../features/kb/KbPage";
 import { DataPage } from "../features/data/DataPage";
 import { LoginPage } from "../features/auth/LoginPage";
 import { UserMenu } from "../features/auth/UserMenu";
@@ -35,7 +38,10 @@ export const router = createBrowserRouter([
           { path: "bi", element: <BiPage /> },
           { path: "bi/:section", element: <BiPage /> },
           { path: "ab/*", element: <ComingSoonPage titleKey="nav.ab" /> },
-          { path: "kb/*", element: <ComingSoonPage titleKey="nav.kb" /> },
+          { path: "kb", element: <KbPage /> },
+          { path: "kb/new", element: <KbEditorPage /> },
+          { path: "kb/:id", element: <KbItemPage /> },
+          { path: "kb/:id/edit", element: <KbEditorPage /> },
           { path: "admin/*", element: <AdminPage /> },
           { path: "*", element: <NotFoundPage /> },
         ],

@@ -18,3 +18,5 @@ export type DataOut = Schemas["DataOut"];
 export type MetricOut = Schemas["MetricOut"];
 export type DimensionOut = Schemas["DimensionOut"];
 export type FilterIn = Schemas["FilterIn"];
+export type KbItem = Schemas["ItemOut"];
+export type KbSummary = Schemas["ItemSummary"];
