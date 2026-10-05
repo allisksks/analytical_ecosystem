@@ -14,14 +14,19 @@ from app import __version__
 from app.api.health import router as health_router
 from app.api.v1 import api_router
 from app.core.config import get_settings
-from app.core.db import dispose_engine
+from app.core.db import dispose_engine, get_sessionmaker
 from app.core.errors import register_error_handlers
 from app.core.logging import configure_logging
 from app.core.middleware import RequestContextMiddleware
+from app.modules.iam.bootstrap import bootstrap
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    settings = get_settings()
+    if settings.env != "test":
+        async with get_sessionmaker()() as db:
+            await bootstrap(db)
     yield
     await dispose_engine()
 

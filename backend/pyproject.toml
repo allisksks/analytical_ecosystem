@@ -16,9 +16,10 @@ dependencies = [
     "orjson>=3.12.0",
     "prometheus-client>=0.26.0",
     "pyarrow>=25.0.1",
-    "pydantic>=2.7",
+    "pydantic[email]>=2.7",
     "pydantic-settings>=2.15.0",
     "pyjwt[crypto]>=2.15.1",
+    "pyotp>=2.10.0",
     "python-multipart>=0.0.32",
     "pyyaml>=6.0.3",
     "redis>=8.1.0",
@@ -47,7 +48,7 @@ extend-exclude = ["migrations/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF", "SIM", "PT", "N"]
-ignore = ["E501", "N818", "S101", "B008", "RUF001", "RUF002", "RUF003", "S608"]
+ignore = ["E501", "N818", "S101", "S105", "PT018", "B008", "RUF001", "RUF002", "RUF003", "S608"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S", "PT011"]

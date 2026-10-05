@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import importlib
 
-MODEL_MODULES: list[str] = []
+MODEL_MODULES: list[str] = [
+    "app.modules.iam.models",
+    "app.modules.audit.models",
+]
 
 
 def load_all_models() -> None:

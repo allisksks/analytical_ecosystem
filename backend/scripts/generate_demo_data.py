@@ -57,12 +57,27 @@ PLATFORMS = np.array(["android", "ios"])
 PLATFORM_P = np.array([0.58, 0.42])
 COUNTRIES = np.array(["US", "DE", "BR", "RU", "JP", "GB", "FR", "IN", "TR", "KZ"])
 COUNTRY_P = np.array([0.22, 0.09, 0.12, 0.10, 0.06, 0.07, 0.06, 0.14, 0.08, 0.06])
-COUNTRY_TIER = {"US": 1.0, "JP": 0.9, "GB": 0.85, "DE": 0.8, "FR": 0.7, "RU": 0.35, "KZ": 0.25,
-                "TR": 0.25, "BR": 0.3, "IN": 0.15}  # fmt: skip
+COUNTRY_TIER = {
+    "US": 1.0,
+    "JP": 0.9,
+    "GB": 0.85,
+    "DE": 0.8,
+    "FR": 0.7,
+    "RU": 0.35,
+    "KZ": 0.25,
+    "TR": 0.25,
+    "BR": 0.3,
+    "IN": 0.15,
+}
 SOURCES = np.array(["organic", "facebook_int", "applovin_int", "mintegral_int", "tiktokglobal_int"])
 SOURCE_P = np.array([0.38, 0.2, 0.17, 0.13, 0.12])
-SOURCE_QUALITY = {"organic": 1.15, "facebook_int": 1.0, "applovin_int": 0.95, "mintegral_int": 0.78,
-                  "tiktokglobal_int": 0.88}  # fmt: skip
+SOURCE_QUALITY = {
+    "organic": 1.15,
+    "facebook_int": 1.0,
+    "applovin_int": 0.95,
+    "mintegral_int": 0.78,
+    "tiktokglobal_int": 0.88,
+}
 CPI = {"organic": 0.0, "facebook_int": 2.4, "applovin_int": 1.9, "mintegral_int": 1.1, "tiktokglobal_int": 1.5}
 PRODUCTS = np.array(["gems_small", "starter_pack", "gems_medium", "battle_pass", "gems_large"])
 PRODUCT_PRICE = np.array([0.99, 4.99, 9.99, 9.99, 49.99])
@@ -97,8 +112,11 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
     platform = _choice(rng, PLATFORMS, PLATFORM_P, n)
     country = _choice(rng, COUNTRIES, COUNTRY_P, n)
     source = _choice(rng, SOURCES, SOURCE_P, n)
-    campaign = np.where(source == "organic", "", np.char.add(np.char.add(source.astype(str), "_"),
-                        rng.choice(["broad", "lookalike", "retarget"], n)))  # fmt: skip
+    campaign = np.where(
+        source == "organic",
+        "",
+        np.char.add(np.char.add(source.astype(str), "_"), rng.choice(["broad", "lookalike", "retarget"], n)),
+    )
     install_version = _version_at(install_day)
 
     # --- experiments (iron_shells only) ---
@@ -187,8 +205,9 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
     for step, surv in enumerate(step_survival, start=1):
         ok = reach < surv * np.minimum(1.0, engagement[fu] * 1.1)
         ok |= step == 1
-        emit(fts[ok] + step * 20, "tutorial_step", fu[ok], fs[ok], fv[ok],
-             np.full(ok.sum(), json.dumps({"step": step})))  # fmt: skip
+        emit(
+            fts[ok] + step * 20, "tutorial_step", fu[ok], fs[ok], fv[ok], np.full(ok.sum(), json.dumps({"step": step}))
+        )
 
     # core loop events
     levels = rng.poisson(2.5, len(s_user))
@@ -202,11 +221,16 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
     emit(l_ts[win] + 90, "level_complete", l_user[win], l_s[win], l_v[win], lp[win])
     if app.has_matches:
         mode = rng.choice(["pve", "pvp"], len(l_user), p=[0.6, 0.4])
-        emit(l_ts + 5, "match_start", l_user, l_s, l_v,
-             np.char.add(np.char.add('{"mode": "', mode), '"}'))  # fmt: skip
+        emit(l_ts + 5, "match_start", l_user, l_s, l_v, np.char.add(np.char.add('{"mode": "', mode), '"}'))
         chest = rng.random(len(l_user)) < 0.35
-        emit(l_ts[chest] + 120, "chest_open", l_user[chest], l_s[chest], l_v[chest],
-             np.full(chest.sum(), '{"chest": "silver"}'))  # fmt: skip
+        emit(
+            l_ts[chest] + 120,
+            "chest_open",
+            l_user[chest],
+            l_s[chest],
+            l_v[chest],
+            np.full(chest.sum(), '{"chest": "silver"}'),
+        )
 
     # payments
     pay_rate = app.payer_rate * np.minimum(engagement[u_idx], 3) * np.vectorize(COUNTRY_TIER.get)(country[u_idx])
@@ -232,8 +256,12 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
     }
     # EMS incident: on iOS 1.8.0 most iap_purchase events stop firing (payments are still in the store report)
     logged = ~((platform[p_user] == "ios") & (p_ver == INCIDENT_VERSION) & (rng.random(len(p_user)) < 0.85))
-    pp = np.array([json.dumps({"product_id": pr, "price_usd": float(pc), "currency": "USD"})
-                   for pr, pc in zip(PRODUCTS[prod_idx], price, strict=True)])  # fmt: skip
+    pp = np.array(
+        [
+            json.dumps({"product_id": pr, "price_usd": float(pc), "currency": "USD"})
+            for pr, pc in zip(PRODUCTS[prod_idx], price, strict=True)
+        ]
+    )
     emit(p_ts[logged], "iap_purchase", p_user[logged], p_sess[logged], p_ver[logged], pp[logged])
 
     # ads
@@ -252,8 +280,14 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
         "country": country[u_idx[has_ads]],
     }
     a_ts = start_ts + act_day[has_ads] * DAY + rng.integers(0, DAY, has_ads.sum())
-    emit(a_ts, "ad_impression", u_idx[has_ads], np.full(has_ads.sum(), ""), act_version[has_ads],
-         np.char.add(np.char.add('{"count": ', imps[has_ads].astype(str)), "}"))  # fmt: skip
+    emit(
+        a_ts,
+        "ad_impression",
+        u_idx[has_ads],
+        np.full(has_ads.sum(), ""),
+        act_version[has_ads],
+        np.char.add(np.char.add('{"count": ', imps[has_ads].astype(str)), "}"),
+    )
 
     # assemble events
     e_user = np.concatenate(ev["user"])
@@ -295,8 +329,14 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
 
     ua_cost = np.vectorize(CPI.get)(source) * (0.6 + np.vectorize(COUNTRY_TIER.get)(country))
     users["cpi_usd"] = np.round(ua_cost, 3)
-    return {"users": users, "mart_retention": mart_retention, "events": events, "payments": payments,
-            "ad_revenue": ad_rev, "ab_assignments": ab}  # fmt: skip
+    return {
+        "users": users,
+        "mart_retention": mart_retention,
+        "events": events,
+        "payments": payments,
+        "ad_revenue": ad_rev,
+        "ab_assignments": ab,
+    }
 
 
 MART_SQL = {
@@ -386,9 +426,19 @@ def generate(out: Path, scale: float = 1.0, days: int = 91, end: date | None = N
         row = con.execute(f"SELECT count(*) FROM {name}").fetchone()
         counts[name] = int(row[0]) if row else 0
     (out / "_manifest.json").write_text(
-        json.dumps({"generated_at": datetime.now(UTC).isoformat(), "start": str(start), "end": str(end),
-                    "scale": scale, "seed": seed, "apps": [a.app_id for a in APPS], "rows": counts}, indent=2)
-    )  # fmt: skip
+        json.dumps(
+            {
+                "generated_at": datetime.now(UTC).isoformat(),
+                "start": str(start),
+                "end": str(end),
+                "scale": scale,
+                "seed": seed,
+                "apps": [a.app_id for a in APPS],
+                "rows": counts,
+            },
+            indent=2,
+        )
+    )
     return counts
 
 
