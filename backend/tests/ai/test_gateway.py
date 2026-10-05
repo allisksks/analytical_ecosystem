@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import pytest
 from pydantic import SecretStr
 
@@ -58,3 +60,33 @@ def test_helpers() -> None:
     assert not is_local("https://llm.api.cloud.yandex.net/v1")
     assert strip_think("<think>a\nb</think>\nОтвет") == "Ответ"
     assert strip_think("Ответ<think>unfinished") == "Ответ"
+
+
+async def test_reasoning_budget_exhausted_and_extra_body() -> None:
+    import httpx
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        assert body["reasoning_effort"] == "low" and body["max_tokens"] == 8000
+        return httpx.Response(
+            200,
+            json={
+                "model": "m",
+                "choices": [
+                    {"finish_reason": "length", "message": {"content": "", "reasoning_content": "long thoughts"}}
+                ],
+            },
+        )
+
+    from app.core.config import Settings
+    from app.modules.ai.gateway import AiGateway
+
+    gw = AiGateway(
+        Settings(ai_enabled=True, ai_extra_body={"reasoning_effort": "low"}), transport=httpx.MockTransport(handler)
+    )
+    with pytest.raises(UpstreamError, match="AI_MAX_TOKENS"):
+        await gw.chat([{"role": "user", "content": "x"}])
+
+
+def test_strip_think_without_opening_tag() -> None:
+    assert strip_think("reasoning only</think>\nSELECT 1") == "SELECT 1"

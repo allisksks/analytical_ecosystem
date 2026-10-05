@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
 from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
@@ -72,10 +72,14 @@ class Settings(BaseSettings):
     ai_chat_model: str = "qwen3:8b"
     ai_sql_model: str | None = None
     ai_embedding_model: str | None = None
-    ai_timeout_s: int = 120
+    ai_timeout_s: int = 300
     ai_auth_scheme: str = "Bearer"  # "Api-Key" for Yandex AI Studio service-account keys
     ai_temperature: float = 0.2
-    ai_max_tokens: int = 1500
+    # reasoning models (Qwen3.6, DeepSeek) spend part of this budget on hidden reasoning before the answer
+    ai_max_tokens: int = 8000
+    # provider-specific request fields merged into every chat request, JSON in the environment, e.g.
+    # {"reasoning_effort": "low"} or {"chat_template_kwargs": {"enable_thinking": false}}
+    ai_extra_body: Annotated[dict[str, Any], NoDecode] = Field(default_factory=dict)
     # Qwen3 reasons before answering; "/no_think" makes interactive answers fast. Off for the SQL model.
     ai_no_think: bool = True
     # Some providers (Yandex AI Studio) need a project/folder header.
@@ -91,6 +95,13 @@ class Settings(BaseSettings):
             if v.strip().startswith("["):
                 return json.loads(v)
             return [o.strip() for o in v.split(",") if o.strip()]
+        return v
+
+    @field_validator("ai_extra_body", mode="before")
+    @classmethod
+    def _extra_body(cls, v: object) -> object:
+        if isinstance(v, str):
+            return json.loads(v) if v.strip() else {}
         return v
 
     @property

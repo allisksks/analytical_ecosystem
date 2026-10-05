@@ -65,6 +65,20 @@ make ai-exam     # экзамен по голден-сету: ≥ 70% — сда
 Откройте <http://localhost:8080/assistant> под `analyst@demo.io` / `demo-pass-2026` и спросите
 «Что мы узнали из теста нового туториала?».
 
+### Рассуждающие модели (Qwen3.6, DeepSeek)
+
+Такие модели сначала «думают» (поле `reasoning_content`), и только потом пишут ответ. Рассуждения
+расходуют лимит `AI_MAX_TOKENS` и время. Если ассистент отвечает ошибкой «израсходовала лимит токенов
+на рассуждения» — увеличьте `AI_MAX_TOKENS` или попросите модель рассуждать меньше через
+`AI_EXTRA_BODY`. Какой параметр понимает провайдер, проверяется одной командой:
+
+```bash
+docker compose exec api python -c "import httpx,os; e=os.environ; [print(x, (lambda c: (c['finish_reason'], len(c['message'].get('content') or ''), len(c['message'].get('reasoning_content') or '')))(httpx.post(e['AI_BASE_URL']+'/chat/completions', headers={'Authorization':'Bearer '+e['AI_API_KEY'],'OpenAI-Project':e['AI_PROJECT_ID']}, json={'model':e['AI_CHAT_MODEL'],'max_tokens':3000,'messages':[{'role':'user','content':'2+2?'}], **x}, timeout=180).json()['choices'][0])) for x in [{}, {'reasoning_effort':'low'}, {'reasoning_effort':'none'}, {'chat_template_kwargs':{'enable_thinking':False}}]]"
+```
+
+Выберите вариант, где ответ есть (вторая цифра > 0), а рассуждений меньше всего (третья цифра), и
+впишите его в `.env`, например `AI_EXTRA_BODY={"reasoning_effort": "low"}`.
+
 ---
 
 ## Вариант B. Локальный Ollama (Qwen3)
@@ -99,7 +113,9 @@ make ai-check && make ai-index && make ai-exam
 | `AI_SQL_MODEL` | = chat | отдельная модель для SQL (например, более крупная) |
 | `AI_EMBEDDING_MODEL` | — | эмбеддинги для гибридного поиска; пусто — только полнотекстовый |
 | `AI_NO_THINK` | `true` | для Qwen3 отключает длинную фазу рассуждений (быстрее ответы) |
-| `AI_TIMEOUT_S` | `120` | таймаут запроса к модели |
+| `AI_MAX_TOKENS` | `8000` | лимит ответа; у «рассуждающих» моделей сюда входят и скрытые рассуждения |
+| `AI_EXTRA_BODY` | — | JSON с параметрами провайдера, добавляется в каждый запрос (например, `{"reasoning_effort": "low"}`) |
+| `AI_TIMEOUT_S` | `300` | таймаут запроса к модели |
 | `AI_ALLOW_CLOUD` | `true` | `false` запрещает облачные адреса (реальные данные клиента) |
 
 ## Как это устроено
