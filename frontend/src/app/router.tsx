@@ -1,4 +1,7 @@
 import { createBrowserRouter } from "react-router";
+import { AbPage } from "../features/ab/AbPage";
+import { DesignerPage } from "../features/ab/DesignerPage";
+import { ExperimentPage } from "../features/ab/ExperimentPage";
 import { AdminPage } from "../features/admin/AdminPage";
 import { BiPage } from "../features/bi/BiPage";
 import { PublicDashboardPage } from "../features/bi/PublicDashboardPage";
@@ -12,7 +15,7 @@ import { UserMenu } from "../features/auth/UserMenu";
 import { ProjectPicker } from "../features/projects/ProjectPicker";
 import { AppShell } from "../layout/AppShell";
 import { HomePage } from "../pages/HomePage";
-import { ComingSoonPage, NotFoundPage } from "../pages/StatusPages";
+import { NotFoundPage } from "../pages/StatusPages";
 import { Protected } from "./Protected";
 
 export const router = createBrowserRouter([
@@ -38,7 +41,10 @@ export const router = createBrowserRouter([
           { path: "ems", element: <EmsPage /> },
           { path: "bi", element: <BiPage /> },
           { path: "bi/:section", element: <BiPage /> },
-          { path: "ab/*", element: <ComingSoonPage titleKey="nav.ab" /> },
+          { path: "ab", element: <AbPage /> },
+          { path: "ab/new", element: <DesignerPage /> },
+          { path: "ab/:id", element: <ExperimentPage /> },
+          { path: "ab/:id/edit", element: <DesignerPage /> },
           { path: "kb", element: <KbPage /> },
           { path: "kb/new", element: <KbEditorPage /> },
           { path: "kb/:id", element: <KbItemPage /> },

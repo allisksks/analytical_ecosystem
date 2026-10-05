@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Download, FileUp, Plus, ScanSearch, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
-import { API_BASE } from "../../shared/api/client";
+import { downloadGet as download } from "../../shared/api/download";
 import { PageBody } from "../../layout/AppShell";
 import { useI18n, type TKey } from "../../shared/i18n";
 import { formatDateTime, formatNumber } from "../../shared/lib/format";
@@ -37,18 +37,6 @@ const FORMATS = [
   ["swift", "Swift"],
   ["csharp", "Unity C#"],
 ] as const;
-
-async function download(path: string, filename: string) {
-  const { authFetch } = await import("../../shared/api/client");
-  const res = await authFetch(new Request(`${API_BASE}${path}`));
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const url = URL.createObjectURL(await res.blob());
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 export function EmsPage() {
   const { t, locale } = useI18n();

@@ -5985,6 +5985,716 @@
           }
         }
       }
+    },
+    "/api/v1/experiments/metrics": {
+      "get": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Metric templates for experiments",
+        "operationId": "metric_templates_api_v1_experiments_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MetricTemplateOut"
+                  },
+                  "type": "array",
+                  "title": "Response Metric Templates Api V1 Experiments Metrics Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/experiments/power": {
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Sample size and duration calculator",
+        "operationId": "power_api_v1_experiments_power_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PowerIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PowerOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/experiments/baseline": {
+      "get": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Current value of a metric over recent matured installs",
+        "operationId": "metric_baseline_api_v1_experiments_baseline_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "source_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Source Id"
+            }
+          },
+          {
+            "name": "metric_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Metric Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaselineOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/sdk-config": {
+      "get": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Running experiments for client-side splitting",
+        "operationId": "sdk_config_api_v1_experiments_sdk_config_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SdkExperiment"
+                  },
+                  "title": "Response Sdk Config Api V1 Experiments Sdk Config Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/assign": {
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Deterministic variant of a user (internal splitter)",
+        "operationId": "assign_api_v1_experiments_assign_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/experiments": {
+      "get": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "List Experiments",
+        "operationId": "list_experiments_api_v1_experiments_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExperimentSummary"
+                  },
+                  "title": "Response List Experiments Api V1 Experiments Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Create Experiment",
+        "operationId": "create_experiment_api_v1_experiments_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/{experiment_id}": {
+      "get": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Get Experiment",
+        "operationId": "get_experiment_api_v1_experiments__experiment_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Update Experiment",
+        "operationId": "update_experiment_api_v1_experiments__experiment_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperimentPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/{experiment_id}/transition": {
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "draft → review → running → completed",
+        "operationId": "transition_api_v1_experiments__experiment_id__transition_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransitionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/{experiment_id}/recalculate": {
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Recalculate",
+        "operationId": "recalculate_api_v1_experiments__experiment_id__recalculate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/{experiment_id}/decision": {
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Final decision of the gatekeeper",
+        "operationId": "decide_api_v1_experiments__experiment_id__decision_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/{experiment_id}/kb": {
+      "post": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Save the result to the knowledge base",
+        "operationId": "save_to_kb_api_v1_experiments__experiment_id__kb_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/experiments/{experiment_id}/report.md": {
+      "get": {
+        "tags": [
+          "experiments"
+        ],
+        "summary": "Markdown report",
+        "operationId": "report_api_v1_experiments__experiment_id__report_md_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6087,6 +6797,62 @@
           "acknowledged_by"
         ],
         "title": "AlertOut"
+      },
+      "AssignIn": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "experiment_key": {
+            "type": "string",
+            "title": "Experiment Key"
+          },
+          "user_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_id",
+          "experiment_key",
+          "user_id"
+        ],
+        "title": "AssignIn"
+      },
+      "AssignOut": {
+        "properties": {
+          "experiment_key": {
+            "type": "string",
+            "title": "Experiment Key"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "variant": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant"
+          }
+        },
+        "type": "object",
+        "required": [
+          "experiment_key",
+          "user_id",
+          "variant"
+        ],
+        "title": "AssignOut"
       },
       "AttachmentOut": {
         "properties": {
@@ -6219,6 +6985,49 @@
           "details"
         ],
         "title": "AuditOut"
+      },
+      "BaselineOut": {
+        "properties": {
+          "metric_key": {
+            "type": "string",
+            "title": "Metric Key"
+          },
+          "metric_type": {
+            "type": "string",
+            "title": "Metric Type"
+          },
+          "baseline": {
+            "type": "number",
+            "title": "Baseline"
+          },
+          "sd": {
+            "type": "number",
+            "title": "Sd"
+          },
+          "daily_users": {
+            "type": "number",
+            "title": "Daily Users"
+          },
+          "users": {
+            "type": "integer",
+            "title": "Users"
+          },
+          "window_days": {
+            "type": "integer",
+            "title": "Window Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_key",
+          "metric_type",
+          "baseline",
+          "sd",
+          "daily_users",
+          "users",
+          "window_days"
+        ],
+        "title": "BaselineOut"
       },
       "Body_attach_api_v1_kb__item_id__attachments_post": {
         "properties": {
@@ -6516,6 +7325,73 @@
         },
         "type": "object",
         "title": "ColumnPatch"
+      },
+      "Comparison": {
+        "properties": {
+          "variant": {
+            "type": "string",
+            "title": "Variant"
+          },
+          "prob_better": {
+            "type": "number",
+            "title": "Prob Better"
+          },
+          "lift": {
+            "type": "number",
+            "title": "Lift"
+          },
+          "lift_ci": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Lift Ci"
+          },
+          "expected_loss": {
+            "type": "number",
+            "title": "Expected Loss"
+          },
+          "posterior_control": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Posterior Control"
+          },
+          "posterior_variant": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Posterior Variant"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "frequentist": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FrequentistOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "variant",
+          "prob_better",
+          "lift",
+          "lift_ci",
+          "expected_loss",
+          "posterior_control",
+          "posterior_variant",
+          "method"
+        ],
+        "title": "Comparison"
       },
       "ConnectorType": {
         "properties": {
@@ -6943,6 +7819,30 @@
           "date_to"
         ],
         "title": "DataOut"
+      },
+      "DecisionIn": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "ship",
+              "keep_control",
+              "inconclusive"
+            ],
+            "title": "Decision"
+          },
+          "conclusion": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Conclusion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision",
+          "conclusion"
+        ],
+        "title": "DecisionIn"
       },
       "DiffOut": {
         "properties": {
@@ -7622,6 +8522,1060 @@
         ],
         "title": "EventVersionOut"
       },
+      "ExperimentIn": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 2,
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "hypothesis": {
+            "type": "string",
+            "title": "Hypothesis",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner",
+            "default": ""
+          },
+          "metric_key": {
+            "type": "string",
+            "title": "Metric Key"
+          },
+          "secondary_metrics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Secondary Metrics"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantIn"
+            },
+            "type": "array",
+            "title": "Variants"
+          },
+          "traffic_share": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Traffic Share",
+            "default": 1.0
+          },
+          "segments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Segments"
+          },
+          "mde": {
+            "type": "number",
+            "exclusiveMaximum": 10.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Mde",
+            "default": 0.05
+          },
+          "alpha": {
+            "type": "number",
+            "exclusiveMaximum": 0.5,
+            "exclusiveMinimum": 0.0,
+            "title": "Alpha",
+            "default": 0.05
+          },
+          "power": {
+            "type": "number",
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.5,
+            "title": "Power",
+            "default": 0.8
+          },
+          "baseline": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "planned_users": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Users"
+          },
+          "planned_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Days"
+          },
+          "threshold": {
+            "type": "number",
+            "exclusiveMaximum": 1.0,
+            "minimum": 0.8,
+            "title": "Threshold",
+            "default": 0.95
+          },
+          "event_name": {
+            "type": "string",
+            "title": "Event Name",
+            "default": ""
+          },
+          "splitter": {
+            "type": "string",
+            "enum": [
+              "external",
+              "internal"
+            ],
+            "title": "Splitter",
+            "default": "external"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
+          },
+          "assignments_table": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_.]*$",
+            "title": "Assignments Table",
+            "default": "ab_assignments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_id",
+          "key",
+          "name",
+          "metric_key"
+        ],
+        "title": "ExperimentIn"
+      },
+      "ExperimentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "review",
+              "running",
+              "completed",
+              "archived"
+            ],
+            "title": "Status"
+          },
+          "metric_key": {
+            "type": "string",
+            "title": "Metric Key"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantIn"
+            },
+            "type": "array",
+            "title": "Variants"
+          },
+          "traffic_share": {
+            "type": "number",
+            "title": "Traffic Share"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          },
+          "planned_users": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Users"
+          },
+          "planned_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Days"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "prob_best": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prob Best"
+          },
+          "lift": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lift"
+          },
+          "users": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Users"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation"
+          },
+          "srm_mismatch": {
+            "type": "boolean",
+            "title": "Srm Mismatch",
+            "default": false
+          },
+          "hypothesis": {
+            "type": "string",
+            "title": "Hypothesis"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "secondary_metrics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Secondary Metrics"
+          },
+          "segments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Segments"
+          },
+          "mde": {
+            "type": "number",
+            "title": "Mde"
+          },
+          "alpha": {
+            "type": "number",
+            "title": "Alpha"
+          },
+          "power": {
+            "type": "number",
+            "title": "Power"
+          },
+          "baseline": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "event_name": {
+            "type": "string",
+            "title": "Event Name"
+          },
+          "splitter": {
+            "type": "string",
+            "title": "Splitter"
+          },
+          "salt": {
+            "type": "string",
+            "title": "Salt"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
+          },
+          "assignments_table": {
+            "type": "string",
+            "title": "Assignments Table"
+          },
+          "approved_by": {
+            "type": "string",
+            "title": "Approved By"
+          },
+          "conclusion": {
+            "type": "string",
+            "title": "Conclusion"
+          },
+          "decided_by": {
+            "type": "string",
+            "title": "Decided By"
+          },
+          "kb_item_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kb Item Id"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "last_calculated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Calculated At"
+          },
+          "last_error": {
+            "type": "string",
+            "title": "Last Error"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExperimentResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/SnapshotOut"
+            },
+            "type": "array",
+            "title": "History"
+          },
+          "results_hidden": {
+            "type": "boolean",
+            "title": "Results Hidden",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "key",
+          "name",
+          "owner",
+          "status",
+          "metric_key",
+          "variants",
+          "traffic_share",
+          "started_at",
+          "ended_at",
+          "decision",
+          "planned_users",
+          "planned_days",
+          "updated_at",
+          "hypothesis",
+          "description",
+          "secondary_metrics",
+          "segments",
+          "mde",
+          "alpha",
+          "power",
+          "baseline",
+          "threshold",
+          "event_name",
+          "splitter",
+          "salt",
+          "source_id",
+          "assignments_table",
+          "approved_by",
+          "conclusion",
+          "decided_by",
+          "kb_item_id",
+          "created_by",
+          "created_at",
+          "last_calculated_at",
+          "last_error"
+        ],
+        "title": "ExperimentOut"
+      },
+      "ExperimentPatch": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "hypothesis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hypothesis"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner"
+          },
+          "metric_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric Key"
+          },
+          "secondary_metrics": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secondary Metrics"
+          },
+          "variants": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/VariantIn"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variants"
+          },
+          "traffic_share": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Traffic Share"
+          },
+          "segments": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Segments"
+          },
+          "mde": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 10.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mde"
+          },
+          "alpha": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 0.5,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alpha"
+          },
+          "power": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 1.0,
+                "exclusiveMinimum": 0.5
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Power"
+          },
+          "baseline": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline"
+          },
+          "planned_users": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Users"
+          },
+          "planned_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Days"
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMaximum": 1.0,
+                "minimum": 0.8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold"
+          },
+          "event_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Name"
+          },
+          "splitter": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "external",
+                  "internal"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Splitter"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
+          },
+          "assignments_table": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_.]*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignments Table"
+          }
+        },
+        "type": "object",
+        "title": "ExperimentPatch"
+      },
+      "ExperimentResult": {
+        "properties": {
+          "calculated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Calculated At"
+          },
+          "assigned": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Assigned"
+          },
+          "matured_users": {
+            "type": "integer",
+            "title": "Matured Users"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress"
+          },
+          "primary": {
+            "$ref": "#/components/schemas/MetricResult"
+          },
+          "secondary": {
+            "items": {
+              "$ref": "#/components/schemas/MetricResult"
+            },
+            "type": "array",
+            "title": "Secondary"
+          },
+          "segments": {
+            "items": {
+              "$ref": "#/components/schemas/SegmentResult"
+            },
+            "type": "array",
+            "title": "Segments"
+          },
+          "srm": {
+            "$ref": "#/components/schemas/SrmOut"
+          },
+          "recommendation": {
+            "type": "string",
+            "enum": [
+              "collecting",
+              "continue",
+              "ship",
+              "keep_control",
+              "inconclusive",
+              "check_srm"
+            ],
+            "title": "Recommendation"
+          },
+          "best_variant": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Best Variant"
+          },
+          "first_assigned_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Assigned At"
+          },
+          "last_assigned_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Assigned At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "calculated_at",
+          "assigned",
+          "matured_users",
+          "progress",
+          "primary",
+          "srm",
+          "recommendation"
+        ],
+        "title": "ExperimentResult"
+      },
+      "ExperimentSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "owner": {
+            "type": "string",
+            "title": "Owner"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "review",
+              "running",
+              "completed",
+              "archived"
+            ],
+            "title": "Status"
+          },
+          "metric_key": {
+            "type": "string",
+            "title": "Metric Key"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantIn"
+            },
+            "type": "array",
+            "title": "Variants"
+          },
+          "traffic_share": {
+            "type": "number",
+            "title": "Traffic Share"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          },
+          "planned_users": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Users"
+          },
+          "planned_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Days"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "prob_best": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prob Best"
+          },
+          "lift": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lift"
+          },
+          "users": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Users"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation"
+          },
+          "srm_mismatch": {
+            "type": "boolean",
+            "title": "Srm Mismatch",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "key",
+          "name",
+          "owner",
+          "status",
+          "metric_key",
+          "variants",
+          "traffic_share",
+          "started_at",
+          "ended_at",
+          "decision",
+          "planned_users",
+          "planned_days",
+          "updated_at"
+        ],
+        "title": "ExperimentSummary"
+      },
       "ExportIn": {
         "properties": {
           "source_id": {
@@ -7748,6 +9702,42 @@
           "values"
         ],
         "title": "FilterIn"
+      },
+      "FrequentistOut": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "p_value": {
+            "type": "number",
+            "title": "P Value"
+          },
+          "diff": {
+            "type": "number",
+            "title": "Diff"
+          },
+          "ci": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Ci"
+          },
+          "significant": {
+            "type": "boolean",
+            "title": "Significant"
+          }
+        },
+        "type": "object",
+        "required": [
+          "method",
+          "p_value",
+          "diff",
+          "ci",
+          "significant"
+        ],
+        "title": "FrequentistOut"
       },
       "FromTemplateIn": {
         "properties": {
@@ -9182,6 +11172,96 @@
         "type": "object",
         "title": "MetricPatch"
       },
+      "MetricResult": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": ""
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantStat"
+            },
+            "type": "array",
+            "title": "Variants"
+          },
+          "comparisons": {
+            "items": {
+              "$ref": "#/components/schemas/Comparison"
+            },
+            "type": "array",
+            "title": "Comparisons"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "name",
+          "type",
+          "variants",
+          "comparisons"
+        ],
+        "title": "MetricResult"
+      },
+      "MetricTemplateOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "semantic_keys": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Semantic Keys"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "type",
+          "days",
+          "unit",
+          "description",
+          "semantic_keys"
+        ],
+        "title": "MetricTemplateOut"
+      },
       "MetricVersionOut": {
         "properties": {
           "version": {
@@ -9365,6 +11445,116 @@
           "org_level"
         ],
         "title": "PermissionInfo"
+      },
+      "PowerIn": {
+        "properties": {
+          "metric_type": {
+            "type": "string",
+            "enum": [
+              "binary",
+              "continuous"
+            ],
+            "title": "Metric Type"
+          },
+          "baseline": {
+            "type": "number",
+            "title": "Baseline"
+          },
+          "mde": {
+            "type": "number",
+            "exclusiveMaximum": 10.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Mde"
+          },
+          "sd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sd"
+          },
+          "alpha": {
+            "type": "number",
+            "exclusiveMaximum": 0.5,
+            "exclusiveMinimum": 0.0,
+            "title": "Alpha",
+            "default": 0.05
+          },
+          "power": {
+            "type": "number",
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.5,
+            "title": "Power",
+            "default": 0.8
+          },
+          "groups": {
+            "type": "integer",
+            "maximum": 6.0,
+            "minimum": 2.0,
+            "title": "Groups",
+            "default": 2
+          },
+          "daily_users": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daily Users"
+          },
+          "traffic_share": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Traffic Share",
+            "default": 1.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_type",
+          "baseline",
+          "mde"
+        ],
+        "title": "PowerIn"
+      },
+      "PowerOut": {
+        "properties": {
+          "per_group": {
+            "type": "integer",
+            "title": "Per Group"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "per_group",
+          "total",
+          "days"
+        ],
+        "title": "PowerOut"
       },
       "PreviewIn": {
         "properties": {
@@ -10171,6 +12361,55 @@
         "type": "object",
         "title": "SavedQueryPatch"
       },
+      "SdkExperiment": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "salt": {
+            "type": "string",
+            "title": "Salt"
+          },
+          "traffic_share": {
+            "type": "number",
+            "title": "Traffic Share"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/SdkVariant"
+            },
+            "type": "array",
+            "title": "Variants"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "salt",
+          "traffic_share",
+          "variants"
+        ],
+        "title": "SdkExperiment"
+      },
+      "SdkVariant": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "weight"
+        ],
+        "title": "SdkVariant"
+      },
       "SearchOut": {
         "properties": {
           "items": {
@@ -10195,6 +12434,45 @@
           "facets"
         ],
         "title": "SearchOut"
+      },
+      "SegmentResult": {
+        "properties": {
+          "segment": {
+            "type": "string",
+            "title": "Segment"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantStat"
+            },
+            "type": "array",
+            "title": "Variants"
+          },
+          "comparisons": {
+            "items": {
+              "$ref": "#/components/schemas/Comparison"
+            },
+            "type": "array",
+            "title": "Comparisons"
+          },
+          "srm_mismatch": {
+            "type": "boolean",
+            "title": "Srm Mismatch",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "segment",
+          "value",
+          "variants",
+          "comparisons"
+        ],
+        "title": "SegmentResult"
       },
       "SemanticQueryIn": {
         "properties": {
@@ -10575,6 +12853,49 @@
         ],
         "title": "ShareOut"
       },
+      "SnapshotOut": {
+        "properties": {
+          "calculated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Calculated At"
+          },
+          "users": {
+            "type": "integer",
+            "title": "Users"
+          },
+          "prob_best": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prob Best"
+          },
+          "lift": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lift"
+          }
+        },
+        "type": "object",
+        "required": [
+          "calculated_at",
+          "users",
+          "prob_best",
+          "lift"
+        ],
+        "title": "SnapshotOut"
+      },
       "SourceIn": {
         "properties": {
           "name": {
@@ -10915,6 +13236,40 @@
           "config"
         ],
         "title": "SourceTestIn"
+      },
+      "SrmOut": {
+        "properties": {
+          "p_value": {
+            "type": "number",
+            "title": "P Value"
+          },
+          "observed": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Observed"
+          },
+          "expected": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Expected"
+          },
+          "mismatch": {
+            "type": "boolean",
+            "title": "Mismatch"
+          }
+        },
+        "type": "object",
+        "required": [
+          "p_value",
+          "observed",
+          "expected",
+          "mismatch"
+        ],
+        "title": "SrmOut"
       },
       "StatPoint": {
         "properties": {
@@ -11366,6 +13721,31 @@
         ],
         "title": "TrackingOut"
       },
+      "TransitionIn": {
+        "properties": {
+          "to": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "review",
+              "running",
+              "completed",
+              "archived"
+            ],
+            "title": "To"
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "title": "TransitionIn"
+      },
       "UserIn": {
         "properties": {
           "email": {
@@ -11646,6 +14026,67 @@
           "error"
         ],
         "title": "ValidationRunOut"
+      },
+      "VariantIn": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": ""
+          },
+          "weight": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Weight",
+            "default": 0.5
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "title": "VariantIn"
+      },
+      "VariantStat": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "mean": {
+            "type": "number",
+            "title": "Mean"
+          },
+          "sd": {
+            "type": "number",
+            "title": "Sd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "n",
+          "mean",
+          "sd"
+        ],
+        "title": "VariantStat"
       },
       "VersionIn": {
         "properties": {

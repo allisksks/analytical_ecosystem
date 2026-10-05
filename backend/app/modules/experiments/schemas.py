@@ -101,7 +101,7 @@ class FrequentistOut(Schema):
     method: str
     p_value: float
     diff: float
-    ci: tuple[float, float]
+    ci: list[float]  # [low, high]
     significant: bool
 
 
@@ -109,10 +109,10 @@ class Comparison(Schema):
     variant: str
     prob_better: float
     lift: float
-    lift_ci: tuple[float, float]
+    lift_ci: list[float]  # [low, high]
     expected_loss: float
-    posterior_control: tuple[float, float]
-    posterior_variant: tuple[float, float]
+    posterior_control: list[float]  # [mean, sd]
+    posterior_variant: list[float]  # [mean, sd]
     method: str
     frequentist: FrequentistOut | None = None
 
