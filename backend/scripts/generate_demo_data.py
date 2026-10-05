@@ -291,7 +291,8 @@ def generate_app(app: AppProfile, start: date, days: int, scale: float, rng: np.
 
     # assemble events
     e_user = np.concatenate(ev["user"])
-    e_ts = np.concatenate(ev["ts"])
+    # sessions that cross midnight of the last day must not leak into "tomorrow"
+    e_ts = np.minimum(np.concatenate(ev["ts"]), start_ts + days * DAY - 1)
     order = np.argsort(e_ts, kind="stable")
     e_user, e_ts = e_user[order], e_ts[order]
     events = {

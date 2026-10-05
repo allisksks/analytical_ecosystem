@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { AdminPage } from "../features/admin/AdminPage";
 import { BiPage } from "../features/bi/BiPage";
 import { PublicDashboardPage } from "../features/bi/PublicDashboardPage";
+import { EmsPage } from "../features/ems/EmsPage";
 import { KbEditorPage } from "../features/kb/KbEditorPage";
 import { KbItemPage } from "../features/kb/KbItemPage";
 import { KbPage } from "../features/kb/KbPage";
@@ -34,7 +35,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <HomePage /> },
           { path: "data/*", element: <DataPage /> },
-          { path: "ems/*", element: <ComingSoonPage titleKey="nav.ems" /> },
+          { path: "ems", element: <EmsPage /> },
           { path: "bi", element: <BiPage /> },
           { path: "bi/:section", element: <BiPage /> },
           { path: "ab/*", element: <ComingSoonPage titleKey="nav.ab" /> },

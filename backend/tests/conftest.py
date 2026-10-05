@@ -179,3 +179,15 @@ async def demo_source(world: World, demo_dir: Path) -> Any:
     await refresh_catalog(world.db, source)
     await world.db.commit()
     return source
+
+
+@pytest.fixture(scope="session")
+def demo_dir_full(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Full 91-day period (contains release 1.8.0 and the iOS tracking incident), few users."""
+    from datetime import UTC, datetime
+
+    from scripts.generate_demo_data import generate
+
+    out = tmp_path_factory.mktemp("demo_full")
+    generate(out, scale=0.06, days=91, end=datetime.now(UTC).date(), seed=5)
+    return out

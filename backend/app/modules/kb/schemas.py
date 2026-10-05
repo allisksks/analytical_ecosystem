@@ -55,7 +55,7 @@ class ItemSummary(Schema):
     updated_at: datetime
 
 
-class CommentOut(Schema):
+class KbCommentOut(Schema):
     id: uuid.UUID
     author_name: str
     text: str
@@ -75,7 +75,7 @@ class ItemOut(ItemSummary):
     links: list[dict[str, Any]]
     source_ref: str
     can_edit: bool = False
-    comments: list[CommentOut] = Field(default_factory=list)
+    comments: list[KbCommentOut] = Field(default_factory=list)
     attachments: list[AttachmentOut] = Field(default_factory=list)
 
 
@@ -95,7 +95,7 @@ class SearchOut(Schema):
     facets: Facets
 
 
-class VersionOut(Schema):
+class KbVersionOut(Schema):
     version: int
     title: str
     summary: str
@@ -104,5 +104,5 @@ class VersionOut(Schema):
     created_at: datetime
 
 
-class CommentIn(Schema):
+class KbCommentIn(Schema):
     text: str = Field(min_length=1, max_length=5000)

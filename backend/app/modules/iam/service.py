@@ -232,3 +232,20 @@ async def grant(db: AsyncSession, user: User, role: Role, project: Project | Non
     await db.flush()
     await db.refresh(user, attribute_names=["memberships"])
     return m
+
+
+SYSTEM_ID = uuid.UUID(int=0)
+
+
+def system_principal(org_id: uuid.UUID, label: str = "system") -> Principal:
+    """Principal for background jobs (validation, schedules). Data rules still apply via the project scope."""
+    from app.modules.iam.permissions import ALL_PERMISSIONS
+
+    return Principal(
+        id=SYSTEM_ID,
+        org_id=org_id,
+        kind="system",
+        label=label,
+        org_permissions=frozenset(ALL_PERMISSIONS),
+        roles_by_project={None: ("system",)},
+    )

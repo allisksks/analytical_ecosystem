@@ -20,14 +20,14 @@ from app.modules.kb import service
 from app.modules.kb.models import KnowledgeAttachment, KnowledgeComment, KnowledgeItem, KnowledgeVersion
 from app.modules.kb.schemas import (
     AttachmentOut,
-    CommentIn,
-    CommentOut,
     ItemIn,
     ItemOut,
     ItemPatch,
     ItemSummary,
+    KbCommentIn,
+    KbCommentOut,
+    KbVersionOut,
     SearchOut,
-    VersionOut,
 )
 from app.modules.query.service import load_project
 
@@ -79,7 +79,7 @@ async def _full(db: DB, principal: CurrentPrincipal, item: KnowledgeItem) -> Ite
     files = (await db.execute(select(KnowledgeAttachment).where(KnowledgeAttachment.item_id == item.id))).scalars()
     out = ItemOut.model_validate(item)
     out.can_edit = service.can_edit(principal, item)
-    out.comments = [CommentOut.model_validate(c) for c in comments]
+    out.comments = [KbCommentOut.model_validate(c) for c in comments]
     out.attachments = [AttachmentOut.model_validate(f) for f in files]
     return out
 
@@ -144,15 +144,15 @@ async def update(item_id: uuid.UUID, body: ItemPatch, principal: CurrentPrincipa
     return await _full(db, principal, item)
 
 
-@router.get("/{item_id}/versions", response_model=list[VersionOut])
+@router.get("/{item_id}/versions", response_model=list[KbVersionOut])
 async def versions(item_id: uuid.UUID, principal: CurrentPrincipal, db: DB) -> list[KnowledgeVersion]:
     await service.get_item(db, principal, item_id)
     q = select(KnowledgeVersion).where(KnowledgeVersion.item_id == item_id).order_by(KnowledgeVersion.version.desc())
     return list((await db.execute(q)).scalars())
 
 
-@router.post("/{item_id}/comments", response_model=CommentOut, status_code=201)
-async def comment(item_id: uuid.UUID, body: CommentIn, principal: CurrentPrincipal, db: DB) -> KnowledgeComment:
+@router.post("/{item_id}/comments", response_model=KbCommentOut, status_code=201)
+async def comment(item_id: uuid.UUID, body: KbCommentIn, principal: CurrentPrincipal, db: DB) -> KnowledgeComment:
     item = await service.get_item(db, principal, item_id)
     c = KnowledgeComment(item_id=item.id, author_id=principal.id, author_name=principal.label, text=body.text)
     db.add(c)

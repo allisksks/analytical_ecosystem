@@ -53,6 +53,11 @@ class Settings(BaseSettings):
     query_cache_ttl_s: int = 900
     source_max_concurrency: int = 4
 
+    # --- background jobs (Celery + Valkey) ---
+    validation_interval_min: int = 60
+    experiments_interval_min: int = 60
+    public_url: str = "http://localhost:8080"
+
     # --- demo data ---
     demo_data_dir: str = "./demo-data"
     # platform file storage: uploaded files, synced data (mount a volume / MinIO gateway here)
