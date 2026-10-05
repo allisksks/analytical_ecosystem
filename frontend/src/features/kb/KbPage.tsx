@@ -1,4 +1,4 @@
-import { BookOpen, Plus, Search } from "lucide-react";
+import { BookOpen, Plus, Search, Sparkles } from "lucide-react";
 import { useDeferredValue, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { PageBody } from "../../layout/AppShell";
@@ -6,6 +6,7 @@ import { useI18n, type TKey } from "../../shared/i18n";
 import { formatDate } from "../../shared/lib/format";
 import { Badge, Button, Card, EmptyState, Input, PageHeader, PageSpinner, Select, Tabs } from "../../shared/ui";
 import { useCan } from "../auth/AuthProvider";
+import { useAiStatus } from "../ai/api";
 import { useProject } from "../projects/ProjectProvider";
 import { useKbSearch } from "./api";
 import { DECISION_TONE, KB_TYPES, TYPE_TONE } from "./kbStyle";
@@ -16,6 +17,7 @@ export function KbPage() {
   const can = useCan();
   const navigate = useNavigate();
   const { projects } = useProject();
+  const ai = useAiStatus();
   const [params, setParams] = useSearchParams();
   const [q, setQ] = useState(params.get("q") ?? "");
   const deferred = useDeferredValue(q);
@@ -41,11 +43,21 @@ export function KbPage() {
         crumbs={[t("kb.title")]}
         title={t("kb.subtitle")}
         actions={
-          can("kb:write") && (
-            <Button variant="primary" icon={<Plus size={16} />} onClick={() => navigate("/kb/new")}>
-              {t("kb.newItem")}
-            </Button>
-          )
+          <>
+            {ai.data?.enabled && can("kb:ask") && (
+              <Button
+                icon={<Sparkles size={16} />}
+                onClick={() => navigate(q ? `/assistant?q=${encodeURIComponent(q)}` : "/assistant")}
+              >
+                {t("nav.ai")}
+              </Button>
+            )}
+            {can("kb:write") && (
+              <Button variant="primary" icon={<Plus size={16} />} onClick={() => navigate("/kb/new")}>
+                {t("kb.newItem")}
+              </Button>
+            )}
+          </>
         }
       />
       <div className={s.toolbar}>

@@ -14,6 +14,7 @@ MODEL_MODULES: list[str] = [
     "app.modules.kb.models",
     "app.modules.ems.models",
     "app.modules.experiments.models",
+    "app.modules.ai.models",
 ]
 
 

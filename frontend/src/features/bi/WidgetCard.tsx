@@ -1,11 +1,13 @@
 import clsx from "clsx";
-import { BarChart3, Download, GripVertical, Image, Pencil, Settings2, Table2, Trash2 } from "lucide-react";
+import { BarChart3, Download, GripVertical, Image, Pencil, Settings2, Sparkles, Table2, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 import type { EChartHandle } from "../../shared/charts/EChart";
 import type { ChartData } from "../../shared/charts/buildOption";
 import type { WidgetOut } from "../../shared/api/types";
 import { useI18n } from "../../shared/i18n";
 import { ErrorBox, IconButton, Skeleton, Textarea, useToast } from "../../shared/ui";
+import { useAiStatus, useDraftWidget } from "../ai/api";
+import { useProject } from "../projects/ProjectProvider";
 import { useBiMutations, useWidgetData, type GlobalFilters } from "./api";
 import { downloadCsv, downloadDataUrl, slug } from "./download";
 import { WidgetBody } from "./WidgetBody";
@@ -36,6 +38,9 @@ export function WidgetCard({
   const [tableView, setTableView] = useState(false);
   const [editObs, setEditObs] = useState(false);
   const [obs, setObs] = useState(widget.observation);
+  const ai = useAiStatus();
+  const { project } = useProject();
+  const draft = useDraftWidget();
   const chart = useRef<EChartHandle | null>(null);
   const data = q.data as ChartData | undefined;
 
@@ -140,6 +145,32 @@ export function WidgetCard({
               {canEdit && (
                 <IconButton size="sm" label={t("bi.observation")} onClick={() => setEditObs(true)}>
                   <Pencil size={13} />
+                </IconButton>
+              )}
+              {canEdit && ai.data?.enabled && data && (
+                <IconButton
+                  size="sm"
+                  label={t("ai.draft")}
+                  disabled={draft.isPending}
+                  onClick={() =>
+                    draft.mutate(
+                      {
+                        project_id: project?.id ?? null,
+                        title: widget.title,
+                        columns: data.columns.map((c) => c.name),
+                        rows: data.rows.slice(0, 200),
+                      },
+                      {
+                        onSuccess: (r) => {
+                          setObs(r.text);
+                          setEditObs(true);
+                        },
+                        onError: (e) => toast.error(e.message),
+                      },
+                    )
+                  }
+                >
+                  <Sparkles size={13} />
                 </IconButton>
               )}
             </span>

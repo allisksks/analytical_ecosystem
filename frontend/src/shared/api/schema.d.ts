@@ -1817,10 +1817,189 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/ai/status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Is the assistant configured (and reachable)? */
+    get: operations["status_api_v1_ai_status_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/ask": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Answer from the knowledge base (non-streaming) */
+    post: operations["ask_api_v1_ai_ask_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/ask/stream": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Answer from the knowledge base as Server-Sent Events */
+    post: operations["ask_stream_api_v1_ai_ask_stream_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/sql": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Generate SQL for a question (validated, not executed) */
+    post: operations["generate_sql_api_v1_ai_sql_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/draft/experiment/{experiment_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Draft of an experiment conclusion */
+    post: operations["draft_experiment_api_v1_ai_draft_experiment__experiment_id__post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/draft/widget": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Observations on a widget's data */
+    post: operations["draft_widget_api_v1_ai_draft_widget_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/interactions/{interaction_id}/feedback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Feedback */
+    post: operations["feedback_api_v1_ai_interactions__interaction_id__feedback_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/interactions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Answer log for quality review */
+    get: operations["interactions_api_v1_ai_interactions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ai/reindex": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Index the knowledge base for the assistant now */
+    post: operations["reindex_api_v1_ai_reindex_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** AiStatus */
+    AiStatus: {
+      /** Enabled */
+      enabled: boolean;
+      /** Cloud */
+      cloud: boolean;
+      /** Allow Cloud */
+      allow_cloud: boolean;
+      /** Chat Model */
+      chat_model: string;
+      /** Sql Model */
+      sql_model: string;
+      /** Embedding Model */
+      embedding_model: string | null;
+      /** Indexed Items */
+      indexed_items: number;
+      /** Total Items */
+      total_items: number;
+      /** Reachable */
+      reachable?: boolean | null;
+      /**
+       * Error
+       * @default
+       */
+      error?: string;
+    };
     /** AlertOut */
     AlertOut: {
       /**
@@ -1865,6 +2044,29 @@ export interface components {
       resolved_at: string | null;
       /** Acknowledged By */
       acknowledged_by: string;
+    };
+    /** AskIn */
+    AskIn: {
+      /** Question */
+      question: string;
+      /** Project Id */
+      project_id?: string | null;
+    };
+    /** AskOut */
+    AskOut: {
+      /**
+       * Interaction Id
+       * Format: uuid
+       */
+      interaction_id: string;
+      /** Answer */
+      answer: string;
+      /** Sources */
+      sources: components["schemas"]["Source"][];
+      /** Model */
+      model: string;
+      /** Latency Ms */
+      latency_ms: number;
     };
     /** AssignIn */
     AssignIn: {
@@ -2332,6 +2534,20 @@ export interface components {
       registered: boolean;
       /** Params */
       params: components["schemas"]["ParamIn"][];
+    };
+    /** DraftOut */
+    DraftOut: {
+      /**
+       * Interaction Id
+       * Format: uuid
+       */
+      interaction_id: string;
+      /** Text */
+      text: string;
+      /** Model */
+      model: string;
+      /** Latency Ms */
+      latency_ms: number;
     };
     /** EventCommentIn */
     EventCommentIn: {
@@ -2924,6 +3140,19 @@ export interface components {
       /** Tags */
       tags: components["schemas"]["TagCount"][];
     };
+    /** FeedbackIn */
+    FeedbackIn: {
+      /**
+       * Rating
+       * @enum {integer}
+       */
+      rating: -1 | 0 | 1;
+      /**
+       * Comment
+       * @default
+       */
+      comment?: string;
+    };
     /** FilterIn */
     FilterIn: {
       /** Dimension */
@@ -3089,6 +3318,47 @@ export interface components {
       metrics: number;
       /** Dimensions */
       dimensions: number;
+    };
+    /** InteractionOut */
+    InteractionOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Kind */
+      kind: string;
+      /** User Id */
+      user_id: string | null;
+      /** Project Id */
+      project_id: string | null;
+      /** Question */
+      question: string;
+      /** Answer */
+      answer: string;
+      /** Sql */
+      sql: string;
+      /** Sources */
+      sources: {
+        [key: string]: unknown;
+      }[];
+      /** Model */
+      model: string;
+      /** Latency Ms */
+      latency_ms: number;
+      /** Status */
+      status: string;
+      /** Error */
+      error: string;
+      /** Rating */
+      rating: number;
+      /** Feedback */
+      feedback: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
     };
     /** ItemIn */
     ItemIn: {
@@ -4134,6 +4404,25 @@ export interface components {
       /** Lift */
       lift: number | null;
     };
+    /** Source */
+    Source: {
+      /** N */
+      n: number;
+      /**
+       * Item Id
+       * Format: uuid
+       */
+      item_id: string;
+      /** Title */
+      title: string;
+      /** Type */
+      type: string;
+      /**
+       * Score
+       * @default 0
+       */
+      score?: number;
+    };
     /** SourceIn */
     SourceIn: {
       /** Name */
@@ -4245,6 +4534,43 @@ export interface components {
       };
       /** Source Id */
       source_id?: string | null;
+    };
+    /** SqlIn */
+    SqlIn: {
+      /** Question */
+      question: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+    };
+    /** SqlOut */
+    SqlOut: {
+      /**
+       * Interaction Id
+       * Format: uuid
+       */
+      interaction_id: string;
+      /** Sql */
+      sql: string;
+      /** Explanation */
+      explanation: string;
+      /** Valid */
+      valid: boolean;
+      /** Error */
+      error: string;
+      /** Examples */
+      examples: string[];
+      /** Model */
+      model: string;
+      /** Latency Ms */
+      latency_ms: number;
     };
     /** SrmOut */
     SrmOut: {
@@ -4650,6 +4976,17 @@ export interface components {
        * @default
        */
       app_version?: string;
+    };
+    /** WidgetDraftIn */
+    WidgetDraftIn: {
+      /** Project Id */
+      project_id?: string | null;
+      /** Title */
+      title: string;
+      /** Columns */
+      columns: string[];
+      /** Rows */
+      rows: unknown[][];
     };
     /** WidgetIn */
     WidgetIn: {
@@ -8876,6 +9213,290 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  status_api_v1_ai_status_get: {
+    parameters: {
+      query?: {
+        check?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AiStatus"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  ask_api_v1_ai_ask_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AskIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AskOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  ask_stream_api_v1_ai_ask_stream_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AskIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  generate_sql_api_v1_ai_sql_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SqlIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SqlOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  draft_experiment_api_v1_ai_draft_experiment__experiment_id__post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DraftOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  draft_widget_api_v1_ai_draft_widget_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WidgetDraftIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DraftOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  feedback_api_v1_ai_interactions__interaction_id__feedback_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        interaction_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FeedbackIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InteractionOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  interactions_api_v1_ai_interactions_get: {
+    parameters: {
+      query?: {
+        kind?: string | null;
+        rating?: number | null;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InteractionOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  reindex_api_v1_ai_reindex_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            [key: string]: number;
+          };
         };
       };
     };

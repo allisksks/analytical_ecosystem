@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
+from app.modules.ai.router import router as ai_router
 from app.modules.bi.router import router as bi_router
 from app.modules.connectors.router import router as connectors_router
 from app.modules.ems.router import channels_router
@@ -26,3 +27,4 @@ api_router.include_router(kb_router)
 api_router.include_router(ems_router)
 api_router.include_router(channels_router)
 api_router.include_router(experiments_router)
+api_router.include_router(ai_router)

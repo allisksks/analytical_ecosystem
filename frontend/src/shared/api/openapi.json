@@ -6695,10 +6695,532 @@
           }
         }
       }
+    },
+    "/api/v1/ai/status": {
+      "get": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Is the assistant configured (and reachable)?",
+        "operationId": "status_api_v1_ai_status_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "check",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Check"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/ask": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Answer from the knowledge base (non-streaming)",
+        "operationId": "ask_api_v1_ai_ask_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ai/ask/stream": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Answer from the knowledge base as Server-Sent Events",
+        "operationId": "ask_stream_api_v1_ai_ask_stream_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ai/sql": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Generate SQL for a question (validated, not executed)",
+        "operationId": "generate_sql_api_v1_ai_sql_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SqlIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SqlOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ai/draft/experiment/{experiment_id}": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Draft of an experiment conclusion",
+        "operationId": "draft_experiment_api_v1_ai_draft_experiment__experiment_id__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "experiment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Experiment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/draft/widget": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Observations on a widget's data",
+        "operationId": "draft_widget_api_v1_ai_draft_widget_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WidgetDraftIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ai/interactions/{interaction_id}/feedback": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Feedback",
+        "operationId": "feedback_api_v1_ai_interactions__interaction_id__feedback_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "interaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Interaction Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InteractionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/interactions": {
+      "get": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Answer log for quality review",
+        "operationId": "interactions_api_v1_ai_interactions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Rating"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InteractionOut"
+                  },
+                  "title": "Response Interactions Api V1 Ai Interactions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/reindex": {
+      "post": {
+        "tags": [
+          "ai"
+        ],
+        "summary": "Index the knowledge base for the assistant now",
+        "operationId": "reindex_api_v1_ai_reindex_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "type": "object",
+                  "title": "Response Reindex Api V1 Ai Reindex Post"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "AiStatus": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "cloud": {
+            "type": "boolean",
+            "title": "Cloud"
+          },
+          "allow_cloud": {
+            "type": "boolean",
+            "title": "Allow Cloud"
+          },
+          "chat_model": {
+            "type": "string",
+            "title": "Chat Model"
+          },
+          "sql_model": {
+            "type": "string",
+            "title": "Sql Model"
+          },
+          "embedding_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Model"
+          },
+          "indexed_items": {
+            "type": "integer",
+            "title": "Indexed Items"
+          },
+          "total_items": {
+            "type": "integer",
+            "title": "Total Items"
+          },
+          "reachable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reachable"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "cloud",
+          "allow_cloud",
+          "chat_model",
+          "sql_model",
+          "embedding_model",
+          "indexed_items",
+          "total_items"
+        ],
+        "title": "AiStatus"
+      },
       "AlertOut": {
         "properties": {
           "id": {
@@ -6797,6 +7319,70 @@
           "acknowledged_by"
         ],
         "title": "AlertOut"
+      },
+      "AskIn": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 2,
+            "title": "Question"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "AskIn"
+      },
+      "AskOut": {
+        "properties": {
+          "interaction_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Interaction Id"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interaction_id",
+          "answer",
+          "sources",
+          "model",
+          "latency_ms"
+        ],
+        "title": "AskOut"
       },
       "AssignIn": {
         "properties": {
@@ -7991,6 +8577,35 @@
           "params"
         ],
         "title": "DiscoveredEvent"
+      },
+      "DraftOut": {
+        "properties": {
+          "interaction_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Interaction Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interaction_id",
+          "text",
+          "model",
+          "latency_ms"
+        ],
+        "title": "DraftOut"
       },
       "EventCommentIn": {
         "properties": {
@@ -9672,6 +10287,30 @@
         ],
         "title": "Facets"
       },
+      "FeedbackIn": {
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "enum": [
+              -1,
+              0,
+              1
+            ],
+            "title": "Rating"
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Comment",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "rating"
+        ],
+        "title": "FeedbackIn"
+      },
       "FilterIn": {
         "properties": {
           "dimension": {
@@ -10098,6 +10737,111 @@
           "dimensions"
         ],
         "title": "InstallOut"
+      },
+      "InteractionOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "answer": {
+            "type": "string",
+            "title": "Answer"
+          },
+          "sql": {
+            "type": "string",
+            "title": "Sql"
+          },
+          "sources": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error"
+          },
+          "rating": {
+            "type": "integer",
+            "title": "Rating"
+          },
+          "feedback": {
+            "type": "string",
+            "title": "Feedback"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "user_id",
+          "project_id",
+          "question",
+          "answer",
+          "sql",
+          "sources",
+          "model",
+          "latency_ms",
+          "status",
+          "error",
+          "rating",
+          "feedback",
+          "created_at"
+        ],
+        "title": "InteractionOut"
       },
       "ItemIn": {
         "properties": {
@@ -12896,6 +13640,40 @@
         ],
         "title": "SnapshotOut"
       },
+      "Source": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "item_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Item Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "item_id",
+          "title",
+          "type"
+        ],
+        "title": "Source"
+      },
       "SourceIn": {
         "properties": {
           "name": {
@@ -13236,6 +14014,85 @@
           "config"
         ],
         "title": "SourceTestIn"
+      },
+      "SqlIn": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 2,
+            "title": "Question"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "source_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "project_id",
+          "source_id"
+        ],
+        "title": "SqlIn"
+      },
+      "SqlOut": {
+        "properties": {
+          "interaction_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Interaction Id"
+          },
+          "sql": {
+            "type": "string",
+            "title": "Sql"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "valid": {
+            "type": "boolean",
+            "title": "Valid"
+          },
+          "error": {
+            "type": "string",
+            "title": "Error"
+          },
+          "examples": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Examples"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interaction_id",
+          "sql",
+          "explanation",
+          "valid",
+          "error",
+          "examples",
+          "model",
+          "latency_ms"
+        ],
+        "title": "SqlOut"
       },
       "SrmOut": {
         "properties": {
@@ -14124,6 +14981,51 @@
           "params"
         ],
         "title": "VersionIn"
+      },
+      "WidgetDraftIn": {
+        "properties": {
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Title"
+          },
+          "columns": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 50,
+            "title": "Columns"
+          },
+          "rows": {
+            "items": {
+              "items": {},
+              "type": "array"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "title": "Rows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "columns",
+          "rows"
+        ],
+        "title": "WidgetDraftIn"
       },
       "WidgetIn": {
         "properties": {

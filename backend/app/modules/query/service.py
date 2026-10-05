@@ -155,6 +155,22 @@ async def load_project(db: AsyncSession, principal: Principal, project_id: uuid.
     return project
 
 
+async def validate(
+    db: AsyncSession, principal: Principal, source: DataSource, project: Project | None, sql: str
+) -> str:
+    """Runs the guard without executing: returns the SQL as it would be executed or raises ``GuardError``."""
+    dialect = (await pool.get(source)).dialect
+    index = await catalog_index(db, source)
+    guarded = guard(
+        sql,
+        dialect,
+        make_resolver(index, _default_schemas(source)),
+        row_filters=await row_filters_for(db, principal, project),
+        mask_pii=not principal.can(P.PII_VIEW, project.id if project else None),
+    )
+    return guarded.sql
+
+
 async def execute(
     db: AsyncSession,
     principal: Principal,
