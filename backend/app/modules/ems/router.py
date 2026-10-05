@@ -11,16 +11,17 @@ from datetime import UTC, datetime, timedelta
 from typing import Annotated, Any, Literal
 
 import sqlglot
-from fastapi import APIRouter, Depends, Query, Response, UploadFile
+from fastapi import APIRouter, Depends, Form, Query, Response, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
 
 from app.core.crypto import encrypt_json
 from app.core.errors import NotFoundError, ValidationFailed
+from app.modules.ai import documents
 from app.modules.audit.service import record
 from app.modules.connectors.models import DataSource
 from app.modules.connectors.service import get_source, pool
-from app.modules.ems import codegen, semver, service, validation
+from app.modules.ems import ai_drafts, codegen, semver, service, validation
 from app.modules.ems.models import (
     Alert,
     Event,
@@ -29,6 +30,8 @@ from app.modules.ems.models import (
     GlobalParam,
     NotificationChannel,
     TrackingConfig,
+    TrackingDraft,
+    TrackingDraftItem,
     ValidationRun,
 )
 from app.modules.ems.notify import Notifier
@@ -54,6 +57,10 @@ from app.modules.ems.schemas import (
     ReviewIn,
     StatPoint,
     StatusIn,
+    TrackingDraftItemOut,
+    TrackingDraftItemPatch,
+    TrackingDraftOut,
+    TrackingDraftSummary,
     TrackingIn,
     TrackingOut,
     ValidationRunOut,
@@ -632,3 +639,127 @@ async def test_channel(channel_id: uuid.UUID, principal: ChannelAdmin, db: DB) -
     except Exception as exc:
         raise ValidationFailed(f"Не удалось отправить: {exc}") from exc
     return Response(status_code=204)
+
+
+# ---------------------------------------------------------------- AI tracking plan drafts
+async def _draft_out(db: DB, draft: TrackingDraft) -> TrackingDraftOut:
+    items = await ai_drafts.items_of(db, draft.id)
+    out_items = []
+    for it in items:
+        o = TrackingDraftItemOut.model_validate(it)
+        if it.action == "update" and it.event_id:
+            versions = await service.versions_of(db, it.event_id)
+            base = service.latest_approved(versions)
+            o.diff = semver.diff(base.params if base else [], it.params).as_dict()
+        out_items.append(o)
+    counts = {s: sum(1 for i in items if i.status == s) for s in ("pending", "accepted", "rejected")}
+    return TrackingDraftOut(
+        **TrackingDraftSummary.model_validate(draft).model_dump(exclude=set(counts)),
+        **counts,
+        truncated=draft.truncated,
+        source_text=draft.source_text,
+        items=out_items,
+    )
+
+
+@router.post(
+    "/ai-drafts",
+    response_model=TrackingDraftOut,
+    status_code=201,
+    summary="AI proposes events from a release document (file or pasted text)",
+)
+async def create_ai_draft(
+    principal: CurrentPrincipal,
+    db: DB,
+    project_id: Annotated[uuid.UUID, Form()],
+    file: UploadFile | None = None,
+    text: Annotated[str, Form()] = "",
+    title: Annotated[str, Form()] = "",
+    app_version: Annotated[str, Form()] = "",
+) -> TrackingDraftOut:
+    project = await _project(db, principal, project_id, P.EVENTS_EDIT)
+    if file is not None and file.filename:
+        content = await file.read(documents.MAX_BYTES + 1)
+        body, truncated = documents.extract_text(file.filename, content)
+        filename = file.filename
+    elif text.strip():
+        body, truncated = text.strip()[: documents.MAX_CHARS], len(text.strip()) > documents.MAX_CHARS
+        filename = ""
+    else:
+        raise ValidationFailed("Приложите документ или вставьте текст")
+    title = title.strip() or filename or body.split("\n", 1)[0][:120]
+    draft = await ai_drafts.create_draft(
+        db,
+        principal,
+        project,
+        title=title,
+        filename=filename,
+        text=body,
+        truncated=truncated,
+        app_version=app_version.strip(),
+    )
+    return await _draft_out(db, draft)
+
+
+@router.get("/ai-drafts", response_model=list[TrackingDraftSummary])
+async def list_ai_drafts(principal: CurrentPrincipal, db: DB, project_id: uuid.UUID) -> list[TrackingDraftSummary]:
+    await _project(db, principal, project_id)
+    drafts = (
+        await db.execute(
+            select(TrackingDraft)
+            .where(TrackingDraft.project_id == project_id)
+            .order_by(TrackingDraft.created_at.desc())
+        )
+    ).scalars()
+    out = []
+    for d in drafts:
+        rows = dict(
+            (
+                await db.execute(
+                    select(TrackingDraftItem.status, func.count())
+                    .where(TrackingDraftItem.draft_id == d.id)
+                    .group_by(TrackingDraftItem.status)
+                )
+            ).all()
+        )
+        out.append(
+            TrackingDraftSummary.model_validate(d).model_copy(
+                update={k: int(rows.get(k, 0)) for k in ("pending", "accepted", "rejected")}
+            )
+        )
+    return out
+
+
+@router.get("/ai-drafts/{draft_id}", response_model=TrackingDraftOut)
+async def get_ai_draft(draft_id: uuid.UUID, principal: CurrentPrincipal, db: DB) -> TrackingDraftOut:
+    return await _draft_out(db, await ai_drafts.get_draft(db, principal, draft_id))
+
+
+@router.patch(
+    "/ai-drafts/{draft_id}/items/{item_id}", response_model=TrackingDraftOut, summary="Edit a proposal before accepting"
+)
+async def update_ai_draft_item(
+    draft_id: uuid.UUID, item_id: uuid.UUID, body: TrackingDraftItemPatch, principal: CurrentPrincipal, db: DB
+) -> TrackingDraftOut:
+    draft = await ai_drafts.get_draft(db, principal, draft_id)
+    changes = body.model_dump(exclude_unset=True)
+    if "params" in changes:
+        changes["params"] = [p.model_dump() for p in body.params or []]
+    await ai_drafts.update_item(db, principal, draft, item_id, changes)
+    return await _draft_out(db, draft)
+
+
+@router.post(
+    "/ai-drafts/{draft_id}/items/{item_id}/{decision}",
+    response_model=TrackingDraftOut,
+    summary="Accept (creates a registry draft / pending version) or reject a proposal",
+)
+async def decide_ai_draft_item(
+    draft_id: uuid.UUID, item_id: uuid.UUID, decision: Literal["accept", "reject"], principal: CurrentPrincipal, db: DB
+) -> TrackingDraftOut:
+    draft = await ai_drafts.get_draft(db, principal, draft_id)
+    if decision == "accept":
+        await ai_drafts.accept(db, principal, draft, item_id)
+    else:
+        await ai_drafts.reject(db, principal, draft, item_id)
+    return await _draft_out(db, draft)

@@ -1559,6 +1559,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/ems/ai-drafts": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Ai Drafts */
+    get: operations["list_ai_drafts_api_v1_ems_ai_drafts_get"];
+    put?: never;
+    /** AI proposes events from a release document (file or pasted text) */
+    post: operations["create_ai_draft_api_v1_ems_ai_drafts_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/ai-drafts/{draft_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Ai Draft */
+    get: operations["get_ai_draft_api_v1_ems_ai_drafts__draft_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/ai-drafts/{draft_id}/items/{item_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Edit a proposal before accepting */
+    patch: operations["update_ai_draft_item_api_v1_ems_ai_drafts__draft_id__items__item_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/ems/ai-drafts/{draft_id}/items/{item_id}/{decision}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Accept (creates a registry draft / pending version) or reject a proposal */
+    post: operations["decide_ai_draft_item_api_v1_ems_ai_drafts__draft_id__items__item_id___decision__post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/notification-channels": {
     parameters: {
       query?: never;
@@ -2163,6 +2232,31 @@ export interface components {
     Body_attach_api_v1_kb__item_id__attachments_post: {
       /** File */
       file: string;
+    };
+    /** Body_create_ai_draft_api_v1_ems_ai_drafts_post */
+    Body_create_ai_draft_api_v1_ems_ai_drafts_post: {
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** File */
+      file?: string | null;
+      /**
+       * Text
+       * @default
+       */
+      text?: string;
+      /**
+       * Title
+       * @default
+       */
+      title?: string;
+      /**
+       * App Version
+       * @default
+       */
+      app_version?: string;
     };
     /** Body_import_plan_api_v1_ems_import_post */
     Body_import_plan_api_v1_ems_import_post: {
@@ -4708,6 +4802,163 @@ export interface components {
       mfa_setup_required?: boolean;
       /** Mfa Token */
       mfa_token?: string | null;
+    };
+    /** TrackingDraftItemOut */
+    TrackingDraftItemOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Action
+       * @enum {string}
+       */
+      action: "create" | "update";
+      /** Name */
+      name: string;
+      /** Event Id */
+      event_id: string | null;
+      /** Description */
+      description: string;
+      /** Category */
+      category: string;
+      /** Goal */
+      goal: string;
+      /** Question */
+      question: string;
+      /** Params */
+      params: components["schemas"]["ParamIn"][];
+      /** Rationale */
+      rationale: string;
+      /** Quote */
+      quote: string;
+      /** Warnings */
+      warnings: string[];
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: "pending" | "accepted" | "rejected";
+      /** Reviewed By */
+      reviewed_by: string;
+      /** Result Version */
+      result_version: string;
+      /** Diff */
+      diff?: {
+        [key: string]: unknown;
+      } | null;
+    };
+    /** TrackingDraftItemPatch */
+    TrackingDraftItemPatch: {
+      /** Name */
+      name?: string | null;
+      /** Description */
+      description?: string | null;
+      /** Category */
+      category?: string | null;
+      /** Goal */
+      goal?: string | null;
+      /** Question */
+      question?: string | null;
+      /** Params */
+      params?: components["schemas"]["ParamIn"][] | null;
+    };
+    /** TrackingDraftOut */
+    TrackingDraftOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Title */
+      title: string;
+      /** Filename */
+      filename: string;
+      /** App Version */
+      app_version: string;
+      /** Summary */
+      summary: string;
+      /** Created By */
+      created_by: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Model */
+      model: string;
+      /**
+       * Pending
+       * @default 0
+       */
+      pending?: number;
+      /**
+       * Accepted
+       * @default 0
+       */
+      accepted?: number;
+      /**
+       * Rejected
+       * @default 0
+       */
+      rejected?: number;
+      /** Truncated */
+      truncated: boolean;
+      /** Source Text */
+      source_text: string;
+      /** Items */
+      items: components["schemas"]["TrackingDraftItemOut"][];
+    };
+    /** TrackingDraftSummary */
+    TrackingDraftSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Title */
+      title: string;
+      /** Filename */
+      filename: string;
+      /** App Version */
+      app_version: string;
+      /** Summary */
+      summary: string;
+      /** Created By */
+      created_by: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Model */
+      model: string;
+      /**
+       * Pending
+       * @default 0
+       */
+      pending?: number;
+      /**
+       * Accepted
+       * @default 0
+       */
+      accepted?: number;
+      /**
+       * Rejected
+       * @default 0
+       */
+      rejected?: number;
     };
     /** TrackingIn */
     TrackingIn: {
@@ -8651,6 +8902,170 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["GlobalParamOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_ai_drafts_api_v1_ems_ai_drafts_get: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingDraftSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_ai_draft_api_v1_ems_ai_drafts_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_create_ai_draft_api_v1_ems_ai_drafts_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingDraftOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_ai_draft_api_v1_ems_ai_drafts__draft_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        draft_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingDraftOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_ai_draft_item_api_v1_ems_ai_drafts__draft_id__items__item_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        draft_id: string;
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TrackingDraftItemPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingDraftOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  decide_ai_draft_item_api_v1_ems_ai_drafts__draft_id__items__item_id___decision__post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        draft_id: string;
+        item_id: string;
+        decision: "accept" | "reject";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingDraftOut"];
         };
       };
       /** @description Validation Error */

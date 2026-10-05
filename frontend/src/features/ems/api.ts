@@ -183,3 +183,71 @@ export function useEmsMutations() {
     }),
   };
 }
+
+export type TrackingDraft = Schemas["TrackingDraftOut"];
+export type TrackingDraftItem = Schemas["TrackingDraftItemOut"];
+
+export const useAiDrafts = (projectId?: string) =>
+  useQuery({
+    queryKey: ["ems", "ai-drafts", projectId ?? ""],
+    queryFn: async () =>
+      (await api.GET("/api/v1/ems/ai-drafts", { params: { query: { project_id: projectId! } } })).data!,
+    enabled: !!projectId,
+  });
+
+export const useAiDraft = (id?: string | null) =>
+  useQuery({
+    queryKey: ["ems", "ai-draft", id ?? ""],
+    queryFn: async () =>
+      (await api.GET("/api/v1/ems/ai-drafts/{draft_id}", { params: { path: { draft_id: id! } } })).data!,
+    enabled: !!id,
+  });
+
+export function useAiDraftMutations() {
+  const qc = useQueryClient();
+  const refresh = () => qc.invalidateQueries({ queryKey: emsKeys.all });
+  return {
+    create: useMutation({
+      mutationFn: async (v: {
+        projectId: string;
+        file?: File | null;
+        text?: string;
+        title?: string;
+        appVersion?: string;
+      }) => {
+        const fd = new FormData();
+        fd.append("project_id", v.projectId);
+        if (v.file) fd.append("file", v.file);
+        if (v.text) fd.append("text", v.text);
+        if (v.title) fd.append("title", v.title);
+        if (v.appVersion) fd.append("app_version", v.appVersion);
+        return (
+          await api.POST("/api/v1/ems/ai-drafts", {
+            body: fd as unknown as Schemas["Body_create_ai_draft_api_v1_ems_ai_drafts_post"],
+            bodySerializer: (b) => b as unknown as FormData,
+          })
+        ).data!;
+      },
+      onSuccess: refresh,
+    }),
+    patch: useMutation({
+      mutationFn: async (v: { draftId: string; itemId: string; body: Schemas["TrackingDraftItemPatch"] }) =>
+        (
+          await api.PATCH("/api/v1/ems/ai-drafts/{draft_id}/items/{item_id}", {
+            params: { path: { draft_id: v.draftId, item_id: v.itemId } },
+            body: v.body,
+          })
+        ).data!,
+      onSuccess: refresh,
+    }),
+    decide: useMutation({
+      mutationFn: async (v: { draftId: string; itemId: string; decision: "accept" | "reject" }) =>
+        (
+          await api.POST("/api/v1/ems/ai-drafts/{draft_id}/items/{item_id}/{decision}", {
+            params: { path: { draft_id: v.draftId, item_id: v.itemId, decision: v.decision } },
+          })
+        ).data!,
+      onSuccess: refresh,
+    }),
+  };
+}

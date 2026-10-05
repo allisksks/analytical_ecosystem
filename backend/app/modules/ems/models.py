@@ -156,3 +156,45 @@ class NotificationChannel(TimestampMixin, Base):
     min_severity: Mapped[str] = mapped_column(String(16), default="warning")
     project_ids: Mapped[list[uuid.UUID] | None] = mapped_column(ARRAY(UUID(as_uuid=True)))
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
+class TrackingDraft(Base):
+    """A tracking plan proposed by the AI from a release document; the analyst accepts items one by one."""
+
+    __tablename__ = "ems_tracking_drafts"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=new_id)
+    org_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("organizations.id", ondelete="CASCADE"), index=True)
+    project_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"), index=True)
+    title: Mapped[str] = mapped_column(String(300))
+    filename: Mapped[str] = mapped_column(String(300), default="")
+    app_version: Mapped[str] = mapped_column(String(32), default="")
+    source_text: Mapped[str] = mapped_column(Text, default="")
+    truncated: Mapped[bool] = mapped_column(Boolean, default=False)
+    summary: Mapped[str] = mapped_column(Text, default="")
+    model: Mapped[str] = mapped_column(String(200), default="")
+    created_by: Mapped[str] = mapped_column(String(320), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=sql_text("now()"))
+
+
+class TrackingDraftItem(Base):
+    __tablename__ = "ems_tracking_draft_items"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=new_id)
+    draft_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("ems_tracking_drafts.id", ondelete="CASCADE"), index=True)
+    position: Mapped[int] = mapped_column(Integer, default=0)
+    action: Mapped[str] = mapped_column(String(16))  # create | update
+    name: Mapped[str] = mapped_column(String(120))
+    event_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ems_events.id", ondelete="SET NULL"))
+    description: Mapped[str] = mapped_column(Text, default="")
+    category: Mapped[str] = mapped_column(String(64), default="")
+    goal: Mapped[str] = mapped_column(Text, default="")
+    question: Mapped[str] = mapped_column(Text, default="")
+    # full parameter list the event will have after acceptance (existing + proposed for updates)
+    params: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, default=list)
+    rationale: Mapped[str] = mapped_column(Text, default="")
+    quote: Mapped[str] = mapped_column(Text, default="")  # fragment of the document the item is based on
+    warnings: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
+    status: Mapped[str] = mapped_column(String(16), default="pending")  # pending | accepted | rejected
+    reviewed_by: Mapped[str] = mapped_column(String(320), default="")
+    result_version: Mapped[str] = mapped_column(String(32), default="")
