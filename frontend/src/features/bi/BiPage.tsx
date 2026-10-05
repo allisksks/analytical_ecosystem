@@ -1,7 +1,7 @@
 import { BarChart3, Check, LayoutTemplate, Pencil, Plus, Share2, Trash2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import type { Dashboard, WidgetOut } from "../../shared/api/types";
 import { PageBody } from "../../layout/AppShell";
 import { useI18n } from "../../shared/i18n";
@@ -20,24 +20,9 @@ import s from "./bi.module.css";
 type Section = "dashboards" | "portfolio" | "cohorts";
 
 export function BiPage() {
-  const { t } = useI18n();
-  const can = useCan();
-  const navigate = useNavigate();
   const { section = "dashboards" } = useParams<{ section?: Section }>();
-  const sections: { key: Section; label: string }[] = [
-    { key: "dashboards", label: t("bi.dashboards") },
-    ...(can("portfolio:view") ? [{ key: "portfolio" as Section, label: t("bi.portfolio") }] : []),
-    { key: "cohorts", label: t("bi.cohorts") },
-  ];
   return (
     <PageBody wide>
-      <Tabs<Section>
-        items={sections}
-        value={section as Section}
-        onChange={(k) => navigate(`/bi/${k}`)}
-        variant="pills"
-        className={s.header}
-      />
       {section === "cohorts" ? <CohortsPage /> : <Dashboards portfolio={section === "portfolio"} />}
     </PageBody>
   );

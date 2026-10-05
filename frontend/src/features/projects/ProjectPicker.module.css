@@ -32,3 +32,12 @@
   opacity: 0.75;
   white-space: nowrap;
 }
+@media (max-width: 600px) {
+  .trigger {
+    max-width: 130px;
+    padding: 0 8px;
+  }
+  .meta {
+    display: none;
+  }
+}

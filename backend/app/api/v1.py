@@ -12,6 +12,7 @@ from app.modules.ems.router import router as ems_router
 from app.modules.experiments.router import router as experiments_router
 from app.modules.iam.router_admin import router as admin_router
 from app.modules.iam.router_auth import router as auth_router
+from app.modules.inbox.router import router as inbox_router
 from app.modules.kb.router import router as kb_router
 from app.modules.query.router import router as query_router
 from app.modules.semantic.router import router as semantic_router
@@ -28,3 +29,4 @@ api_router.include_router(ems_router)
 api_router.include_router(channels_router)
 api_router.include_router(experiments_router)
 api_router.include_router(ai_router)
+api_router.include_router(inbox_router)

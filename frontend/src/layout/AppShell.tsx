@@ -1,19 +1,35 @@
 import type { ReactNode } from "react";
 import { Outlet } from "react-router";
+import { ShellProvider } from "./shell";
+import { Sidebar, type SideGroup } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import s from "./AppShell.module.css";
 
-export function AppShell({ topbarExtra }: { topbarExtra?: ReactNode }) {
+export function AppShell({
+  topbarExtra,
+  nav,
+  overlays,
+}: {
+  topbarExtra?: ReactNode;
+  nav?: SideGroup[];
+  overlays?: ReactNode;
+}) {
   return (
-    <div className={s.shell}>
-      <a href="#main" className={s.skip}>
-        Skip to content
-      </a>
-      <Topbar extra={topbarExtra} />
-      <main id="main" className={s.main}>
-        <Outlet />
-      </main>
-    </div>
+    <ShellProvider>
+      <div className={s.shell}>
+        <a href="#main" className={s.skip}>
+          Skip to content
+        </a>
+        <Topbar extra={topbarExtra} />
+        <div className={s.body}>
+          {nav && <Sidebar groups={nav} />}
+          <main id="main" className={s.main}>
+            <Outlet />
+          </main>
+        </div>
+        {overlays}
+      </div>
+    </ShellProvider>
   );
 }
 

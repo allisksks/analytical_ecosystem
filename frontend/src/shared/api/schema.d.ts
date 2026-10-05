@@ -2039,6 +2039,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/inbox": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Tasks waiting for me in a project */
+    get: operations["inbox_api_v1_inbox_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2418,6 +2435,34 @@ export interface components {
       } | null;
       /** Secret Fields */
       secret_fields?: string[];
+    };
+    /** Counts */
+    Counts: {
+      /**
+       * Event Reviews
+       * @default 0
+       */
+      event_reviews?: number;
+      /**
+       * Ai Drafts
+       * @default 0
+       */
+      ai_drafts?: number;
+      /**
+       * Alerts
+       * @default 0
+       */
+      alerts?: number;
+      /**
+       * Experiment Reviews
+       * @default 0
+       */
+      experiment_reviews?: number;
+      /**
+       * Experiment Decisions
+       * @default 0
+       */
+      experiment_decisions?: number;
     };
     /** DashboardIn */
     DashboardIn: {
@@ -3405,6 +3450,14 @@ export interface components {
       unchanged: string[];
       /** Errors */
       errors: string[];
+    };
+    /** InboxOut */
+    InboxOut: {
+      counts: components["schemas"]["Counts"];
+      /** Total */
+      total: number;
+      /** Tasks */
+      tasks: components["schemas"]["Task"][];
     };
     /** InstallOut */
     InstallOut: {
@@ -4756,6 +4809,31 @@ export interface components {
       tag: string;
       /** Count */
       count: number;
+    };
+    /** Task */
+    Task: {
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: "event_review" | "ai_drafts" | "alert" | "experiment_review" | "experiment_decision" | "experiment_ready";
+      /** Title */
+      title: string;
+      /**
+       * Subtitle
+       * @default
+       */
+      subtitle?: string;
+      /** Link */
+      link: string;
+      /**
+       * Severity
+       * @default info
+       * @enum {string}
+       */
+      severity?: "info" | "warning" | "critical";
+      /** At */
+      at?: string | null;
     };
     /** TemplateOut */
     TemplateOut: {
@@ -9912,6 +9990,37 @@ export interface operations {
           "application/json": {
             [key: string]: number;
           };
+        };
+      };
+    };
+  };
+  inbox_api_v1_inbox_get: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InboxOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };

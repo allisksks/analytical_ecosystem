@@ -12,12 +12,10 @@ import { KbItemPage } from "../features/kb/KbItemPage";
 import { KbPage } from "../features/kb/KbPage";
 import { DataPage } from "../features/data/DataPage";
 import { LoginPage } from "../features/auth/LoginPage";
-import { UserMenu } from "../features/auth/UserMenu";
-import { ProjectPicker } from "../features/projects/ProjectPicker";
-import { AppShell } from "../layout/AppShell";
 import { HomePage } from "../pages/HomePage";
 import { NotFoundPage } from "../pages/StatusPages";
 import { Protected } from "./Protected";
+import { Shell } from "./Shell";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
@@ -26,16 +24,7 @@ export const router = createBrowserRouter([
     element: <Protected />,
     children: [
       {
-        element: (
-          <AppShell
-            topbarExtra={
-              <>
-                <ProjectPicker />
-                <UserMenu />
-              </>
-            }
-          />
-        ),
+        element: <Shell />,
         children: [
           { index: true, element: <HomePage /> },
           { path: "data/*", element: <DataPage /> },

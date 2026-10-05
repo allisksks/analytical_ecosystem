@@ -35,34 +35,44 @@
   color: #1f5dd4;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.18);
 }
-.tabs {
-  display: flex;
-  align-items: stretch;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.tab {
+.search {
+  align-self: center;
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 0 14px;
+  gap: 10px;
+  width: min(440px, 40vw);
+  height: 36px;
+  padding: 0 8px 0 12px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.12);
   color: rgb(255 255 255 / 0.85);
-  font-weight: 700;
+  font: inherit;
   font-size: 13.5px;
+  cursor: pointer;
+  text-align: left;
+}
+.search:hover {
+  background: rgb(255 255 255 / 0.2);
+  color: #fff;
+}
+.searchText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  border-bottom: 3px solid transparent;
-  margin-top: 3px;
-  text-decoration: none !important;
-  transition: background var(--transition);
 }
-.tab:hover {
-  color: #fff;
-  background: rgb(255 255 255 / 0.08);
+.searchKbd {
+  display: flex;
+  gap: 3px;
+  opacity: 0.85;
 }
-.active {
-  color: #fff;
-  background: rgb(0 0 0 / 0.1);
-  border-bottom-color: #fff;
+.searchKbd kbd {
+  color: var(--ink);
+}
+.burger {
+  display: none !important;
+  align-self: center;
 }
 .spacer {
   flex: 1;
@@ -79,11 +89,35 @@
 .iconBtn:hover {
   background: rgb(255 255 255 / 0.24) !important;
 }
-@media (max-width: 1100px) {
-  .tab span {
+@media (max-width: 960px) {
+  .burger {
+    display: inline-flex !important;
+  }
+  .brandName,
+  .searchText,
+  .searchKbd {
     display: none;
   }
-  .brandName {
-    display: none;
+  .search {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+@media (max-width: 600px) {
+  .topbar {
+    padding: 0 var(--space-2);
+    gap: 6px;
+  }
+  .brand {
+    padding-right: 0;
+  }
+  /* language and theme stay reachable on larger screens; on phones the header keeps only essentials */
+  .right .iconBtn {
+    display: none !important;
+  }
+  .right {
+    gap: 6px;
+    min-width: 0;
   }
 }
