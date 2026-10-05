@@ -713,6 +713,370 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/semantic/metrics": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Metrics */
+    get: operations["list_metrics_api_v1_semantic_metrics_get"];
+    put?: never;
+    /** Create Metric */
+    post: operations["create_metric_api_v1_semantic_metrics_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/semantic/dimensions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Dimensions */
+    get: operations["list_dimensions_api_v1_semantic_dimensions_get"];
+    put?: never;
+    /** Create Dimension */
+    post: operations["create_dimension_api_v1_semantic_dimensions_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/semantic/metrics/{metric_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Change a metric (creates a new version) */
+    patch: operations["update_metric_api_v1_semantic_metrics__metric_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/semantic/metrics/{metric_id}/versions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Metric Versions */
+    get: operations["metric_versions_api_v1_semantic_metrics__metric_id__versions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/semantic/packs/{pack}/install": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Install a domain pack (metrics, dimensions) */
+    post: operations["install_api_v1_semantic_packs__pack__install_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/semantic/packs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Packs */
+    get: operations["packs_api_v1_semantic_packs_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/semantic/dimensions/{key}/values": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Distinct values for filter pickers */
+    get: operations["dimension_values_api_v1_semantic_dimensions__key__values_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/semantic/query": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Run metrics by dimensions without SQL */
+    post: operations["query_api_v1_semantic_query_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards/templates": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Templates */
+    get: operations["list_templates_api_v1_dashboards_templates_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Dashboards */
+    get: operations["list_dashboards_api_v1_dashboards_get"];
+    put?: never;
+    /** Create Dashboard */
+    post: operations["create_dashboard_api_v1_dashboards_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards/from-template": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** From Template */
+    post: operations["from_template_api_v1_dashboards_from_template_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards/{dashboard_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Dashboard */
+    get: operations["read_dashboard_api_v1_dashboards__dashboard_id__get"];
+    put?: never;
+    post?: never;
+    /** Delete Dashboard */
+    delete: operations["delete_dashboard_api_v1_dashboards__dashboard_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Dashboard */
+    patch: operations["update_dashboard_api_v1_dashboards__dashboard_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/dashboards/{dashboard_id}/widgets": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Add Widget */
+    post: operations["add_widget_api_v1_dashboards__dashboard_id__widgets_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/widgets/{widget_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Widget */
+    delete: operations["delete_widget_api_v1_widgets__widget_id__delete"];
+    options?: never;
+    head?: never;
+    /** Update Widget */
+    patch: operations["update_widget_api_v1_widgets__widget_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/dashboards/{dashboard_id}/layout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Save positions after drag & drop */
+    put: operations["save_layout_api_v1_dashboards__dashboard_id__layout_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards/{dashboard_id}/widgets/{widget_id}/data": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Widget Data */
+    post: operations["widget_data_api_v1_dashboards__dashboard_id__widgets__widget_id__data_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/widgets/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Data for an unsaved block (block editor) */
+    post: operations["preview_api_v1_widgets_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards/{dashboard_id}/share": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Public read-only link with expiry */
+    post: operations["share_api_v1_dashboards__dashboard_id__share_post"];
+    /** Unshare */
+    delete: operations["unshare_api_v1_dashboards__dashboard_id__share_delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/dashboards/{dashboard_id}/grants": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Give a guest access to this dashboard */
+    post: operations["grant_api_v1_dashboards__dashboard_id__grants_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/public/dashboards/{token}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Public Dashboard */
+    get: operations["public_dashboard_api_v1_public_dashboards__token__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/public/dashboards/{token}/widgets/{widget_id}/data": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Public Widget Data */
+    post: operations["public_widget_data_api_v1_public_dashboards__token__widgets__widget_id__data_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -755,6 +1119,24 @@ export interface components {
     Body_upload_file_api_v1_sources__source_id__files_post: {
       /** File */
       file: string;
+    };
+    /** CohortIn */
+    CohortIn: {
+      /** Label */
+      label: string;
+      /** Filters */
+      filters?: components["schemas"]["FilterIn"][];
+    };
+    /** ColumnMeta */
+    ColumnMeta: {
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Role */
+      role: string;
+      /** Format */
+      format: string;
     };
     /** ColumnOut */
     ColumnOut: {
@@ -811,6 +1193,172 @@ export interface components {
       /** Secret Fields */
       secret_fields?: string[];
     };
+    /** DashboardIn */
+    DashboardIn: {
+      /** Project Id */
+      project_id?: string | null;
+      /** Title */
+      title: string;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /** Filters */
+      filters?: {
+        [key: string]: unknown;
+      };
+    };
+    /** DashboardOut */
+    DashboardOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Project Id */
+      project_id: string | null;
+      /** Title */
+      title: string;
+      /** Description */
+      description: string;
+      /** Role */
+      role: string;
+      /** Template Key */
+      template_key: string;
+      /** Owner Id */
+      owner_id: string | null;
+      /** Position */
+      position: number;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /**
+       * Can Edit
+       * @default false
+       */
+      can_edit?: boolean;
+      /** Filters */
+      filters: {
+        [key: string]: unknown;
+      };
+      /** Widgets */
+      widgets: components["schemas"]["WidgetOut"][];
+      /** Share Expires At */
+      share_expires_at: string | null;
+      /**
+       * Shared
+       * @default false
+       */
+      shared?: boolean;
+    };
+    /** DashboardPatch */
+    DashboardPatch: {
+      /** Title */
+      title?: string | null;
+      /** Description */
+      description?: string | null;
+      /** Filters */
+      filters?: {
+        [key: string]: unknown;
+      } | null;
+      /** Position */
+      position?: number | null;
+    };
+    /** DashboardSummary */
+    DashboardSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Project Id */
+      project_id: string | null;
+      /** Title */
+      title: string;
+      /** Description */
+      description: string;
+      /** Role */
+      role: string;
+      /** Template Key */
+      template_key: string;
+      /** Owner Id */
+      owner_id: string | null;
+      /** Position */
+      position: number;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /**
+       * Can Edit
+       * @default false
+       */
+      can_edit?: boolean;
+    };
+    /** DataIn */
+    DataIn: {
+      /** Date From */
+      date_from?: string | null;
+      /** Date To */
+      date_to?: string | null;
+      /** Filters */
+      filters?: components["schemas"]["FilterIn"][];
+    };
+    /** DataOut */
+    DataOut: {
+      /** Columns */
+      columns: components["schemas"]["ColumnMeta"][];
+      /** Rows */
+      rows: unknown[][];
+      /** Sql */
+      sql: string[];
+      /** Cached */
+      cached: boolean;
+      /**
+       * Date From
+       * Format: date
+       */
+      date_from: string;
+      /**
+       * Date To
+       * Format: date
+       */
+      date_to: string;
+    };
+    /** DimensionIn */
+    DimensionIn: {
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Column */
+      column: string;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+    };
+    /** DimensionOut */
+    DimensionOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Column */
+      column: string;
+      /** Description */
+      description: string;
+    };
     /** ExportIn */
     ExportIn: {
       /**
@@ -837,6 +1385,36 @@ export interface components {
        * @enum {string}
        */
       format?: "csv" | "xlsx";
+    };
+    /** FilterIn */
+    FilterIn: {
+      /** Dimension */
+      dimension: string;
+      /**
+       * Op
+       * @default in
+       * @enum {string}
+       */
+      op?: "in" | "not_in" | "gte" | "lte" | "eq";
+      /** Values */
+      values: unknown[];
+    };
+    /** FromTemplateIn */
+    FromTemplateIn: {
+      /** Project Id */
+      project_id?: string | null;
+      /** Template Key */
+      template_key: string;
+    };
+    /** GrantIn */
+    GrantIn: {
+      /**
+       * User Id
+       * Format: uuid
+       */
+      user_id: string;
+      /** Expires At */
+      expires_at?: string | null;
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -876,6 +1454,25 @@ export interface components {
        * Format: date-time
        */
       created_at: string;
+    };
+    /** InstallOut */
+    InstallOut: {
+      /** Metrics */
+      metrics: number;
+      /** Dimensions */
+      dimensions: number;
+    };
+    /** LayoutItem */
+    LayoutItem: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Layout */
+      layout: {
+        [key: string]: number;
+      };
     };
     /** LoginIn */
     LoginIn: {
@@ -930,6 +1527,153 @@ export interface components {
       /** Project Id */
       project_id: string | null;
     };
+    /** MetricIn */
+    MetricIn: {
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /** Table */
+      table: string;
+      /** Time Column */
+      time_column: string;
+      /** Expression */
+      expression: string;
+      /**
+       * Filters
+       * @default
+       */
+      filters?: string;
+      /**
+       * Maturity Days
+       * @default 0
+       */
+      maturity_days?: number;
+      /** Default Dimensions */
+      default_dimensions?: string[];
+      /**
+       * Format
+       * @default number
+       * @enum {string}
+       */
+      format?: "number" | "percent" | "currency" | "decimal";
+      /**
+       * Owner
+       * @default
+       */
+      owner?: string;
+      /** Tags */
+      tags?: string[];
+      /** Source Id */
+      source_id?: string | null;
+      /** Key */
+      key: string;
+    };
+    /** MetricOut */
+    MetricOut: {
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /** Table */
+      table: string;
+      /** Time Column */
+      time_column: string;
+      /** Expression */
+      expression: string;
+      /**
+       * Filters
+       * @default
+       */
+      filters?: string;
+      /**
+       * Maturity Days
+       * @default 0
+       */
+      maturity_days?: number;
+      /** Default Dimensions */
+      default_dimensions?: string[];
+      /**
+       * Format
+       * @default number
+       * @enum {string}
+       */
+      format?: "number" | "percent" | "currency" | "decimal";
+      /**
+       * Owner
+       * @default
+       */
+      owner?: string;
+      /** Tags */
+      tags?: string[];
+      /** Source Id */
+      source_id?: string | null;
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Key */
+      key: string;
+      /** Pack */
+      pack: string;
+      /** Version */
+      version: number;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+    };
+    /** MetricPatch */
+    MetricPatch: {
+      /** Name */
+      name?: string | null;
+      /** Description */
+      description?: string | null;
+      /** Table */
+      table?: string | null;
+      /** Time Column */
+      time_column?: string | null;
+      /** Expression */
+      expression?: string | null;
+      /** Filters */
+      filters?: string | null;
+      /** Maturity Days */
+      maturity_days?: number | null;
+      /** Default Dimensions */
+      default_dimensions?: string[] | null;
+      /** Format */
+      format?: ("number" | "percent" | "currency" | "decimal") | null;
+      /** Owner */
+      owner?: string | null;
+      /** Tags */
+      tags?: string[] | null;
+      /** Source Id */
+      source_id?: string | null;
+    };
+    /** MetricVersionOut */
+    MetricVersionOut: {
+      /** Version */
+      version: number;
+      /** Definition */
+      definition: {
+        [key: string]: unknown;
+      };
+      /** Author */
+      author: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
     /** MfaCodeIn */
     MfaCodeIn: {
       /** Mfa Token */
@@ -969,6 +1713,27 @@ export interface components {
       key: string;
       /** Org Level */
       org_level: boolean;
+    };
+    /** PreviewIn */
+    PreviewIn: {
+      /** Date From */
+      date_from?: string | null;
+      /** Date To */
+      date_to?: string | null;
+      /** Filters */
+      filters?: components["schemas"]["FilterIn"][];
+      /** Project Id */
+      project_id?: string | null;
+      /**
+       * Mode
+       * @default semantic
+       * @enum {string}
+       */
+      mode?: "semantic" | "sql";
+      /** Spec */
+      spec: {
+        [key: string]: unknown;
+      };
     };
     /** ProjectIn */
     ProjectIn: {
@@ -1237,6 +2002,45 @@ export interface components {
       /** Shared */
       shared?: boolean | null;
     };
+    /** SemanticQueryIn */
+    SemanticQueryIn: {
+      /** Project Id */
+      project_id?: string | null;
+      /** Metrics */
+      metrics: string[];
+      /** Dimensions */
+      dimensions?: string[];
+      /**
+       * Grain
+       * @default none
+       * @enum {string}
+       */
+      grain?: "none" | "day" | "week" | "month";
+      /** Date From */
+      date_from?: string | null;
+      /** Date To */
+      date_to?: string | null;
+      /** Filters */
+      filters?: components["schemas"]["FilterIn"][];
+      /** Cohorts */
+      cohorts?: components["schemas"]["CohortIn"][];
+      /**
+       * Limit
+       * @default 5000
+       */
+      limit?: number;
+    };
+    /** SemanticResultOut */
+    SemanticResultOut: {
+      /** Columns */
+      columns: components["schemas"]["ColumnMeta"][];
+      /** Rows */
+      rows: unknown[][];
+      /** Sql */
+      sql: string[];
+      /** Cached */
+      cached: boolean;
+    };
     /** ServiceTokenCreated */
     ServiceTokenCreated: {
       /**
@@ -1312,6 +2116,24 @@ export interface components {
        * Format: date-time
        */
       created_at: string;
+    };
+    /** ShareIn */
+    ShareIn: {
+      /**
+       * Ttl Days
+       * @default 7
+       */
+      ttl_days?: number;
+    };
+    /** ShareOut */
+    ShareOut: {
+      /** Token */
+      token: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
     };
     /** SourceIn */
     SourceIn: {
@@ -1476,6 +2298,19 @@ export interface components {
       /** Tags */
       tags?: string[] | null;
     };
+    /** TemplateOut */
+    TemplateOut: {
+      /** Key */
+      key: string;
+      /** Title */
+      title: string;
+      /** Role */
+      role: string;
+      /** Scope */
+      scope: string;
+      /** Widgets */
+      widgets: number;
+    };
     /** TestOut */
     TestOut: {
       /** Ok */
@@ -1572,6 +2407,96 @@ export interface components {
       input?: unknown;
       /** Context */
       ctx?: Record<string, never>;
+    };
+    /** WidgetIn */
+    WidgetIn: {
+      /** Title */
+      title: string;
+      /**
+       * Viz
+       * @enum {string}
+       */
+      viz: "line" | "bar" | "area" | "heatmap" | "table" | "kpi" | "pie";
+      /**
+       * Mode
+       * @default semantic
+       * @enum {string}
+       */
+      mode?: "semantic" | "sql";
+      /** Spec */
+      spec: {
+        [key: string]: unknown;
+      };
+      /** Layout */
+      layout?: {
+        [key: string]: number;
+      };
+      /** Settings */
+      settings?: {
+        [key: string]: unknown;
+      };
+      /**
+       * Observation
+       * @default
+       */
+      observation?: string;
+    };
+    /** WidgetOut */
+    WidgetOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      /** Viz */
+      viz: string;
+      /** Mode */
+      mode: string;
+      /** Spec */
+      spec: {
+        [key: string]: unknown;
+      };
+      /** Layout */
+      layout: {
+        [key: string]: number;
+      };
+      /** Settings */
+      settings: {
+        [key: string]: unknown;
+      };
+      /** Position */
+      position: number;
+      /** Observation */
+      observation: string;
+      /** Observation Author */
+      observation_author: string;
+      /** Observation Is Ai Draft */
+      observation_is_ai_draft: boolean;
+    };
+    /** WidgetPatch */
+    WidgetPatch: {
+      /** Title */
+      title?: string | null;
+      /** Viz */
+      viz?: ("line" | "bar" | "area" | "heatmap" | "table" | "kpi" | "pie") | null;
+      /** Mode */
+      mode?: ("semantic" | "sql") | null;
+      /** Spec */
+      spec?: {
+        [key: string]: unknown;
+      } | null;
+      /** Layout */
+      layout?: {
+        [key: string]: number;
+      } | null;
+      /** Settings */
+      settings?: {
+        [key: string]: unknown;
+      } | null;
+      /** Observation */
+      observation?: string | null;
     };
   };
   responses: never;
@@ -3186,6 +4111,875 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_metrics_api_v1_semantic_metrics_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MetricOut"][];
+        };
+      };
+    };
+  };
+  create_metric_api_v1_semantic_metrics_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MetricIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MetricOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_dimensions_api_v1_semantic_dimensions_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DimensionOut"][];
+        };
+      };
+    };
+  };
+  create_dimension_api_v1_semantic_dimensions_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DimensionIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DimensionOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_metric_api_v1_semantic_metrics__metric_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        metric_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MetricPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MetricOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  metric_versions_api_v1_semantic_metrics__metric_id__versions_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        metric_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MetricVersionOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  install_api_v1_semantic_packs__pack__install_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        pack: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InstallOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  packs_api_v1_semantic_packs_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": string[];
+        };
+      };
+    };
+  };
+  dimension_values_api_v1_semantic_dimensions__key__values_get: {
+    parameters: {
+      query?: {
+        project_id?: string | null;
+      };
+      header?: never;
+      path: {
+        key: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown[];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  query_api_v1_semantic_query_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SemanticQueryIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SemanticResultOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_templates_api_v1_dashboards_templates_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TemplateOut"][];
+        };
+      };
+    };
+  };
+  list_dashboards_api_v1_dashboards_get: {
+    parameters: {
+      query?: {
+        project_id?: string | null;
+        portfolio?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_dashboard_api_v1_dashboards_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DashboardIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  from_template_api_v1_dashboards_from_template_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FromTemplateIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_dashboard_api_v1_dashboards__dashboard_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_dashboard_api_v1_dashboards__dashboard_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_dashboard_api_v1_dashboards__dashboard_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DashboardPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  add_widget_api_v1_dashboards__dashboard_id__widgets_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WidgetIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WidgetOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_widget_api_v1_widgets__widget_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        widget_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_widget_api_v1_widgets__widget_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        widget_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WidgetPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WidgetOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_layout_api_v1_dashboards__dashboard_id__layout_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LayoutItem"][];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  widget_data_api_v1_dashboards__dashboard_id__widgets__widget_id__data_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+        widget_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DataOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_v1_widgets_preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PreviewIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DataOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  share_api_v1_dashboards__dashboard_id__share_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ShareIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ShareOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  unshare_api_v1_dashboards__dashboard_id__share_delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  grant_api_v1_dashboards__dashboard_id__grants_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        dashboard_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GrantIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  public_dashboard_api_v1_public_dashboards__token__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        token: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DashboardOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  public_widget_data_api_v1_public_dashboards__token__widgets__widget_id__data_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        token: string;
+        widget_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DataIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DataOut"];
+        };
       };
       /** @description Validation Error */
       422: {
