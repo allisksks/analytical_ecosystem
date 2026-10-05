@@ -53,7 +53,7 @@ docs/               архитектура, руководства, настро
 ## ИИ-ассистент
 
 Выключен по умолчанию. Чтобы включить — укажите модель и ключ в `.env` и перезапустите стек:
-пошагово для Yandex AI Studio (Qwen3 235B) и локального Ollama — в [docs/ai-setup.md](docs/ai-setup.md).
+пошагово для Yandex AI Studio (Qwen3.6 35B) и локального Ollama — в [docs/ai-setup.md](docs/ai-setup.md).
 Проверка качества: `make ai-exam` (экзамен по голден-сету, порог 70%).
 
 Подробности — в [docs/architecture.md](docs/architecture.md) и [CONTRIBUTING.md](CONTRIBUTING.md).
