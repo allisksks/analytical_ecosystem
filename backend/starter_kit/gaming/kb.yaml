@@ -1,0 +1,149 @@
+# Knowledge base templates (one per VKR record type) and filled examples for the demo studio.
+templates:
+  experiment: |
+    ## Гипотеза
+    Если …, то метрика … изменится на … , потому что …
+
+    ## Дизайн
+    - Первичная метрика:
+    - Защитные метрики:
+    - Группы и доли трафика:
+    - Сегменты:
+    - Критерий остановки:
+
+    ## Результат
+    | Метрика | A | B | Lift | P(B>A) |
+    |---|---|---|---|---|
+
+    ## Вывод и решение
+  research: |
+    ## Вопрос
+    ## Данные и метод
+    ## Находки
+    1.
+    ## Рекомендации
+  case: |
+    ## Контекст
+    ## Что сделали
+    ## Результат в цифрах
+    ## Чему научились
+  incident_report: |
+    ## Что случилось
+    ## Влияние (метрики, период, доля пользователей)
+    ## Хронология
+    | Время | Событие |
+    |---|---|
+    ## Причина
+    ## Что исправили и как не повторить
+  playbook: |
+    ## Когда применять
+    ## Шаги
+    1.
+    ## Чек-лист
+    - [ ]
+    ## Ответственные
+  decision_log: |
+    ## Решение
+    ## Контекст и альтернативы
+    ## Почему так
+    ## Как пересмотреть решение
+  metric_definition: |
+    ## Определение
+    ## Формула
+    ```sql
+    ```
+    ## Источник и витрина
+    ## Подводные камни
+examples:
+  - type: experiment
+    project: iron_shells
+    title: "Iron Shells · Стартовый набор $4.99 → $5.99"
+    summary: "Повышение цены стартового набора на $1 увеличило ARPU на 4,8% (P(B>A)=0,97) при падении конверсии в покупку на 12%."
+    decision: accepted
+    tags: [pricing, starter-pack, monetisation, ab]
+    author: P. Orlov
+    body: |
+      ## Гипотеза
+      Если поднять цену стартового набора с $4.99 до $5.99, ARPU вырастет, потому что спрос на набор неэластичен в мидкоре.
+
+      ## Результат
+      | Метрика | A | B | Lift | P(B>A) |
+      |---|---|---|---|---|
+      | ARPU D7 | $0.41 | $0.43 | +4.8% | 0.97 |
+      | Конверсия в платёж | 2.9% | 2.5% | −12% | 0.02 |
+
+      ## Вывод и решение
+      Принято: оставить $5.99. Следить за конверсией новых когорт в течение месяца.
+  - type: experiment
+    project: iron_shells
+    title: "Iron Shells · Новый туториал (tutorial_v2)"
+    summary: "Сокращённый туториал поднял Retention D7 на ~2 п.п. Решение — раскатить на 100%."
+    decision: accepted
+    tags: [onboarding, tutorial, retention, ab]
+    author: A. Volkova
+  - type: experiment
+    project: bloom_merge
+    title: "Bloom & Merge · Дополнительный ежедневный квест"
+    summary: "Четвёртый квест не изменил удержание (+0,2 п.п., незначимо) и снизил выполнение квестов на 5 п.п."
+    decision: rejected
+    tags: [liveops, quests, retention, ab]
+    author: M. Sokolov
+  - type: research
+    project: iron_shells
+    title: "Почему новые игроки уходят в первые 24 часа"
+    summary: "Воронка показала два провала: шаги 3 и 7 туториала (−12% и −9%)."
+    tags: [onboarding, funnel, retention]
+    author: A. Volkova
+  - type: incident_report
+    project: iron_shells
+    title: "iOS 1.8.0: iap_purchase перестал отправляться у 85% платежей"
+    summary: "После релиза 1.8.0 на iOS событие покупки терялось; реестр событий поднял алерт через 2 часа, выручка в сторе не пострадала."
+    tags: [incident, ios, ems, iap]
+    author: M. Sokolov
+    body: |
+      ## Что случилось
+      После релиза 1.8.0 на iOS событие `iap_purchase` отправлялось только для 15% платежей.
+
+      ## Влияние
+      Дашборды монетизации занижали выручку iOS; отчёт стора не пострадал.
+
+      ## Причина
+      SDK-обёртка вызывала трекинг до подтверждения транзакции StoreKit 2.
+
+      ## Что исправили
+      Хотфикс 1.8.1, контроль частоты события в реестре событий (порог 50% от базовой).
+  - type: playbook
+    title: "Как запустить LiveOps-ивент от начала до конца"
+    summary: "Шесть шагов: дизайн события в реестре, дашборд, A/B, пострелизная проверка, разбор итогов."
+    tags: [liveops, playbook, process]
+    author: A. Volkova
+  - type: decision_log
+    title: "Байесовский подход вместо частотного для A/B"
+    summary: "60% наших тестов имеют меньше 10 тыс. пользователей на группу; P(B>A) понятнее продуктам на любом шаге."
+    tags: [statistics, ab, methodology]
+    author: Y. Sanochkin
+  - type: metric_definition
+    title: "Retention D7: определение"
+    summary: "Доля игроков когорты установки, активных ровно на 7-й день после установки (day_n = 7)."
+    tags: [retention, definition, metric]
+    author: data-team
+    links: [{kind: metric, ref: retention_d7, title: Retention D7}]
+    body: |
+      ## Формула
+      ```sql
+      count(distinct if(day_n = 7, user_id, null)) / count(distinct user_id)  -- по когорте установки
+      ```
+      ## Подводные камни
+      Когорты младше 7 дней исключаются (зрелость когорты).
+  - type: case
+    project: bloom_merge
+    title: "Кросс-промо Bloom & Merge → Iron Shells"
+    summary: "Баннер кросс-промо конвертирует 3,1% и даёт IPM в 1,6 раза выше Facebook."
+    tags: [ua, cross-promo]
+    author: I. Petrov
+  - type: research
+    project: drift_kings
+    title: "Drift Kings · Качество источников трафика"
+    summary: "Mintegral приносит дешёвые установки, но D7 на 35% ниже органики; ROAS D7 не окупается."
+    tags: [ua, retention, sources]
+    author: I. Petrov

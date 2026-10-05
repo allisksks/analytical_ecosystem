@@ -1077,10 +1077,150 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/kb/templates": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Markdown skeletons per record type */
+    get: operations["templates_api_v1_kb_templates_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/kb": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Full-text search with type and tag facets */
+    get: operations["search_api_v1_kb_get"];
+    put?: never;
+    /** Create */
+    post: operations["create_api_v1_kb_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/kb/{item_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read */
+    get: operations["read_api_v1_kb__item_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Edit (content changes create a new version) */
+    patch: operations["update_api_v1_kb__item_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/kb/{item_id}/versions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Versions */
+    get: operations["versions_api_v1_kb__item_id__versions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/kb/{item_id}/comments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Comment */
+    post: operations["comment_api_v1_kb__item_id__comments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/kb/{item_id}/attachments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Attach */
+    post: operations["attach_api_v1_kb__item_id__attachments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/kb/{item_id}/attachments/{attachment_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Download */
+    get: operations["download_api_v1_kb__item_id__attachments__attachment_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** AttachmentOut */
+    AttachmentOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Filename */
+      filename: string;
+      /** Content Type */
+      content_type: string;
+      /** Size */
+      size: number;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
     /** AuditOut */
     AuditOut: {
       /** Id */
@@ -1114,6 +1254,11 @@ export interface components {
       details: {
         [key: string]: unknown;
       };
+    };
+    /** Body_attach_api_v1_kb__item_id__attachments_post */
+    Body_attach_api_v1_kb__item_id__attachments_post: {
+      /** File */
+      file: string;
     };
     /** Body_upload_file_api_v1_sources__source_id__files_post */
     Body_upload_file_api_v1_sources__source_id__files_post: {
@@ -1166,6 +1311,28 @@ export interface components {
       description?: string | null;
       /** Is Pii */
       is_pii?: boolean | null;
+    };
+    /** CommentIn */
+    CommentIn: {
+      /** Text */
+      text: string;
+    };
+    /** CommentOut */
+    CommentOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Author Name */
+      author_name: string;
+      /** Text */
+      text: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
     };
     /** ConnectorType */
     ConnectorType: {
@@ -1386,6 +1553,15 @@ export interface components {
        */
       format?: "csv" | "xlsx";
     };
+    /** Facets */
+    Facets: {
+      /** Types */
+      types: {
+        [key: string]: number;
+      };
+      /** Tags */
+      tags: components["schemas"]["TagCount"][];
+    };
     /** FilterIn */
     FilterIn: {
       /** Dimension */
@@ -1462,6 +1638,153 @@ export interface components {
       /** Dimensions */
       dimensions: number;
     };
+    /** ItemIn */
+    ItemIn: {
+      /** Project Id */
+      project_id?: string | null;
+      /**
+       * Type
+       * @enum {string}
+       */
+      type: "experiment" | "research" | "case" | "incident_report" | "playbook" | "decision_log" | "metric_definition";
+      /** Title */
+      title: string;
+      /**
+       * Summary
+       * @default
+       */
+      summary?: string;
+      /**
+       * Body
+       * @default
+       */
+      body?: string;
+      /** Tags */
+      tags?: string[];
+      /** Links */
+      links?: components["schemas"]["LinkIn"][];
+      /**
+       * Decision
+       * @default
+       */
+      decision?: string;
+      /**
+       * Status
+       * @default published
+       * @enum {string}
+       */
+      status?: "draft" | "published";
+    };
+    /** ItemOut */
+    ItemOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Project Id */
+      project_id: string | null;
+      /** Type */
+      type: string;
+      /** Title */
+      title: string;
+      /** Summary */
+      summary: string;
+      /** Status */
+      status: string;
+      /** Decision */
+      decision: string;
+      /** Tags */
+      tags: string[];
+      /** Author Name */
+      author_name: string;
+      /** Version */
+      version: number;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Body */
+      body: string;
+      /** Links */
+      links: {
+        [key: string]: unknown;
+      }[];
+      /** Source Ref */
+      source_ref: string;
+      /**
+       * Can Edit
+       * @default false
+       */
+      can_edit?: boolean;
+      /** Comments */
+      comments?: components["schemas"]["CommentOut"][];
+      /** Attachments */
+      attachments?: components["schemas"]["AttachmentOut"][];
+    };
+    /** ItemPatch */
+    ItemPatch: {
+      /** Title */
+      title?: string | null;
+      /** Summary */
+      summary?: string | null;
+      /** Body */
+      body?: string | null;
+      /** Tags */
+      tags?: string[] | null;
+      /** Links */
+      links?: components["schemas"]["LinkIn"][] | null;
+      /** Decision */
+      decision?: string | null;
+      /** Status */
+      status?: ("draft" | "published" | "archived") | null;
+      /** Type */
+      type?:
+        | ("experiment" | "research" | "case" | "incident_report" | "playbook" | "decision_log" | "metric_definition")
+        | null;
+    };
+    /** ItemSummary */
+    ItemSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Project Id */
+      project_id: string | null;
+      /** Type */
+      type: string;
+      /** Title */
+      title: string;
+      /** Summary */
+      summary: string;
+      /** Status */
+      status: string;
+      /** Decision */
+      decision: string;
+      /** Tags */
+      tags: string[];
+      /** Author Name */
+      author_name: string;
+      /** Version */
+      version: number;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+    };
     /** LayoutItem */
     LayoutItem: {
       /**
@@ -1473,6 +1796,21 @@ export interface components {
       layout: {
         [key: string]: number;
       };
+    };
+    /** LinkIn */
+    LinkIn: {
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: "event" | "metric" | "dashboard" | "experiment" | "kb" | "url";
+      /** Ref */
+      ref: string;
+      /**
+       * Title
+       * @default
+       */
+      title?: string;
     };
     /** LoginIn */
     LoginIn: {
@@ -2002,6 +2340,14 @@ export interface components {
       /** Shared */
       shared?: boolean | null;
     };
+    /** SearchOut */
+    SearchOut: {
+      /** Items */
+      items: components["schemas"]["ItemSummary"][];
+      /** Total */
+      total: number;
+      facets: components["schemas"]["Facets"];
+    };
     /** SemanticQueryIn */
     SemanticQueryIn: {
       /** Project Id */
@@ -2298,6 +2644,13 @@ export interface components {
       /** Tags */
       tags?: string[] | null;
     };
+    /** TagCount */
+    TagCount: {
+      /** Tag */
+      tag: string;
+      /** Count */
+      count: number;
+    };
     /** TemplateOut */
     TemplateOut: {
       /** Key */
@@ -2407,6 +2760,24 @@ export interface components {
       input?: unknown;
       /** Context */
       ctx?: Record<string, never>;
+    };
+    /** VersionOut */
+    VersionOut: {
+      /** Version */
+      version: number;
+      /** Title */
+      title: string;
+      /** Summary */
+      summary: string;
+      /** Body */
+      body: string;
+      /** Author */
+      author: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
     };
     /** WidgetIn */
     WidgetIn: {
@@ -4980,6 +5351,296 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["DataOut"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  templates_api_v1_kb_templates_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            [key: string]: string;
+          };
+        };
+      };
+    };
+  };
+  search_api_v1_kb_get: {
+    parameters: {
+      query?: {
+        q?: string;
+        type?: string[] | null;
+        tag?: string[] | null;
+        project_id?: string | null;
+        status?: string;
+        sort?: string;
+        limit?: number;
+        offset?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SearchOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_api_v1_kb_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ItemIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ItemOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_api_v1_kb__item_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ItemOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_api_v1_kb__item_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ItemPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ItemOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  versions_api_v1_kb__item_id__versions_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["VersionOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  comment_api_v1_kb__item_id__comments_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  attach_api_v1_kb__item_id__attachments_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_attach_api_v1_kb__item_id__attachments_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttachmentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  download_api_v1_kb__item_id__attachments__attachment_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        item_id: string;
+        attachment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {

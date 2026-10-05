@@ -3,11 +3,12 @@ import { PageBody } from "../../layout/AppShell";
 import { useI18n } from "../../shared/i18n";
 import { PageHeader, Tabs } from "../../shared/ui";
 import { CatalogPage } from "./CatalogPage";
+import { MetricsPage } from "./MetricsPage";
 import { SourcesPage } from "./SourcesPage";
 import { SqlPage } from "./SqlPage";
 import s from "./data.module.css";
 
-type Section = "sources" | "catalog" | "sql";
+type Section = "sources" | "catalog" | "metrics" | "sql";
 
 export function DataPage() {
   const { t } = useI18n();
@@ -24,6 +25,7 @@ export function DataPage() {
         items={[
           { key: "sources", label: t("data.sources") },
           { key: "catalog", label: t("data.catalog") },
+          { key: "metrics", label: t("data.metrics") },
           { key: "sql", label: t("data.sql") },
         ]}
       />
@@ -31,6 +33,7 @@ export function DataPage() {
         <Route index element={<Navigate to="sources" replace />} />
         <Route path="sources" element={<SourcesPage />} />
         <Route path="catalog" element={<CatalogPage />} />
+        <Route path="metrics" element={<MetricsPage />} />
         <Route path="sql" element={<SqlPage />} />
       </Routes>
     </PageBody>
