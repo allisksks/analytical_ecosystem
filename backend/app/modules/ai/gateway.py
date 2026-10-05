@@ -47,8 +47,11 @@ def is_local(url: str) -> bool:
 
 
 def strip_think(text: str) -> str:
-    """Removes the reasoning block of Qwen3/DeepSeek-style models (also an unterminated one)."""
+    """Removes the reasoning block of Qwen3/DeepSeek-style models (also an unterminated one, or one whose
+    opening tag the provider already dropped)."""
     text = THINK_RE.sub("", text)
+    if "</think>" in text:
+        text = text.rsplit("</think>", 1)[1]
     if "<think>" in text:
         text = text.split("<think>", 1)[0]
     return text.strip()
@@ -102,6 +105,7 @@ class AiGateway:
             "temperature": kw.pop("temperature", self.s.ai_temperature),
             "max_tokens": kw.pop("max_tokens", self.s.ai_max_tokens),
             "stream": stream,
+            **self.s.ai_extra_body,
             **kw,
         }
 
@@ -119,7 +123,13 @@ class AiGateway:
             raise UpstreamError(f"Модель вернула ошибку {r.status_code}", details={"body": r.text[:500]})
         data = r.json()
         usage = data.get("usage") or {}
-        text = strip_think(data["choices"][0]["message"].get("content") or "")
+        choice = data["choices"][0]
+        text = strip_think(choice["message"].get("content") or "")
+        if not text and choice.get("finish_reason") == "length":
+            raise UpstreamError(
+                f"Модель израсходовала лимит {body['max_tokens']} токенов на рассуждения и не успела ответить. "
+                "Увеличьте AI_MAX_TOKENS или отключите рассуждения через AI_EXTRA_BODY (docs/ai-setup.md)"
+            )
         return ChatResult(
             text=text,
             model=data.get("model") or body["model"],

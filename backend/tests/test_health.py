@@ -31,3 +31,12 @@ def test_cors_origins_from_plain_env(monkeypatch) -> None:  # type: ignore[no-un
     assert Settings().cors_origins == ["https://a.example", "https://b.example"]
     monkeypatch.setenv("CORS_ORIGINS", '["https://c.example"]')
     assert Settings().cors_origins == ["https://c.example"]
+
+
+def test_ai_extra_body_from_env(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    from app.core.config import Settings
+
+    monkeypatch.setenv("AI_EXTRA_BODY", "")
+    assert Settings().ai_extra_body == {}
+    monkeypatch.setenv("AI_EXTRA_BODY", '{"reasoning_effort": "low"}')
+    assert Settings().ai_extra_body == {"reasoning_effort": "low"}
