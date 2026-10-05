@@ -31,3 +31,5 @@ demo-data/
 !.vscode/extensions.json
 .DS_Store
 *.swp
+ai-exam-report.md
+ai-exam-report.json

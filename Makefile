@@ -1,4 +1,4 @@
-.PHONY: help setup dev-db dev-api dev-web demo-data test lint fmt openapi up down
+.PHONY: help setup dev-db dev-api dev-web demo-data test lint fmt openapi up up-ai ai-check ai-index ai-exam ai-exam-dev down
 
 help:  ## Show targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -38,6 +38,25 @@ openapi:  ## Regenerate OpenAPI schema and the typed frontend client
 up:  ## Build and start the full stack with demo data
 	docker compose --profile demo run --rm demo-data
 	docker compose up -d --build
+
+up-ai:  ## Full stack + local Ollama with Qwen3 and an embedding model (option B in docs/ai-setup.md)
+	docker compose --profile demo run --rm demo-data
+	docker compose --profile ai up -d --build
+	docker compose exec ollama ollama pull $${AI_CHAT_MODEL:-qwen3:8b}
+	docker compose exec ollama ollama pull $${AI_EMBEDDING_MODEL:-nomic-embed-text}
+
+ai-check:  ## Ask the configured model a test question
+	docker compose exec api python -c "import asyncio; from app.modules.ai.gateway import AiGateway; print(asyncio.run(AiGateway().ping()))"
+
+ai-index:  ## Index the knowledge base for the assistant now (otherwise every 15 minutes)
+	docker compose exec worker celery -A app.worker call ai.index_kb
+
+ai-exam:  ## Golden-set exam of the SQL assistant (pass >= 70%), report in ai-exam-report.md
+	docker compose exec api python -m scripts.ai_exam --data /data/demo --out /tmp/ai-exam-report.md
+	docker compose cp api:/tmp/ai-exam-report.md ./ai-exam-report.md
+
+ai-exam-dev:  ## Same exam against the local dev setup (backend/demo-data, backend/.env)
+	cd backend && uv run python -m scripts.ai_exam
 
 down:  ## Stop the stack
 	docker compose down

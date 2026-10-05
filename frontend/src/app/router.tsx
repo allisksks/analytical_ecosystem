@@ -3,6 +3,7 @@ import { AbPage } from "../features/ab/AbPage";
 import { DesignerPage } from "../features/ab/DesignerPage";
 import { ExperimentPage } from "../features/ab/ExperimentPage";
 import { AdminPage } from "../features/admin/AdminPage";
+import { AssistantPage } from "../features/ai/AssistantPage";
 import { BiPage } from "../features/bi/BiPage";
 import { PublicDashboardPage } from "../features/bi/PublicDashboardPage";
 import { EmsPage } from "../features/ems/EmsPage";
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
           { path: "ab/new", element: <DesignerPage /> },
           { path: "ab/:id", element: <ExperimentPage /> },
           { path: "ab/:id/edit", element: <DesignerPage /> },
+          { path: "assistant", element: <AssistantPage /> },
           { path: "kb", element: <KbPage /> },
           { path: "kb/new", element: <KbEditorPage /> },
           { path: "kb/:id", element: <KbItemPage /> },

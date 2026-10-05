@@ -30,6 +30,7 @@ celery_app.conf.update(
             "task": "experiments.recalculate_all",
             "schedule": settings.experiments_interval_min * 60,
         },
+        "ai-index-kb": {"task": "ai.index_kb", "schedule": 15 * 60},
     },
 )
 
@@ -54,8 +55,19 @@ def validate_all() -> int:
 
 @celery_app.task(name="experiments.recalculate_all")
 def recalculate_all() -> int:
-    try:
-        from app.modules.experiments.service import recalculate_all as job
-    except ImportError:  # module arrives in the next stage
-        return 0
+    from app.modules.experiments.service import recalculate_all as job
+
+    return _run(job)
+
+
+@celery_app.task(name="ai.index_kb")
+def index_kb() -> int:
+    """Chunks new/changed knowledge-base records and embeds them when an embedding model is configured."""
+    from app.modules.ai.service import index_all
+
+    async def job(db: Any) -> int:
+        n = await index_all(db)
+        await db.commit()
+        return n
+
     return _run(job)

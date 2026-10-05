@@ -1,4 +1,4 @@
-import { Download, Play, Save, Square, Trash2 } from "lucide-react";
+import { Download, Play, Save, Sparkles, Square, Trash2 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { api } from "../../shared/api/client";
 import { downloadPost } from "../../shared/api/download";
@@ -24,6 +24,9 @@ import {
   useToast,
   type SqlSchema,
 } from "../../shared/ui";
+import { SqlAiDialog } from "../ai/SqlAiDialog";
+import { useAiStatus } from "../ai/api";
+import { useCan } from "../auth/AuthProvider";
 import { useProject } from "../projects/ProjectProvider";
 import { SourceSelect } from "./SourceSelect";
 import { useSelectedSource } from "./useSelectedSource";
@@ -52,6 +55,9 @@ export function SqlPage() {
   const [error, setError] = useState<string | null>(null);
   const [pane, setPane] = useState<Pane>("results");
   const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const ai = useAiStatus();
+  const can = useCan();
   const running = useRef<string | null>(null);
 
   const schema = useMemo<SqlSchema>(() => {
@@ -99,6 +105,11 @@ export function SqlPage() {
           <span className="muted" style={{ fontSize: 12 }}>
             <Kbd>Ctrl</Kbd> + <Kbd>Enter</Kbd>
           </span>
+          {ai.data?.enabled && project && can("ai:sql", project.id) && (
+            <Button icon={<Sparkles size={16} />} onClick={() => setGenerating(true)} disabled={!source}>
+              {t("ai.generateSql")}
+            </Button>
+          )}
           <Button icon={<Save size={16} />} onClick={() => setSaving(true)} disabled={!source}>
             {t("data.save")}
           </Button>
@@ -241,6 +252,14 @@ export function SqlPage() {
           )}
         </div>
       </Card>
+      {generating && source && project && (
+        <SqlAiDialog
+          projectId={project.id}
+          sourceId={source.id}
+          onInsert={setSql}
+          onClose={() => setGenerating(false)}
+        />
+      )}
       {saving && source && (
         <SaveDialog
           onClose={() => setSaving(false)}

@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Database, FlaskConical, Home, Zap } from "lucide-react";
+import { BarChart3, BookOpen, Database, FlaskConical, Home, Sparkles, Zap } from "lucide-react";
 import type { ReactNode } from "react";
 import type { TKey } from "../shared/i18n";
 
@@ -16,4 +16,5 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/bi", label: "nav.bi", icon: <BarChart3 size={16} /> },
   { to: "/ab", label: "nav.ab", icon: <FlaskConical size={16} /> },
   { to: "/kb", label: "nav.kb", icon: <BookOpen size={16} /> },
+  { to: "/assistant", label: "nav.ai", icon: <Sparkles size={16} /> },
 ];

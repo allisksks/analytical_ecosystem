@@ -71,6 +71,11 @@ class Settings(BaseSettings):
     ai_sql_model: str | None = None
     ai_embedding_model: str | None = None
     ai_timeout_s: int = 120
+    ai_auth_scheme: str = "Bearer"  # "Api-Key" for Yandex AI Studio service-account keys
+    ai_temperature: float = 0.2
+    ai_max_tokens: int = 1500
+    # Qwen3 reasons before answering; "/no_think" makes interactive answers fast. Off for the SQL model.
+    ai_no_think: bool = True
     # Some providers (Yandex AI Studio) need a project/folder header.
     ai_project_header: str | None = None
     ai_project_id: str | None = None

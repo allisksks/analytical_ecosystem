@@ -10,6 +10,7 @@ import {
   Play,
   RefreshCw,
   Send,
+  Sparkles,
   Square,
   Undo2,
 } from "lucide-react";
@@ -36,6 +37,7 @@ import {
   Textarea,
   useToast,
 } from "../../shared/ui";
+import { useAiStatus, useDraftExperiment } from "../ai/api";
 import { useCan } from "../auth/AuthProvider";
 import { ProbCell } from "./AbPage";
 import { historyOption, posteriorOption } from "./abCharts";
@@ -564,6 +566,8 @@ function DecisionDialog({ exp, onClose }: { exp: Experiment; onClose: () => void
     (exp.decision as Decision) || (rec === "ship" || rec === "keep_control" ? rec : "inconclusive"),
   );
   const [conclusion, setConclusion] = useState(exp.conclusion);
+  const ai = useAiStatus();
+  const draft = useDraftExperiment();
   return (
     <Modal
       open
@@ -598,6 +602,28 @@ function DecisionDialog({ exp, onClose }: { exp: Experiment; onClose: () => void
             ))}
           </Select>
         </Field>
+        {ai.data?.enabled && exp.result && (
+          <div>
+            <Button
+              size="sm"
+              icon={<Sparkles size={14} />}
+              loading={draft.isPending}
+              onClick={() =>
+                draft.mutate(exp.id, {
+                  onSuccess: (r) => setConclusion(r.text),
+                  onError: (e) => toast.error(e.message),
+                })
+              }
+            >
+              {t("ai.draft")}
+            </Button>
+            {draft.data && (
+              <span className="muted" style={{ marginLeft: 8, fontSize: 12 }}>
+                {t("ai.draftHint")}
+              </span>
+            )}
+          </div>
+        )}
         <Field label={t("ab.decisionModal.conclusion")} required>
           <Textarea
             rows={5}
