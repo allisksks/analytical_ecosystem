@@ -13,13 +13,21 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "gen:api": "openapi-typescript src/shared/api/openapi.json -o src/shared/api/schema.d.ts"
+    "gen:api": "openapi-typescript src/shared/api/openapi.json -o src/shared/api/schema.d.ts --default-non-nullable false"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.20.3",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-sql": "^6.10.0",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.13",
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@fontsource/nunito-sans": "^5.3.0",
+    "@lezer/highlight": "^1.2.5",
     "@tanstack/react-query": "^5.104.1",
     "clsx": "^2.1.1",
+    "codemirror": "^6.0.2",
     "echarts": "^6.1.0",
     "lucide-react": "^1.52.0",
     "openapi-fetch": "^0.17.0",

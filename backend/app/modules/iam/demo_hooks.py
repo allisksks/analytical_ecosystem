@@ -20,5 +20,7 @@ def demo_hook(fn: DemoHook) -> DemoHook:
 
 
 async def run_demo_hooks(db: AsyncSession, org: Organization, projects: dict[str, Project], admin: User) -> None:
+    import app.modules.demo  # noqa: F401  (registers hooks of every module)
+
     for hook in _HOOKS:
         await hook(db, org, projects, admin)

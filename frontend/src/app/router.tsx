@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import { AdminPage } from "../features/admin/AdminPage";
+import { DataPage } from "../features/data/DataPage";
 import { LoginPage } from "../features/auth/LoginPage";
 import { UserMenu } from "../features/auth/UserMenu";
 import { ProjectPicker } from "../features/projects/ProjectPicker";
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
         ),
         children: [
           { index: true, element: <HomePage /> },
-          { path: "data/*", element: <ComingSoonPage titleKey="nav.data" /> },
+          { path: "data/*", element: <DataPage /> },
           { path: "ems/*", element: <ComingSoonPage titleKey="nav.ems" /> },
           { path: "bi/*", element: <ComingSoonPage titleKey="nav.bi" /> },
           { path: "ab/*", element: <ComingSoonPage titleKey="nav.ab" /> },

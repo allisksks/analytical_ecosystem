@@ -55,6 +55,8 @@ class Settings(BaseSettings):
 
     # --- demo data ---
     demo_data_dir: str = "./demo-data"
+    # platform file storage: uploaded files, synced data (mount a volume / MinIO gateway here)
+    storage_dir: str = "./.data"
 
     # --- AI gateway (OpenAI-compatible API: vLLM / Ollama / Yandex AI Studio) ---
     ai_enabled: bool = False

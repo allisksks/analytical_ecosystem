@@ -23,6 +23,16 @@ jobs:
         ports: ["55432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
+      clickhouse:
+        image: clickhouse/clickhouse-server:25.8
+        env: { CLICKHOUSE_USER: platform, CLICKHOUSE_PASSWORD: platform, CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1 }
+        ports: ["18123:8123"]
+      mysql:
+        image: mysql:8.4
+        env: { MYSQL_ROOT_PASSWORD: platform, MYSQL_DATABASE: demo }
+        ports: ["13306:3306"]
+        options: >-
+          --health-cmd "mysqladmin ping -pplatform" --health-interval 5s --health-retries 30
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6

@@ -17,9 +17,8 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:25.8
     environment: { CLICKHOUSE_USER: platform, CLICKHOUSE_PASSWORD: platform, CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1 }
-    ports: ["8123:8123"]
+    ports: ["8123:8123", "18123:8123"]
   mysql:
     image: mysql:8.4
     environment: { MYSQL_ROOT_PASSWORD: platform, MYSQL_DATABASE: demo }
-    ports: ["3306:3306"]
-    profiles: ["mysql"]
+    ports: ["13306:3306"]

@@ -10,3 +10,5 @@ export { Table } from "./Table";
 export { default as tableStyles } from "./Table.module.css";
 export { Tabs, type TabItem } from "./Tabs";
 export { ToastProvider, useToast } from "./Toast";
+export { ResultTable } from "./ResultTable";
+export { SqlEditor, type SqlSchema } from "./SqlEditor";
