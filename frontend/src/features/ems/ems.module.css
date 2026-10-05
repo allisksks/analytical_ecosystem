@@ -1,0 +1,123 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(380px, 5fr) minmax(0, 7fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.toolbar {
+  display: flex;
+  gap: var(--space-2);
+  padding: 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.list {
+  max-height: calc(100vh - 290px);
+  overflow: auto;
+}
+.row {
+  cursor: pointer;
+}
+.row td {
+  padding: 9px 12px;
+}
+.rowSelected td {
+  background: var(--row-selected) !important;
+}
+.rowWarning td:first-child {
+  box-shadow: inset 3px 0 0 var(--status-warn);
+}
+.rowCritical td:first-child {
+  box-shadow: inset 3px 0 0 var(--status-crit);
+}
+.eventName {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.detailName {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+.sectionTitle {
+  font-size: var(--fs-sm);
+  font-weight: 800;
+  color: var(--accent-kb);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: var(--space-4) 0 var(--space-2);
+}
+.pending {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.paramRow {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 60px 1.6fr 1.2fr auto;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.diffAdded {
+  color: var(--pos-text);
+}
+.diffRemoved {
+  color: var(--neg-text);
+  text-decoration: line-through;
+}
+.diffChanged {
+  color: var(--warn-text);
+}
+.alertCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.alertTitle {
+  font-weight: 800;
+}
+.alertMeta {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+.govGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+.chart {
+  height: 280px;
+}
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .list {
+    max-height: 420px;
+  }
+}

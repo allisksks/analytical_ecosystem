@@ -24,6 +24,8 @@ x-backend-env: &backend-env
   AI_PROJECT_HEADER: ${AI_PROJECT_HEADER:-}
   AI_PROJECT_ID: ${AI_PROJECT_ID:-}
   AI_ALLOW_CLOUD: ${AI_ALLOW_CLOUD:-true}
+  PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+  COOKIE_SECURE: ${COOKIE_SECURE:-true}
 
 services:
   postgres:
@@ -79,6 +81,16 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       valkey: { condition: service_healthy }
+
+  # Celery worker + beat: scheduled validation of events, experiment recalculation
+  worker:
+    build: ./backend
+    restart: unless-stopped
+    command: ["celery", "-A", "app.worker", "worker", "-B", "--loglevel=INFO", "--concurrency=2"]
+    environment: *backend-env
+    volumes: [demodata:/data/demo:ro]
+    depends_on:
+      api: { condition: service_started }
 
   web:
     build: ./frontend

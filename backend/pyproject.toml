@@ -2,7 +2,7 @@
 name = "platform-backend"
 version = "0.1.0"
 description = "Analytics platform backend: Core API, Query Service, workers, AI gateway"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "alembic>=1.20.0",
     "argon2-cffi>=25.1.0",
@@ -29,6 +29,7 @@ dependencies = [
     "structlog>=26.1.0",
     "uvicorn[standard]>=0.54.0",
     "openpyxl>=3.1.5",
+    "celery>=5.5",
 ]
 
 [dependency-groups]
@@ -77,3 +78,7 @@ omit = ["app/main.py"]
 [tool.coverage.report]
 skip_covered = true
 show_missing = true
+
+[[tool.mypy.overrides]]
+module = ["app.worker"]
+disallow_untyped_decorators = false

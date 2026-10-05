@@ -1198,10 +1198,468 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/ems/events": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Events */
+    get: operations["list_events_api_v1_ems_events_get"];
+    put?: never;
+    /** Register an event (draft v1.0.0) */
+    post: operations["create_event_api_v1_ems_events_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read Event */
+    get: operations["read_event_api_v1_ems_events__event_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Update Event */
+    patch: operations["update_event_api_v1_ems_events__event_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}/versions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Propose a new version (semver bump is computed from the diff) */
+    post: operations["propose_api_v1_ems_events__event_id__versions_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}/versions/{version_id}/review": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Review */
+    post: operations["review_api_v1_ems_events__event_id__versions__version_id__review_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}/status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Lifecycle: active ↔ deprecated → archived */
+    post: operations["set_status_api_v1_ems_events__event_id__status_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}/diff": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Diff of any two versions */
+    get: operations["version_diff_api_v1_ems_events__event_id__diff_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}/comments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Comment */
+    post: operations["comment_api_v1_ems_events__event_id__comments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/events/{event_id}/stats": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Daily volume by platform (monitoring) */
+    get: operations["stats_api_v1_ems_events__event_id__stats_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/export": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** JSON Schema or generated code for all approved events of a project */
+    get: operations["export_api_v1_ems_export_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/export/bundle": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** ZIP with JSON Schema and code for every supported language */
+    get: operations["export_bundle_api_v1_ems_export_bundle_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/import/template": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** CSV template of a tracking plan */
+    get: operations["import_template_api_v1_ems_import_template_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/import": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Import an existing tracking plan (CSV/XLSX export of Sheets/Excel) */
+    post: operations["import_plan_api_v1_ems_import_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/discover": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Describe events automatically from actual data */
+    get: operations["discover_api_v1_ems_discover_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/discover/apply": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create drafts for discovered events */
+    post: operations["discover_apply_api_v1_ems_discover_apply_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/tracking/{project_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Tracking */
+    get: operations["get_tracking_api_v1_ems_tracking__project_id__get"];
+    /** Put Tracking */
+    put: operations["put_tracking_api_v1_ems_tracking__project_id__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/validate/{project_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Run post-release validation now */
+    post: operations["validate_now_api_v1_ems_validate__project_id__post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/runs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Runs */
+    get: operations["runs_api_v1_ems_runs_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/alerts": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Alerts */
+    get: operations["alerts_api_v1_ems_alerts_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/alerts/{alert_id}/{action}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Alert Action */
+    post: operations["alert_action_api_v1_ems_alerts__alert_id___action__post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/governance": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Events without owner/metric, deprecated still firing, unregistered */
+    get: operations["governance_api_v1_ems_governance_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/ems/global-params": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Global */
+    get: operations["list_global_api_v1_ems_global_params_get"];
+    /** Replace the global parameter library */
+    put: operations["put_global_api_v1_ems_global_params_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-channels": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Channels */
+    get: operations["list_channels_api_v1_notification_channels_get"];
+    put?: never;
+    /** Create Channel */
+    post: operations["create_channel_api_v1_notification_channels_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-channels/{channel_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Delete Channel */
+    delete: operations["delete_channel_api_v1_notification_channels__channel_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-channels/{channel_id}/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Send a test message */
+    post: operations["test_channel_api_v1_notification_channels__channel_id__test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** AlertOut */
+    AlertOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Event Id */
+      event_id: string | null;
+      /** Event Name */
+      event_name: string;
+      /** Kind */
+      kind: string;
+      /** Severity */
+      severity: string;
+      /** Title */
+      title: string;
+      /** Message */
+      message: string;
+      /** Details */
+      details: {
+        [key: string]: unknown;
+      };
+      /** Status */
+      status: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Last Seen At
+       * Format: date-time
+       */
+      last_seen_at: string;
+      /** Resolved At */
+      resolved_at: string | null;
+      /** Acknowledged By */
+      acknowledged_by: string;
+    };
     /** AttachmentOut */
     AttachmentOut: {
       /**
@@ -1260,10 +1718,73 @@ export interface components {
       /** File */
       file: string;
     };
+    /** Body_import_plan_api_v1_ems_import_post */
+    Body_import_plan_api_v1_ems_import_post: {
+      /** File */
+      file: string;
+    };
     /** Body_upload_file_api_v1_sources__source_id__files_post */
     Body_upload_file_api_v1_sources__source_id__files_post: {
       /** File */
       file: string;
+    };
+    /** ChannelIn */
+    ChannelIn: {
+      /** Name */
+      name: string;
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: "slack" | "mattermost" | "telegram" | "email";
+      /** Config */
+      config?: {
+        [key: string]: unknown;
+      };
+      /** Secrets */
+      secrets?: {
+        [key: string]: string;
+      };
+      /**
+       * Min Severity
+       * @default warning
+       * @enum {string}
+       */
+      min_severity?: "warning" | "critical";
+      /** Project Ids */
+      project_ids?: string[] | null;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled?: boolean;
+    };
+    /** ChannelOut */
+    ChannelOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /** Kind */
+      kind: string;
+      /** Config */
+      config: {
+        [key: string]: unknown;
+      };
+      /** Min Severity */
+      min_severity: string;
+      /** Project Ids */
+      project_ids: string[] | null;
+      /** Enabled */
+      enabled: boolean;
+      /**
+       * Has Secrets
+       * @default false
+       */
+      has_secrets?: boolean;
     };
     /** CohortIn */
     CohortIn: {
@@ -1311,28 +1832,6 @@ export interface components {
       description?: string | null;
       /** Is Pii */
       is_pii?: boolean | null;
-    };
-    /** CommentIn */
-    CommentIn: {
-      /** Text */
-      text: string;
-    };
-    /** CommentOut */
-    CommentOut: {
-      /**
-       * Id
-       * Format: uuid
-       */
-      id: string;
-      /** Author Name */
-      author_name: string;
-      /** Text */
-      text: string;
-      /**
-       * Created At
-       * Format: date-time
-       */
-      created_at: string;
     };
     /** ConnectorType */
     ConnectorType: {
@@ -1496,6 +1995,19 @@ export interface components {
        */
       date_to: string;
     };
+    /** DiffOut */
+    DiffOut: {
+      /** From Version */
+      from_version: string;
+      /** To Version */
+      to_version: string;
+      /** Bump */
+      bump: string;
+      /** Changes */
+      changes: {
+        [key: string]: unknown;
+      }[];
+    };
     /** DimensionIn */
     DimensionIn: {
       /** Key */
@@ -1525,6 +2037,251 @@ export interface components {
       column: string;
       /** Description */
       description: string;
+    };
+    /** DiscoverApplyIn */
+    DiscoverApplyIn: {
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Events */
+      events: components["schemas"]["DiscoveredEvent"][];
+    };
+    /** DiscoveredEvent */
+    DiscoveredEvent: {
+      /** Name */
+      name: string;
+      /** Count */
+      count: number;
+      /** Registered */
+      registered: boolean;
+      /** Params */
+      params: components["schemas"]["ParamIn"][];
+    };
+    /** EventCommentIn */
+    EventCommentIn: {
+      /** Text */
+      text: string;
+    };
+    /** EventCommentOut */
+    EventCommentOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Author */
+      author: string;
+      /** Text */
+      text: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
+    /** EventIn */
+    EventIn: {
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /**
+       * Category
+       * @default
+       */
+      category?: string;
+      /**
+       * Owner
+       * @default
+       */
+      owner?: string;
+      /**
+       * Goal
+       * @default
+       */
+      goal?: string;
+      /**
+       * Question
+       * @default
+       */
+      question?: string;
+      /** Metric Keys */
+      metric_keys?: string[];
+      /** Tags */
+      tags?: string[];
+      /** Params */
+      params?: components["schemas"]["ParamIn"][];
+      /**
+       * App Version
+       * @default
+       */
+      app_version?: string;
+    };
+    /** EventOut */
+    EventOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Name */
+      name: string;
+      /** Description */
+      description: string;
+      /** Category */
+      category: string;
+      /** Owner */
+      owner: string;
+      /** Status */
+      status: string;
+      /** Current Version */
+      current_version: string | null;
+      /** Metric Keys */
+      metric_keys: string[];
+      /** Tags */
+      tags: string[];
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Pending Version */
+      pending_version?: string | null;
+      /**
+       * Open Alerts
+       * @default 0
+       */
+      open_alerts?: number;
+      /**
+       * Health
+       * @default unknown
+       */
+      health?: string;
+      /** Last Count */
+      last_count?: number | null;
+      /** Goal */
+      goal: string;
+      /** Question */
+      question: string;
+      /** Created By */
+      created_by: string;
+      /** Versions */
+      versions: components["schemas"]["EventVersionOut"][];
+      /** Comments */
+      comments: components["schemas"]["EventCommentOut"][];
+    };
+    /** EventPatch */
+    EventPatch: {
+      /** Category */
+      category?: string | null;
+      /** Owner */
+      owner?: string | null;
+      /** Goal */
+      goal?: string | null;
+      /** Question */
+      question?: string | null;
+      /** Metric Keys */
+      metric_keys?: string[] | null;
+      /** Tags */
+      tags?: string[] | null;
+    };
+    /** EventSummary */
+    EventSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Name */
+      name: string;
+      /** Description */
+      description: string;
+      /** Category */
+      category: string;
+      /** Owner */
+      owner: string;
+      /** Status */
+      status: string;
+      /** Current Version */
+      current_version: string | null;
+      /** Metric Keys */
+      metric_keys: string[];
+      /** Tags */
+      tags: string[];
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Pending Version */
+      pending_version?: string | null;
+      /**
+       * Open Alerts
+       * @default 0
+       */
+      open_alerts?: number;
+      /**
+       * Health
+       * @default unknown
+       */
+      health?: string;
+      /** Last Count */
+      last_count?: number | null;
+    };
+    /** EventVersionOut */
+    EventVersionOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Version */
+      version: string;
+      /** Params */
+      params: {
+        [key: string]: unknown;
+      }[];
+      /** Description */
+      description: string;
+      /** Changelog */
+      changelog: string;
+      /** App Version */
+      app_version: string;
+      /** Status */
+      status: string;
+      /** Author */
+      author: string;
+      /** Reviewed By */
+      reviewed_by: string;
+      /** Reviewed At */
+      reviewed_at: string | null;
+      /** Review Comment */
+      review_comment: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
     };
     /** ExportIn */
     ExportIn: {
@@ -1582,6 +2339,72 @@ export interface components {
       /** Template Key */
       template_key: string;
     };
+    /** GlobalParamIn */
+    GlobalParamIn: {
+      /** Name */
+      name: string;
+      /**
+       * Type
+       * @default string
+       * @enum {string}
+       */
+      type?: "string" | "int" | "float" | "bool" | "enum" | "timestamp" | "json";
+      /**
+       * Required
+       * @default false
+       */
+      required?: boolean;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /** Enum */
+      enum?: string[];
+    };
+    /** GlobalParamOut */
+    GlobalParamOut: {
+      /** Name */
+      name: string;
+      /**
+       * Type
+       * @default string
+       * @enum {string}
+       */
+      type?: "string" | "int" | "float" | "bool" | "enum" | "timestamp" | "json";
+      /**
+       * Required
+       * @default false
+       */
+      required?: boolean;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /** Enum */
+      enum?: string[];
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+    };
+    /** Governance */
+    Governance: {
+      /** No Owner */
+      no_owner: string[];
+      /** No Metrics */
+      no_metrics: string[];
+      /** Deprecated Firing */
+      deprecated_firing: string[];
+      /** Unregistered */
+      unregistered: string[];
+      /** Pending Review */
+      pending_review: string[];
+      /** Stale Drafts */
+      stale_drafts: string[];
+    };
     /** GrantIn */
     GrantIn: {
       /**
@@ -1630,6 +2453,17 @@ export interface components {
        * Format: date-time
        */
       created_at: string;
+    };
+    /** ImportOut */
+    ImportOut: {
+      /** Created */
+      created: string[];
+      /** Versioned */
+      versioned: string[];
+      /** Unchanged */
+      unchanged: string[];
+      /** Errors */
+      errors: string[];
     };
     /** InstallOut */
     InstallOut: {
@@ -1724,7 +2558,7 @@ export interface components {
        */
       can_edit?: boolean;
       /** Comments */
-      comments?: components["schemas"]["CommentOut"][];
+      comments?: components["schemas"]["KbCommentOut"][];
       /** Attachments */
       attachments?: components["schemas"]["AttachmentOut"][];
     };
@@ -1784,6 +2618,46 @@ export interface components {
        * Format: date-time
        */
       updated_at: string;
+    };
+    /** KbCommentIn */
+    KbCommentIn: {
+      /** Text */
+      text: string;
+    };
+    /** KbCommentOut */
+    KbCommentOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Author Name */
+      author_name: string;
+      /** Text */
+      text: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+    };
+    /** KbVersionOut */
+    KbVersionOut: {
+      /** Version */
+      version: number;
+      /** Title */
+      title: string;
+      /** Summary */
+      summary: string;
+      /** Body */
+      body: string;
+      /** Author */
+      author: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
     };
     /** LayoutItem */
     LayoutItem: {
@@ -2038,6 +2912,29 @@ export interface components {
       /** Total */
       total: number;
     };
+    /** ParamIn */
+    ParamIn: {
+      /** Name */
+      name: string;
+      /**
+       * Type
+       * @default string
+       * @enum {string}
+       */
+      type?: "string" | "int" | "float" | "bool" | "enum" | "timestamp" | "json";
+      /**
+       * Required
+       * @default false
+       */
+      required?: boolean;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /** Enum */
+      enum?: string[];
+    };
     /** PasswordChangeIn */
     PasswordChangeIn: {
       /** Current Password */
@@ -2142,6 +3039,16 @@ export interface components {
       name: string;
       /** Type */
       type: string;
+    };
+    /** ReviewIn */
+    ReviewIn: {
+      /** Approve */
+      approve: boolean;
+      /**
+       * Comment
+       * @default
+       */
+      comment?: string;
     };
     /** RlsRuleIn */
     RlsRuleIn: {
@@ -2593,6 +3500,28 @@ export interface components {
       /** Source Id */
       source_id?: string | null;
     };
+    /** StatPoint */
+    StatPoint: {
+      /** Date */
+      date: string;
+      /** Platform */
+      platform: string;
+      /** Count */
+      count: number;
+    };
+    /** StatusIn */
+    StatusIn: {
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: "active" | "deprecated" | "archived";
+      /**
+       * Reason
+       * @default
+       */
+      reason?: string;
+    };
     /** SyncOut */
     SyncOut: {
       /** Rows */
@@ -2697,6 +3626,117 @@ export interface components {
       /** Mfa Token */
       mfa_token?: string | null;
     };
+    /** TrackingIn */
+    TrackingIn: {
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Table
+       * @default events
+       */
+      table?: string;
+      /**
+       * Name Column
+       * @default event_name
+       */
+      name_column?: string;
+      /**
+       * Time Column
+       * @default event_ts
+       */
+      time_column?: string;
+      /**
+       * Date Column
+       * @default event_date
+       */
+      date_column?: string;
+      /**
+       * Params Column
+       * @default params
+       */
+      params_column?: string;
+      /**
+       * User Column
+       * @default user_id
+       */
+      user_column?: string;
+      /**
+       * Platform Column
+       * @default platform
+       */
+      platform_column?: string;
+      /**
+       * Version Column
+       * @default app_version
+       */
+      version_column?: string;
+      /**
+       * Drop Threshold
+       * @default 0.5
+       */
+      drop_threshold?: number;
+    };
+    /** TrackingOut */
+    TrackingOut: {
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Table
+       * @default events
+       */
+      table?: string;
+      /**
+       * Name Column
+       * @default event_name
+       */
+      name_column?: string;
+      /**
+       * Time Column
+       * @default event_ts
+       */
+      time_column?: string;
+      /**
+       * Date Column
+       * @default event_date
+       */
+      date_column?: string;
+      /**
+       * Params Column
+       * @default params
+       */
+      params_column?: string;
+      /**
+       * User Column
+       * @default user_id
+       */
+      user_column?: string;
+      /**
+       * Platform Column
+       * @default platform
+       */
+      platform_column?: string;
+      /**
+       * Version Column
+       * @default app_version
+       */
+      version_column?: string;
+      /**
+       * Drop Threshold
+       * @default 0.5
+       */
+      drop_threshold?: number;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+    };
     /** UserIn */
     UserIn: {
       /**
@@ -2761,23 +3801,54 @@ export interface components {
       /** Context */
       ctx?: Record<string, never>;
     };
-    /** VersionOut */
-    VersionOut: {
-      /** Version */
-      version: number;
-      /** Title */
-      title: string;
-      /** Summary */
-      summary: string;
-      /** Body */
-      body: string;
-      /** Author */
-      author: string;
+    /** ValidationRunOut */
+    ValidationRunOut: {
       /**
-       * Created At
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /**
+       * Started At
        * Format: date-time
        */
-      created_at: string;
+      started_at: string;
+      /** Data Until */
+      data_until: string | null;
+      /** Status */
+      status: string;
+      /** Summary */
+      summary: {
+        [key: string]: unknown;
+      };
+      /** Results */
+      results: {
+        [key: string]: unknown;
+      }[];
+      /** Error */
+      error: string;
+    };
+    /** VersionIn */
+    VersionIn: {
+      /** Params */
+      params: components["schemas"]["ParamIn"][];
+      /** Description */
+      description?: string | null;
+      /**
+       * Changelog
+       * @default
+       */
+      changelog?: string;
+      /**
+       * App Version
+       * @default
+       */
+      app_version?: string;
     };
     /** WidgetIn */
     WidgetIn: {
@@ -5539,7 +6610,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["VersionOut"][];
+          "application/json": components["schemas"]["KbVersionOut"][];
         };
       };
       /** @description Validation Error */
@@ -5564,7 +6635,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CommentIn"];
+        "application/json": components["schemas"]["KbCommentIn"];
       };
     };
     responses: {
@@ -5574,7 +6645,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["CommentOut"];
+          "application/json": components["schemas"]["KbCommentOut"];
         };
       };
       /** @description Validation Error */
@@ -5637,6 +6708,919 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_events_api_v1_ems_events_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        status?: string | null;
+        q?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_event_api_v1_ems_events_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EventIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_event_api_v1_ems_events__event_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_event_api_v1_ems_events__event_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EventPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  propose_api_v1_ems_events__event_id__versions_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["VersionIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventVersionOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  review_api_v1_ems_events__event_id__versions__version_id__review_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        event_id: string;
+        version_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReviewIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  set_status_api_v1_ems_events__event_id__status_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StatusIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  version_diff_api_v1_ems_events__event_id__diff_get: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+      };
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiffOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  comment_api_v1_ems_events__event_id__comments_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EventCommentIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EventCommentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  stats_api_v1_ems_events__event_id__stats_get: {
+    parameters: {
+      query?: {
+        days?: number;
+      };
+      header?: never;
+      path: {
+        event_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StatPoint"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  export_api_v1_ems_export_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        format?: "json_schema" | "typescript" | "kotlin" | "swift" | "csharp";
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  export_bundle_api_v1_ems_export_bundle_get: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  import_template_api_v1_ems_import_template_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  import_plan_api_v1_ems_import_post: {
+    parameters: {
+      query: {
+        project_id: string;
+        app_version?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["Body_import_plan_api_v1_ems_import_post"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ImportOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  discover_api_v1_ems_discover_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        days?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiscoveredEvent"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  discover_apply_api_v1_ems_discover_apply_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DiscoverApplyIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ImportOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_tracking_api_v1_ems_tracking__project_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingOut"] | null;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  put_tracking_api_v1_ems_tracking__project_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TrackingIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackingOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  validate_now_api_v1_ems_validate__project_id__post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        project_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ValidationRunOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  runs_api_v1_ems_runs_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ValidationRunOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  alerts_api_v1_ems_alerts_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        status?: string;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AlertOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  alert_action_api_v1_ems_alerts__alert_id___action__post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        alert_id: string;
+        action: "ack" | "resolve" | "reopen";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AlertOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  governance_api_v1_ems_governance_get: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Governance"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_global_api_v1_ems_global_params_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GlobalParamOut"][];
+        };
+      };
+    };
+  };
+  put_global_api_v1_ems_global_params_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GlobalParamIn"][];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GlobalParamOut"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_channels_api_v1_notification_channels_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ChannelOut"][];
+        };
+      };
+    };
+  };
+  create_channel_api_v1_notification_channels_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChannelIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ChannelOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_channel_api_v1_notification_channels__channel_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        channel_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_channel_api_v1_notification_channels__channel_id__test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        channel_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
         headers: {
           [name: string]: unknown;
         };
