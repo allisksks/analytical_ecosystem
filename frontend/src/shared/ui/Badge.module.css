@@ -1,0 +1,50 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 11px;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.mono {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.pos {
+  background: var(--pos-bg);
+  color: var(--pos-text);
+}
+.neg {
+  background: var(--neg-bg);
+  color: var(--neg-text);
+}
+.info {
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+.warn {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+.neutral {
+  background: var(--neutral-bg);
+  color: var(--neutral-text);
+}
+.violet {
+  background: var(--violet-bg);
+  color: var(--violet-text);
+}

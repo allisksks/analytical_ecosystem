@@ -1,0 +1,62 @@
+.tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.underline {
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  border: none;
+  background: none;
+  color: var(--ink-2);
+  font-weight: 700;
+  font-size: 13.5px;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+.tab:hover {
+  color: var(--ink);
+}
+.underline .active {
+  color: var(--brand);
+  border-bottom-color: var(--brand);
+}
+.pills {
+  gap: var(--space-2);
+}
+.pills .tab {
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  margin: 0;
+  font-size: var(--fs-sm);
+  background: var(--surface);
+}
+.pills .active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--on-brand);
+}
+.count {
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: var(--neutral-bg);
+  color: var(--neutral-text);
+  font-size: 11px;
+  display: inline-grid;
+  place-items: center;
+}
+.pills .active .count {
+  background: rgb(255 255 255 / 0.25);
+  color: inherit;
+}
