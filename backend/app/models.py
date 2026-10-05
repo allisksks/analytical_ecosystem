@@ -7,6 +7,8 @@ import importlib
 MODEL_MODULES: list[str] = [
     "app.modules.iam.models",
     "app.modules.audit.models",
+    "app.modules.connectors.models",
+    "app.modules.query.models",
 ]
 
 

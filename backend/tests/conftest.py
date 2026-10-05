@@ -151,3 +151,31 @@ async def world(db: AsyncSession) -> World:
 @pytest.fixture
 def as_user(world: World) -> Callable[[str], dict[str, str]]:
     return world.headers
+
+
+@pytest.fixture(scope="session")
+def demo_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Small deterministic copy of the demo dataset shared by data tests."""
+    from datetime import date
+
+    from scripts.generate_demo_data import generate
+
+    out = tmp_path_factory.mktemp("demo")
+    generate(out, scale=0.03, days=60, end=date(2026, 5, 31), seed=11)
+    return out
+
+
+@pytest.fixture
+async def demo_source(world: World, demo_dir: Path) -> Any:
+    """Demo files source available to every project, catalog loaded; projects scoped to two games."""
+    from app.modules.connectors.models import DataSource
+    from app.modules.connectors.service import refresh_catalog
+
+    world.projects["alpha"].data_scope = {"app_id": ["iron_shells"]}
+    world.projects["beta"].data_scope = {"app_id": ["drift_kings"]}
+    source = DataSource(org_id=world.org.id, name="demo", type="files", config={"path": str(demo_dir)}, row_limit=1000)
+    world.db.add(source)
+    await world.db.flush()
+    await refresh_catalog(world.db, source)
+    await world.db.commit()
+    return source

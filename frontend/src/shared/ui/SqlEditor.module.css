@@ -1,0 +1,14 @@
+.editor {
+  border: 1px solid var(--field-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  resize: vertical;
+}
+.editor > :global(.cm-editor) {
+  flex: 1;
+}
+.editor:focus-within {
+  border-color: var(--brand);
+  box-shadow: var(--focus-ring);
+}
