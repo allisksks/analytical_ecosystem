@@ -7429,6 +7429,54 @@
           }
         ]
       }
+    },
+    "/api/v1/inbox": {
+      "get": {
+        "tags": [
+          "inbox"
+        ],
+        "summary": "Tasks waiting for me in a project",
+        "operationId": "inbox_api_v1_inbox_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8370,6 +8418,37 @@
           "available"
         ],
         "title": "ConnectorType"
+      },
+      "Counts": {
+        "properties": {
+          "event_reviews": {
+            "type": "integer",
+            "title": "Event Reviews",
+            "default": 0
+          },
+          "ai_drafts": {
+            "type": "integer",
+            "title": "Ai Drafts",
+            "default": 0
+          },
+          "alerts": {
+            "type": "integer",
+            "title": "Alerts",
+            "default": 0
+          },
+          "experiment_reviews": {
+            "type": "integer",
+            "title": "Experiment Reviews",
+            "default": 0
+          },
+          "experiment_decisions": {
+            "type": "integer",
+            "title": "Experiment Decisions",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "Counts"
       },
       "DashboardIn": {
         "properties": {
@@ -11043,6 +11122,31 @@
           "errors"
         ],
         "title": "ImportOut"
+      },
+      "InboxOut": {
+        "properties": {
+          "counts": {
+            "$ref": "#/components/schemas/Counts"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/components/schemas/Task"
+            },
+            "type": "array",
+            "title": "Tasks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "counts",
+          "total",
+          "tasks"
+        ],
+        "title": "InboxOut"
       },
       "InstallOut": {
         "properties": {
@@ -14669,6 +14773,64 @@
           "count"
         ],
         "title": "TagCount"
+      },
+      "Task": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "event_review",
+              "ai_drafts",
+              "alert",
+              "experiment_review",
+              "experiment_decision",
+              "experiment_ready"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "subtitle": {
+            "type": "string",
+            "title": "Subtitle",
+            "default": ""
+          },
+          "link": {
+            "type": "string",
+            "title": "Link"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warning",
+              "critical"
+            ],
+            "title": "Severity",
+            "default": "info"
+          },
+          "at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "title",
+          "link"
+        ],
+        "title": "Task"
       },
       "TemplateOut": {
         "properties": {

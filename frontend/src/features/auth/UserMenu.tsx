@@ -1,6 +1,7 @@
-import { LogOut, Settings } from "lucide-react";
+import { Languages, LogOut, Moon, Settings, Sun } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useI18n } from "../../shared/i18n";
+import { useTheme } from "../../shared/lib/theme";
 import { MenuGroup, MenuItem, Popover } from "../../shared/ui";
 import { useAuth } from "./AuthProvider";
 import s from "./UserMenu.module.css";
@@ -14,7 +15,8 @@ function initials(name: string): string {
 }
 
 export function UserMenu() {
-  const { t } = useI18n();
+  const { t, locale, setLocale } = useI18n();
+  const { resolved, setPref } = useTheme();
   const { me, logout } = useAuth();
   const navigate = useNavigate();
   if (!me) return null;
@@ -53,6 +55,15 @@ export function UserMenu() {
                 {t("nav.admin")}
               </MenuItem>
             )}
+            <MenuItem icon={<Languages size={16} />} onClick={() => setLocale(locale === "ru" ? "en" : "ru")}>
+              {t("common.language")}: {locale === "ru" ? "English" : "Русский"}
+            </MenuItem>
+            <MenuItem
+              icon={resolved === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              onClick={() => setPref(resolved === "dark" ? "light" : "dark")}
+            >
+              {t("common.theme")}: {resolved === "dark" ? t("common.light") : t("common.dark")}
+            </MenuItem>
             <MenuItem icon={<LogOut size={16} />} onClick={() => void logout()}>
               {t("common.signOut")}
             </MenuItem>

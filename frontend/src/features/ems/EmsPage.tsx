@@ -57,6 +57,20 @@ export function EmsPage() {
   const ai = useAiStatus();
   const aiDrafts = useAiDrafts(pid);
   const aiPending = (aiDrafts.data ?? []).reduce((n, d) => n + d.pending, 0);
+  // deep links from the command palette and home page: /ems?new=event | /ems?new=ai
+  const requested = params.get("new");
+  const openDialog = requested === "ai" ? "ai" : requested === "event" ? "new" : dialog;
+  const closeDialog = () => {
+    setDialog(null);
+    if (requested)
+      setParams(
+        (p) => {
+          p.delete("new");
+          return p;
+        },
+        { replace: true },
+      );
+  };
   const list = useMemo(
     () => (events.data ?? []).filter((e) => !q || e.name.includes(q.toLowerCase())),
     [events.data, q],
@@ -247,19 +261,19 @@ export function EmsPage() {
         {section === "globalParams" && <GlobalParamsTab />}
         {section === "settings" && <SettingsTab projectId={project.id} />}
       </div>
-      {dialog === "new" && <NewEventDialog projectId={project.id} onClose={() => setDialog(null)} />}
-      {dialog === "ai" && (
+      {openDialog === "new" && <NewEventDialog projectId={project.id} onClose={closeDialog} />}
+      {openDialog === "ai" && (
         <AiDraftDialog
           projectId={project.id}
-          onClose={() => setDialog(null)}
+          onClose={closeDialog}
           onCreated={(id) => {
             setDialog(null);
             setParams({ tab: "aiDrafts", draft: id });
           }}
         />
       )}
-      {dialog === "import" && <ImportDialog projectId={project.id} onClose={() => setDialog(null)} />}
-      {dialog === "discover" && <DiscoverDialog projectId={project.id} onClose={() => setDialog(null)} />}
+      {openDialog === "import" && <ImportDialog projectId={project.id} onClose={closeDialog} />}
+      {openDialog === "discover" && <DiscoverDialog projectId={project.id} onClose={closeDialog} />}
     </PageBody>
   );
 }
