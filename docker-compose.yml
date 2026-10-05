@@ -90,6 +90,12 @@ services:
     restart: unless-stopped
     command: ["celery", "-A", "app.worker", "worker", "-B", "--loglevel=INFO", "--concurrency=2"]
     environment: *backend-env
+    healthcheck:  # the image's HTTP check is for the API; the worker answers Celery pings instead
+      test: ["CMD-SHELL", "celery -A app.worker inspect ping -d celery@$$HOSTNAME --timeout 10 | grep -q pong"]
+      interval: 60s
+      timeout: 20s
+      retries: 3
+      start_period: 30s
     volumes: [demodata:/data/demo:ro]
     depends_on:
       api: { condition: service_started }

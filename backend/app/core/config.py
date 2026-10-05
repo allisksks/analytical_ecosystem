@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import json
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, SecretStr, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -18,7 +19,8 @@ class Settings(BaseSettings):
     api_prefix: str = "/api/v1"
     log_level: str = "INFO"
     log_json: bool = False
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
+    # comma-separated in the environment ("https://a.example,https://b.example"); NoDecode skips JSON parsing
+    cors_origins: Annotated[list[str], NoDecode] = Field(default_factory=lambda: ["http://localhost:5173"])
 
     # --- storage of platform metadata ---
     database_url: str = "postgresql+asyncpg://platform:platform@localhost:5432/platform"
@@ -85,7 +87,9 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_origins(cls, v: object) -> object:
-        if isinstance(v, str) and not v.startswith("["):
+        if isinstance(v, str):
+            if v.strip().startswith("["):
+                return json.loads(v)
             return [o.strip() for o in v.split(",") if o.strip()]
         return v
 
