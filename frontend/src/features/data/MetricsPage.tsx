@@ -1,6 +1,6 @@
-import { History, Plus } from "lucide-react";
+import { FlaskConical, History, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { api } from "../../shared/api/client";
 import type { MetricOut, Schemas } from "../../shared/api/types";
@@ -141,6 +141,7 @@ function MetricDialog({
         .data!,
     enabled: showVersions && !!metric,
   });
+  const navigate = useNavigate();
   const save = useMutation({
     mutationFn: async () => {
       const { key, ...rest } = form;
@@ -176,6 +177,11 @@ function MetricDialog({
           {metric && (
             <Button variant="ghost" icon={<History size={16} />} onClick={() => setShowVersions((v) => !v)}>
               v{metric.version}
+            </Button>
+          )}
+          {metric && (
+            <Button icon={<FlaskConical size={16} />} onClick={() => navigate(`/ab/new?metric=${metric.key}`)}>
+              {t("ems.createAb")}
             </Button>
           )}
           <Button onClick={onClose}>{t("common.close")}</Button>

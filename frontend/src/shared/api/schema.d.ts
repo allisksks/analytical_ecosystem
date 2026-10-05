@@ -1611,6 +1611,212 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/experiments/metrics": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Metric templates for experiments */
+    get: operations["metric_templates_api_v1_experiments_metrics_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/power": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Sample size and duration calculator */
+    post: operations["power_api_v1_experiments_power_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/baseline": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Current value of a metric over recent matured installs */
+    get: operations["metric_baseline_api_v1_experiments_baseline_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/sdk-config": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Running experiments for client-side splitting */
+    get: operations["sdk_config_api_v1_experiments_sdk_config_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/assign": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Deterministic variant of a user (internal splitter) */
+    post: operations["assign_api_v1_experiments_assign_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Experiments */
+    get: operations["list_experiments_api_v1_experiments_get"];
+    put?: never;
+    /** Create Experiment */
+    post: operations["create_experiment_api_v1_experiments_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/{experiment_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Experiment */
+    get: operations["get_experiment_api_v1_experiments__experiment_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Update Experiment */
+    patch: operations["update_experiment_api_v1_experiments__experiment_id__patch"];
+    trace?: never;
+  };
+  "/api/v1/experiments/{experiment_id}/transition": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** draft → review → running → completed */
+    post: operations["transition_api_v1_experiments__experiment_id__transition_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/{experiment_id}/recalculate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Recalculate */
+    post: operations["recalculate_api_v1_experiments__experiment_id__recalculate_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/{experiment_id}/decision": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Final decision of the gatekeeper */
+    post: operations["decide_api_v1_experiments__experiment_id__decision_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/{experiment_id}/kb": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Save the result to the knowledge base */
+    post: operations["save_to_kb_api_v1_experiments__experiment_id__kb_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/experiments/{experiment_id}/report.md": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Markdown report */
+    get: operations["report_api_v1_experiments__experiment_id__report_md_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1659,6 +1865,27 @@ export interface components {
       resolved_at: string | null;
       /** Acknowledged By */
       acknowledged_by: string;
+    };
+    /** AssignIn */
+    AssignIn: {
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Experiment Key */
+      experiment_key: string;
+      /** User Id */
+      user_id: string;
+    };
+    /** AssignOut */
+    AssignOut: {
+      /** Experiment Key */
+      experiment_key: string;
+      /** User Id */
+      user_id: string;
+      /** Variant */
+      variant: string | null;
     };
     /** AttachmentOut */
     AttachmentOut: {
@@ -1712,6 +1939,23 @@ export interface components {
       details: {
         [key: string]: unknown;
       };
+    };
+    /** BaselineOut */
+    BaselineOut: {
+      /** Metric Key */
+      metric_key: string;
+      /** Metric Type */
+      metric_type: string;
+      /** Baseline */
+      baseline: number;
+      /** Sd */
+      sd: number;
+      /** Daily Users */
+      daily_users: number;
+      /** Users */
+      users: number;
+      /** Window Days */
+      window_days: number;
     };
     /** Body_attach_api_v1_kb__item_id__attachments_post */
     Body_attach_api_v1_kb__item_id__attachments_post: {
@@ -1832,6 +2076,26 @@ export interface components {
       description?: string | null;
       /** Is Pii */
       is_pii?: boolean | null;
+    };
+    /** Comparison */
+    Comparison: {
+      /** Variant */
+      variant: string;
+      /** Prob Better */
+      prob_better: number;
+      /** Lift */
+      lift: number;
+      /** Lift Ci */
+      lift_ci: number[];
+      /** Expected Loss */
+      expected_loss: number;
+      /** Posterior Control */
+      posterior_control: number[];
+      /** Posterior Variant */
+      posterior_variant: number[];
+      /** Method */
+      method: string;
+      frequentist?: components["schemas"]["FrequentistOut"] | null;
     };
     /** ConnectorType */
     ConnectorType: {
@@ -1994,6 +2258,16 @@ export interface components {
        * Format: date
        */
       date_to: string;
+    };
+    /** DecisionIn */
+    DecisionIn: {
+      /**
+       * Decision
+       * @enum {string}
+       */
+      decision: "ship" | "keep_control" | "inconclusive";
+      /** Conclusion */
+      conclusion: string;
     };
     /** DiffOut */
     DiffOut: {
@@ -2283,6 +2557,337 @@ export interface components {
        */
       created_at: string;
     };
+    /** ExperimentIn */
+    ExperimentIn: {
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /**
+       * Hypothesis
+       * @default
+       */
+      hypothesis?: string;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+      /**
+       * Owner
+       * @default
+       */
+      owner?: string;
+      /** Metric Key */
+      metric_key: string;
+      /** Secondary Metrics */
+      secondary_metrics?: string[];
+      /** Variants */
+      variants?: components["schemas"]["VariantIn"][];
+      /**
+       * Traffic Share
+       * @default 1
+       */
+      traffic_share?: number;
+      /** Segments */
+      segments?: string[];
+      /**
+       * Mde
+       * @default 0.05
+       */
+      mde?: number;
+      /**
+       * Alpha
+       * @default 0.05
+       */
+      alpha?: number;
+      /**
+       * Power
+       * @default 0.8
+       */
+      power?: number;
+      /** Baseline */
+      baseline?: number | null;
+      /** Planned Users */
+      planned_users?: number | null;
+      /** Planned Days */
+      planned_days?: number | null;
+      /**
+       * Threshold
+       * @default 0.95
+       */
+      threshold?: number;
+      /**
+       * Event Name
+       * @default
+       */
+      event_name?: string;
+      /**
+       * Splitter
+       * @default external
+       * @enum {string}
+       */
+      splitter?: "external" | "internal";
+      /** Source Id */
+      source_id?: string | null;
+      /**
+       * Assignments Table
+       * @default ab_assignments
+       */
+      assignments_table?: string;
+    };
+    /** ExperimentOut */
+    ExperimentOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Owner */
+      owner: string;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: "draft" | "review" | "running" | "completed" | "archived";
+      /** Metric Key */
+      metric_key: string;
+      /** Variants */
+      variants: components["schemas"]["VariantIn"][];
+      /** Traffic Share */
+      traffic_share: number;
+      /** Started At */
+      started_at: string | null;
+      /** Ended At */
+      ended_at: string | null;
+      /** Decision */
+      decision: string;
+      /** Planned Users */
+      planned_users: number | null;
+      /** Planned Days */
+      planned_days: number | null;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Prob Best */
+      prob_best?: number | null;
+      /** Lift */
+      lift?: number | null;
+      /** Users */
+      users?: number | null;
+      /** Recommendation */
+      recommendation?: string | null;
+      /**
+       * Srm Mismatch
+       * @default false
+       */
+      srm_mismatch?: boolean;
+      /** Hypothesis */
+      hypothesis: string;
+      /** Description */
+      description: string;
+      /** Secondary Metrics */
+      secondary_metrics: string[];
+      /** Segments */
+      segments: string[];
+      /** Mde */
+      mde: number;
+      /** Alpha */
+      alpha: number;
+      /** Power */
+      power: number;
+      /** Baseline */
+      baseline: number | null;
+      /** Threshold */
+      threshold: number;
+      /** Event Name */
+      event_name: string;
+      /** Splitter */
+      splitter: string;
+      /** Salt */
+      salt: string;
+      /** Source Id */
+      source_id: string | null;
+      /** Assignments Table */
+      assignments_table: string;
+      /** Approved By */
+      approved_by: string;
+      /** Conclusion */
+      conclusion: string;
+      /** Decided By */
+      decided_by: string;
+      /** Kb Item Id */
+      kb_item_id: string | null;
+      /** Created By */
+      created_by: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Last Calculated At */
+      last_calculated_at: string | null;
+      /** Last Error */
+      last_error: string;
+      result?: components["schemas"]["ExperimentResult"] | null;
+      /** History */
+      history?: components["schemas"]["SnapshotOut"][];
+      /**
+       * Results Hidden
+       * @default false
+       */
+      results_hidden?: boolean;
+    };
+    /** ExperimentPatch */
+    ExperimentPatch: {
+      /** Name */
+      name?: string | null;
+      /** Hypothesis */
+      hypothesis?: string | null;
+      /** Description */
+      description?: string | null;
+      /** Owner */
+      owner?: string | null;
+      /** Metric Key */
+      metric_key?: string | null;
+      /** Secondary Metrics */
+      secondary_metrics?: string[] | null;
+      /** Variants */
+      variants?: components["schemas"]["VariantIn"][] | null;
+      /** Traffic Share */
+      traffic_share?: number | null;
+      /** Segments */
+      segments?: string[] | null;
+      /** Mde */
+      mde?: number | null;
+      /** Alpha */
+      alpha?: number | null;
+      /** Power */
+      power?: number | null;
+      /** Baseline */
+      baseline?: number | null;
+      /** Planned Users */
+      planned_users?: number | null;
+      /** Planned Days */
+      planned_days?: number | null;
+      /** Threshold */
+      threshold?: number | null;
+      /** Event Name */
+      event_name?: string | null;
+      /** Splitter */
+      splitter?: ("external" | "internal") | null;
+      /** Source Id */
+      source_id?: string | null;
+      /** Assignments Table */
+      assignments_table?: string | null;
+    };
+    /** ExperimentResult */
+    ExperimentResult: {
+      /**
+       * Calculated At
+       * Format: date-time
+       */
+      calculated_at: string;
+      /** Assigned */
+      assigned: {
+        [key: string]: number;
+      };
+      /** Matured Users */
+      matured_users: number;
+      /** Progress */
+      progress: number | null;
+      primary: components["schemas"]["MetricResult"];
+      /** Secondary */
+      secondary?: components["schemas"]["MetricResult"][];
+      /** Segments */
+      segments?: components["schemas"]["SegmentResult"][];
+      srm: components["schemas"]["SrmOut"];
+      /**
+       * Recommendation
+       * @enum {string}
+       */
+      recommendation: "collecting" | "continue" | "ship" | "keep_control" | "inconclusive" | "check_srm";
+      /** Best Variant */
+      best_variant?: string | null;
+      /** First Assigned At */
+      first_assigned_at?: string | null;
+      /** Last Assigned At */
+      last_assigned_at?: string | null;
+    };
+    /** ExperimentSummary */
+    ExperimentSummary: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Project Id
+       * Format: uuid
+       */
+      project_id: string;
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Owner */
+      owner: string;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: "draft" | "review" | "running" | "completed" | "archived";
+      /** Metric Key */
+      metric_key: string;
+      /** Variants */
+      variants: components["schemas"]["VariantIn"][];
+      /** Traffic Share */
+      traffic_share: number;
+      /** Started At */
+      started_at: string | null;
+      /** Ended At */
+      ended_at: string | null;
+      /** Decision */
+      decision: string;
+      /** Planned Users */
+      planned_users: number | null;
+      /** Planned Days */
+      planned_days: number | null;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Prob Best */
+      prob_best?: number | null;
+      /** Lift */
+      lift?: number | null;
+      /** Users */
+      users?: number | null;
+      /** Recommendation */
+      recommendation?: string | null;
+      /**
+       * Srm Mismatch
+       * @default false
+       */
+      srm_mismatch?: boolean;
+    };
     /** ExportIn */
     ExportIn: {
       /**
@@ -2331,6 +2936,19 @@ export interface components {
       op?: "in" | "not_in" | "gte" | "lte" | "eq";
       /** Values */
       values: unknown[];
+    };
+    /** FrequentistOut */
+    FrequentistOut: {
+      /** Method */
+      method: string;
+      /** P Value */
+      p_value: number;
+      /** Diff */
+      diff: number;
+      /** Ci */
+      ci: number[];
+      /** Significant */
+      significant: boolean;
     };
     /** FromTemplateIn */
     FromTemplateIn: {
@@ -2870,6 +3488,41 @@ export interface components {
       /** Source Id */
       source_id?: string | null;
     };
+    /** MetricResult */
+    MetricResult: {
+      /** Metric */
+      metric: string;
+      /** Name */
+      name: string;
+      /** Type */
+      type: string;
+      /**
+       * Unit
+       * @default
+       */
+      unit?: string;
+      /** Variants */
+      variants: components["schemas"]["VariantStat"][];
+      /** Comparisons */
+      comparisons: components["schemas"]["Comparison"][];
+    };
+    /** MetricTemplateOut */
+    MetricTemplateOut: {
+      /** Key */
+      key: string;
+      /** Name */
+      name: string;
+      /** Type */
+      type: string;
+      /** Days */
+      days: number;
+      /** Unit */
+      unit: string;
+      /** Description */
+      description: string;
+      /** Semantic Keys */
+      semantic_keys: string[];
+    };
     /** MetricVersionOut */
     MetricVersionOut: {
       /** Version */
@@ -2948,6 +3601,51 @@ export interface components {
       key: string;
       /** Org Level */
       org_level: boolean;
+    };
+    /** PowerIn */
+    PowerIn: {
+      /**
+       * Metric Type
+       * @enum {string}
+       */
+      metric_type: "binary" | "continuous";
+      /** Baseline */
+      baseline: number;
+      /** Mde */
+      mde: number;
+      /** Sd */
+      sd?: number | null;
+      /**
+       * Alpha
+       * @default 0.05
+       */
+      alpha?: number;
+      /**
+       * Power
+       * @default 0.8
+       */
+      power?: number;
+      /**
+       * Groups
+       * @default 2
+       */
+      groups?: number;
+      /** Daily Users */
+      daily_users?: number | null;
+      /**
+       * Traffic Share
+       * @default 1
+       */
+      traffic_share?: number;
+    };
+    /** PowerOut */
+    PowerOut: {
+      /** Per Group */
+      per_group: number;
+      /** Total */
+      total: number;
+      /** Days */
+      days: number | null;
     };
     /** PreviewIn */
     PreviewIn: {
@@ -3247,6 +3945,24 @@ export interface components {
       /** Shared */
       shared?: boolean | null;
     };
+    /** SdkExperiment */
+    SdkExperiment: {
+      /** Key */
+      key: string;
+      /** Salt */
+      salt: string;
+      /** Traffic Share */
+      traffic_share: number;
+      /** Variants */
+      variants: components["schemas"]["SdkVariant"][];
+    };
+    /** SdkVariant */
+    SdkVariant: {
+      /** Key */
+      key: string;
+      /** Weight */
+      weight: number;
+    };
     /** SearchOut */
     SearchOut: {
       /** Items */
@@ -3254,6 +3970,22 @@ export interface components {
       /** Total */
       total: number;
       facets: components["schemas"]["Facets"];
+    };
+    /** SegmentResult */
+    SegmentResult: {
+      /** Segment */
+      segment: string;
+      /** Value */
+      value: string;
+      /** Variants */
+      variants: components["schemas"]["VariantStat"][];
+      /** Comparisons */
+      comparisons: components["schemas"]["Comparison"][];
+      /**
+       * Srm Mismatch
+       * @default false
+       */
+      srm_mismatch?: boolean;
     };
     /** SemanticQueryIn */
     SemanticQueryIn: {
@@ -3388,6 +4120,20 @@ export interface components {
        */
       expires_at: string;
     };
+    /** SnapshotOut */
+    SnapshotOut: {
+      /**
+       * Calculated At
+       * Format: date-time
+       */
+      calculated_at: string;
+      /** Users */
+      users: number;
+      /** Prob Best */
+      prob_best: number | null;
+      /** Lift */
+      lift: number | null;
+    };
     /** SourceIn */
     SourceIn: {
       /** Name */
@@ -3499,6 +4245,17 @@ export interface components {
       };
       /** Source Id */
       source_id?: string | null;
+    };
+    /** SrmOut */
+    SrmOut: {
+      /** P Value */
+      p_value: number;
+      /** Observed */
+      observed: number[];
+      /** Expected */
+      expected: number[];
+      /** Mismatch */
+      mismatch: boolean;
     };
     /** StatPoint */
     StatPoint: {
@@ -3737,6 +4494,19 @@ export interface components {
        */
       project_id: string;
     };
+    /** TransitionIn */
+    TransitionIn: {
+      /**
+       * To
+       * @enum {string}
+       */
+      to: "draft" | "review" | "running" | "completed" | "archived";
+      /**
+       * Comment
+       * @default
+       */
+      comment?: string;
+    };
     /** UserIn */
     UserIn: {
       /**
@@ -3832,6 +4602,37 @@ export interface components {
       }[];
       /** Error */
       error: string;
+    };
+    /** VariantIn */
+    VariantIn: {
+      /** Key */
+      key: string;
+      /**
+       * Name
+       * @default
+       */
+      name?: string;
+      /**
+       * Weight
+       * @default 0.5
+       */
+      weight?: number;
+      /**
+       * Description
+       * @default
+       */
+      description?: string;
+    };
+    /** VariantStat */
+    VariantStat: {
+      /** Key */
+      key: string;
+      /** N */
+      n: number;
+      /** Mean */
+      mean: number;
+      /** Sd */
+      sd: number;
     };
     /** VersionIn */
     VersionIn: {
@@ -7621,6 +8422,448 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  metric_templates_api_v1_experiments_metrics_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MetricTemplateOut"][];
+        };
+      };
+    };
+  };
+  power_api_v1_experiments_power_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PowerIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PowerOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  metric_baseline_api_v1_experiments_baseline_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        source_id: string;
+        metric_key: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["BaselineOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  sdk_config_api_v1_experiments_sdk_config_get: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SdkExperiment"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  assign_api_v1_experiments_assign_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AssignOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_experiments_api_v1_experiments_get: {
+    parameters: {
+      query: {
+        project_id: string;
+        status?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentSummary"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_experiment_api_v1_experiments_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ExperimentIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_experiment_api_v1_experiments__experiment_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_experiment_api_v1_experiments__experiment_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ExperimentPatch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  transition_api_v1_experiments__experiment_id__transition_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TransitionIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  recalculate_api_v1_experiments__experiment_id__recalculate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  decide_api_v1_experiments__experiment_id__decision_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DecisionIn"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_to_kb_api_v1_experiments__experiment_id__kb_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExperimentOut"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  report_api_v1_experiments__experiment_id__report_md_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        experiment_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
         headers: {
           [name: string]: unknown;
         };
