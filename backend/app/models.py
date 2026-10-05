@@ -13,6 +13,7 @@ MODEL_MODULES: list[str] = [
     "app.modules.bi.models",
     "app.modules.kb.models",
     "app.modules.ems.models",
+    "app.modules.experiments.models",
 ]
 
 
