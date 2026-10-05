@@ -1,0 +1,77 @@
+[project]
+name = "platform-backend"
+version = "0.1.0"
+description = "Analytics platform backend: Core API, Query Service, workers, AI gateway"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.20.0",
+    "argon2-cffi>=25.1.0",
+    "asyncmy>=0.2.15",
+    "asyncpg>=0.31.0",
+    "clickhouse-connect>=1.9.0",
+    "duckdb>=1.5.6",
+    "fastapi>=0.115",
+    "httpx>=0.28.1",
+    "numpy>=2.5.3",
+    "orjson>=3.12.0",
+    "prometheus-client>=0.26.0",
+    "pyarrow>=25.0.1",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.15.0",
+    "pyjwt[crypto]>=2.15.1",
+    "python-multipart>=0.0.32",
+    "pyyaml>=6.0.3",
+    "redis>=8.1.0",
+    "scipy>=1.18.1",
+    "sqlalchemy[asyncio]>=2.0",
+    "sqlglot>=30.21.0",
+    "structlog>=26.1.0",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "asgi-lifespan>=2.1.0",
+    "mypy>=2.4.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+    "types-pyyaml>=6.0.12.20260906",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF", "SIM", "PT", "N"]
+ignore = ["E501", "N818", "S101", "B008", "RUF001", "RUF002", "RUF003", "S608"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "PT011"]
+"scripts/**" = ["S311"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+exclude = ["migrations/", "tests/"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["tests"]
+addopts = "-ra -q"
+markers = ["integration: needs external databases (ClickHouse, MySQL)"]
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["app/main.py"]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true

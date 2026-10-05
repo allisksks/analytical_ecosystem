@@ -1,0 +1,99 @@
+# Single-server pilot install: `cp .env.example .env && docker compose up -d`
+# Profiles: `--profile ai` adds a local Ollama model server.
+name: analytics-platform
+
+x-backend-env: &backend-env
+  ENV: ${ENV:-prod}
+  DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-platform}:${POSTGRES_PASSWORD:-platform}@postgres:5432/${POSTGRES_DB:-platform}
+  REDIS_URL: redis://valkey:6379/0
+  SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+  CORS_ORIGINS: ${PUBLIC_URL:-http://localhost:8080}
+  LOG_JSON: "true"
+  DEMO_DATA_DIR: /data/demo
+  BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@example.com}
+  BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+  BOOTSTRAP_DEMO: ${BOOTSTRAP_DEMO:-true}
+  CLICKHOUSE_DEMO_URL: http://clickhouse:8123
+  AI_ENABLED: ${AI_ENABLED:-false}
+  AI_BASE_URL: ${AI_BASE_URL:-http://ollama:11434/v1}
+  AI_API_KEY: ${AI_API_KEY:-}
+  AI_CHAT_MODEL: ${AI_CHAT_MODEL:-qwen3:8b}
+  AI_SQL_MODEL: ${AI_SQL_MODEL:-}
+  AI_EMBEDDING_MODEL: ${AI_EMBEDDING_MODEL:-}
+  AI_PROJECT_HEADER: ${AI_PROJECT_HEADER:-}
+  AI_PROJECT_ID: ${AI_PROJECT_ID:-}
+  AI_ALLOW_CLOUD: ${AI_ALLOW_CLOUD:-true}
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-platform}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-platform}
+      POSTGRES_DB: ${POSTGRES_DB:-platform}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      retries: 20
+
+  # Valkey: BSD-licensed Redis fork (Redis 7.4+ is not under a permissive license)
+  valkey:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    command: ["valkey-server", "--save", "", "--maxmemory", "512mb", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      retries: 20
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8
+    restart: unless-stopped
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-platform}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-platform}
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    volumes: [chdata:/var/lib/clickhouse]
+    ulimits: { nofile: { soft: 262144, hard: 262144 } }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8123/ping"]
+      interval: 5s
+      retries: 30
+
+  # One-shot: generates demo game data (Parquet) into a shared volume.
+  demo-data:
+    build: ./backend
+    command: ["python", "-m", "scripts.generate_demo_data", "--out", "/data/demo", "--scale", "${DEMO_SCALE:-1.0}"]
+    user: "0"
+    volumes: [demodata:/data/demo]
+    profiles: ["demo"]
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    environment: *backend-env
+    volumes: [demodata:/data/demo:ro]
+    depends_on:
+      postgres: { condition: service_healthy }
+      valkey: { condition: service_healthy }
+
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    ports: ["${HTTP_PORT:-8080}:8080"]
+    depends_on: [api]
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes: [ollama:/root/.ollama]
+    profiles: ["ai"]
+
+volumes:
+  pgdata:
+  chdata:
+  demodata:
+  ollama:

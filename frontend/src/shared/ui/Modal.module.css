@@ -1,0 +1,53 @@
+.dialog {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-lg);
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+}
+.dialog::backdrop {
+  background: rgb(10 20 35 / 0.45);
+  backdrop-filter: blur(2px);
+}
+.sm {
+  width: min(420px, calc(100vw - 32px));
+}
+.lg {
+  width: min(820px, calc(100vw - 32px));
+}
+.xl {
+  width: min(1120px, calc(100vw - 32px));
+}
+.inner {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 64px);
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line-soft);
+}
+.title {
+  font-size: var(--fs-lg);
+  font-weight: 800;
+}
+.body {
+  padding: var(--space-5);
+  overflow: auto;
+}
+.foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--line-soft);
+  background: var(--surface-2);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
