@@ -9,6 +9,8 @@ MODEL_MODULES: list[str] = [
     "app.modules.audit.models",
     "app.modules.connectors.models",
     "app.modules.query.models",
+    "app.modules.semantic.models",
+    "app.modules.bi.models",
 ]
 
 
