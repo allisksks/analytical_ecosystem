@@ -19,6 +19,7 @@ import { askStream, useAiStatus, useFeedback, type AiSource } from "./api";
 import s from "./ai.module.css";
 
 interface Turn {
+  key: number;
   question: string;
   answer: string;
   sources: AiSource[];
@@ -46,17 +47,25 @@ export function AssistantChat({
   const [scoped, setScoped] = useState(false);
   const [turns, setTurns] = useState<Turn[]>([]);
   const abort = useRef<AbortController | null>(null);
+  // refs, not state: two asks in the same tick (a double-clicked button, a re-run effect) must see each other
+  const streaming = useRef(false);
+  const nextKey = useRef(0);
+  const handledRequest = useRef<number | null>(null);
   const feedback = useFeedback();
   const busy = turns.some((x) => x.streaming);
 
-  const update = (i: number, patch: Partial<Turn> | ((t: Turn) => Partial<Turn>)) =>
-    setTurns((all) => all.map((x, j) => (j === i ? { ...x, ...(typeof patch === "function" ? patch(x) : patch) } : x)));
+  /** Updates one turn by its stable key — never by position, which a stale closure may get wrong. */
+  const update = (key: number, patch: Partial<Turn> | ((t: Turn) => Partial<Turn>)) =>
+    setTurns((all) =>
+      all.map((x) => (x.key === key ? { ...x, ...(typeof patch === "function" ? patch(x) : patch) } : x)),
+    );
 
   const ask = (q: string) => {
     const text = q.trim();
-    if (!text || busy) return;
-    const i = turns.length;
-    setTurns((all) => [...all, { question: text, answer: "", sources: [], streaming: true }]);
+    if (!text || streaming.current) return;
+    streaming.current = true;
+    const i = nextKey.current++;
+    setTurns((all) => [...all, { key: i, question: text, answer: "", sources: [], streaming: true }]);
     setQuestion("");
     const ctrl = new AbortController();
     abort.current = ctrl;
@@ -73,7 +82,10 @@ export function AssistantChat({
       .catch((e: Error) => {
         if (e.name !== "AbortError") update(i, { error: e.message });
       })
-      .finally(() => update(i, { streaming: false }));
+      .finally(() => {
+        streaming.current = false;
+        update(i, { streaming: false });
+      });
   };
 
   const submit = (e: FormEvent) => {
@@ -81,20 +93,22 @@ export function AssistantChat({
     ask(question);
   };
 
-  const rate = (i: number, rating: -1 | 1) => {
-    const id = turns[i].interactionId;
+  const rate = (key: number, rating: -1 | 1) => {
+    const id = turns.find((x) => x.key === key)?.interactionId;
     if (!id) return;
     feedback.mutate(
       { id, rating },
       {
-        onSuccess: () => (update(i, { rating }), toast.success(t("ai.thanks"))),
+        onSuccess: () => (update(key, { rating }), toast.success(t("ai.thanks"))),
         onError: (e) => toast.error(e.message),
       },
     );
   };
 
   useEffect(() => {
-    if (request) ask(request.q);
+    if (!request || handledRequest.current === request.n) return;
+    handledRequest.current = request.n;
+    ask(request.q);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [request?.n]);
 
@@ -116,8 +130,8 @@ export function AssistantChat({
           </div>
         </Card>
       )}
-      {turns.map((turn, i) => (
-        <div key={i} className={s.turn}>
+      {turns.map((turn) => (
+        <div key={turn.key} className={s.turn}>
           <div className={s.question}>{turn.question}</div>
           <div className={s.answer} aria-live={turn.streaming ? "polite" : undefined} aria-busy={turn.streaming}>
             {turn.error && !turn.answer ? (
@@ -145,7 +159,7 @@ export function AssistantChat({
                   size="sm"
                   variant={turn.rating === 1 ? "primary" : "ghost"}
                   label={t("ai.helpful")}
-                  onClick={() => rate(i, 1)}
+                  onClick={() => rate(turn.key, 1)}
                 >
                   <ThumbsUp size={14} />
                 </IconButton>
@@ -153,7 +167,7 @@ export function AssistantChat({
                   size="sm"
                   variant={turn.rating === -1 ? "primary" : "ghost"}
                   label={t("ai.notHelpful")}
-                  onClick={() => rate(i, -1)}
+                  onClick={() => rate(turn.key, -1)}
                 >
                   <ThumbsDown size={14} />
                 </IconButton>
