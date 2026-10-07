@@ -124,6 +124,9 @@ async def list_sources(principal: CurrentPrincipal, db: DB, project_id: uuid.UUI
             continue
         if visible_to(principal, s) or visible_to(principal, s, P.SQL_RUN) or principal.can(P.SQL_RUN_ALL):
             out.append(source_out(s, counts.get(s.id, 0)))
+        elif visible_to(principal, s, P.EXPERIMENTS_PROPOSE) or visible_to(principal, s, P.EXPERIMENTS_EDIT):
+            # experiment designers pick the source of assignments; connection details stay hidden
+            out.append(source_out(s, counts.get(s.id, 0)).model_copy(update={"config": {}}))
     return out
 
 
