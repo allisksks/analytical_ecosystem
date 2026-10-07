@@ -1,0 +1,5 @@
+# False positives (gitleaks generic-api-key):
+# experiment key "daily_quest_4" in the demo seed
+a4284973b57b9fde642a4eec074b42380345d065:backend/app/modules/experiments/demo.py:generic-api-key:58
+# test-only SECRET_KEY default in the test bootstrap
+07982c36424749cc671f1126810910c9aba6ec1a:backend/tests/conftest.py:generic-api-key:22
