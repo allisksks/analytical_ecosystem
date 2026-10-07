@@ -229,3 +229,20 @@ async def test_worker_recalculates_running(client: AsyncClient, world: World, as
     assert await recalculate_all(world.db) == 1
     r = await client.get(f"/experiments/{eid}", headers=as_user("analyst"))
     assert len(r.json()["history"]) == 2
+
+
+async def test_product_sees_sources_for_design_without_connection_details(
+    client: AsyncClient, world: World, as_user: H, ab: dict[str, Any]
+) -> None:
+    r = await client.get("/sources", params={"project_id": ab["alpha"]}, headers=as_user("po"))
+    assert r.status_code == 200
+    assert [s["id"] for s in r.json()] == [ab["source"]]
+    assert r.json()[0]["config"] == {}
+    full = (await client.get("/sources", headers=as_user("lead"))).json()
+    assert full[0]["config"]
+    r = await client.get(
+        "/experiments/baseline",
+        params={"project_id": ab["alpha"], "source_id": ab["source"], "metric_key": "retention_d7"},
+        headers=as_user("po"),
+    )
+    assert r.status_code == 200, r.text
