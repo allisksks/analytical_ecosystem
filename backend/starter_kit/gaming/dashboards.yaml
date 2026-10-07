@@ -1,0 +1,107 @@
+# Role dashboards of the "mobile games" pack. Layout: 12-column grid, w = width, h = height in rows (≈ 80px).
+# scope: project (created in every game) | portfolio (one per organisation, needs portfolio:view)
+dashboards:
+  - key: overview
+    title: Обзор
+    role: product
+    scope: project
+    widgets:
+      - {title: DAU, viz: kpi, layout: {x: 0, y: 0, w: 3, h: 2}, spec: {metrics: [dau]}}
+      - {title: Выручка, viz: kpi, layout: {x: 3, y: 0, w: 3, h: 2}, spec: {metrics: [revenue]}}
+      - {title: Retention D1, viz: kpi, layout: {x: 6, y: 0, w: 3, h: 2}, spec: {metrics: [retention_d1]}}
+      - {title: ARPDAU, viz: kpi, layout: {x: 9, y: 0, w: 3, h: 2}, spec: {metrics: [arpdau]}}
+      - title: DAU по дням
+        viz: area
+        layout: {x: 0, y: 2, w: 6, h: 4}
+        spec: {metrics: [dau], grain: day}
+        observation: Следите за просадками после релизов и рекламных пауз; выходные обычно дают +10–15%.
+      - title: Выручка по дням
+        viz: bar
+        layout: {x: 6, y: 2, w: 6, h: 4}
+        spec: {metrics: [iap_revenue, ad_revenue], grain: day}
+        settings: {stacked: true}
+        observation: Доля рекламной выручки показывает зависимость от монетизации через рекламу.
+      - title: Удержание по неделям установки
+        viz: line
+        layout: {x: 0, y: 6, w: 6, h: 4}
+        spec: {metrics: [retention_d1, retention_d7], grain: week}
+      - title: Страны
+        viz: table
+        layout: {x: 6, y: 6, w: 6, h: 4}
+        spec: {metrics: [dau, revenue, arpdau], dimensions: [country]}
+  - key: retention
+    title: Удержание и когорты
+    role: analyst
+    scope: project
+    widgets:
+      - title: Кривая удержания по платформам
+        viz: line
+        layout: {x: 0, y: 0, w: 6, h: 4}
+        spec: {metrics: [retention_curve], dimensions: [day_n, platform]}
+        observation: Разрыв между платформами на D1 обычно объясняется качеством трафика, а не продуктом.
+      - title: Тепловая карта когорт (неделя установки × день)
+        viz: heatmap
+        layout: {x: 6, y: 0, w: 6, h: 4}
+        spec: {metrics: [retention_curve], dimensions: [day_n], grain: week}
+      - title: Retention D1 / D7 / D30
+        viz: line
+        layout: {x: 0, y: 4, w: 8, h: 4}
+        spec: {metrics: [retention_d1, retention_d7, retention_d30], grain: week}
+      - title: Размер когорт
+        viz: bar
+        layout: {x: 8, y: 4, w: 4, h: 4}
+        spec: {metrics: [cohort_size], grain: week}
+  - key: monetisation
+    title: Монетизация
+    role: analyst
+    scope: project
+    widgets:
+      - {title: ARPPU, viz: kpi, layout: {x: 0, y: 0, w: 4, h: 2}, spec: {metrics: [arppu]}}
+      - {title: Конверсия в платёж, viz: kpi, layout: {x: 4, y: 0, w: 4, h: 2}, spec: {metrics: [payer_conversion]}}
+      - {title: Средний чек, viz: kpi, layout: {x: 8, y: 0, w: 4, h: 2}, spec: {metrics: [avg_check]}}
+      - title: ARPDAU по дням
+        viz: line
+        layout: {x: 0, y: 2, w: 6, h: 4}
+        spec: {metrics: [arpdau], grain: day, dimensions: [platform]}
+      - title: Покупки по товарам
+        viz: bar
+        layout: {x: 6, y: 2, w: 6, h: 4}
+        spec: {metrics: [purchases], dimensions: [product_id]}
+  - key: acquisition
+    title: Привлечение
+    role: marketing
+    scope: project
+    widgets:
+      - {title: Установки, viz: kpi, layout: {x: 0, y: 0, w: 3, h: 2}, spec: {metrics: [installs]}}
+      - {title: Расходы, viz: kpi, layout: {x: 3, y: 0, w: 3, h: 2}, spec: {metrics: [spend]}}
+      - {title: CPI, viz: kpi, layout: {x: 6, y: 0, w: 3, h: 2}, spec: {metrics: [cpi]}}
+      - {title: ROAS D7, viz: kpi, layout: {x: 9, y: 0, w: 3, h: 2}, spec: {metrics: [roas_d7]}}
+      - title: Установки по источникам
+        viz: bar
+        layout: {x: 0, y: 2, w: 6, h: 4}
+        spec: {metrics: [installs], dimensions: [source], grain: week}
+        settings: {stacked: true}
+      - title: Источники трафика
+        viz: table
+        layout: {x: 6, y: 2, w: 6, h: 4}
+        spec: {metrics: [installs, spend, cpi, ltv_d7, roas_d7], dimensions: [source]}
+        observation: Источник окупается, когда ROAS D7 выше целевого порога первой недели (для мидкора — 15–20%).
+  - key: portfolio
+    title: Портфель проектов
+    role: executive
+    scope: portfolio
+    widgets:
+      - {title: DAU портфеля, viz: kpi, layout: {x: 0, y: 0, w: 3, h: 2}, spec: {metrics: [portfolio_dau]}}
+      - {title: Выручка портфеля, viz: kpi, layout: {x: 3, y: 0, w: 3, h: 2}, spec: {metrics: [portfolio_revenue]}}
+      - {title: Установки, viz: kpi, layout: {x: 6, y: 0, w: 3, h: 2}, spec: {metrics: [portfolio_installs]}}
+      - {title: Retention D7, viz: kpi, layout: {x: 9, y: 0, w: 3, h: 2}, spec: {metrics: [portfolio_d7]}}
+      - title: Выручка по играм
+        viz: area
+        layout: {x: 0, y: 2, w: 8, h: 4}
+        spec: {metrics: [portfolio_revenue], dimensions: [app_id], grain: week}
+        settings: {stacked: true}
+      - title: Игры
+        viz: table
+        layout: {x: 8, y: 2, w: 4, h: 4}
+        spec: {metrics: [portfolio_dau, portfolio_revenue, portfolio_d1, portfolio_d7], dimensions: [app_id]}
+        observation: Данные витрины обновляются не реже раза в 4 часа (требование BP-5).

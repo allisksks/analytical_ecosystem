@@ -1,0 +1,150 @@
+/* Design tokens. Light theme is the default, dark theme overrides via [data-theme="dark"].
+   Palette follows the VKR prototype; contrast pairs are checked against WCAG AA. */
+:root {
+  color-scheme: light;
+
+  --brand: #2a6be0;
+  --brand-strong: #1f5dd4;
+  --brand-dark: #194fb1;
+  --brand-light: #e7eefb;
+  --brand-tint: #f1f5fc;
+  --on-brand: #ffffff;
+
+  --accent-ems: #e07a2a;
+  --accent-bi: #2a6be0;
+  --accent-ab: #7c3aed;
+  --accent-kb: #1d8fb8;
+  --accent-data: #0f9d76;
+
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #f7f9fc;
+  --surface-sunken: #eef2f8;
+  --line: #e3e7ed;
+  --line-soft: #eceff4;
+
+  --ink: #1f2a36;
+  --ink-2: #4a5764;
+  --ink-3: #66727e;
+  --ink-4: #a3aebb;
+
+  --row-hover: #eef4fd;
+  --row-selected: #dde9fb;
+
+  --field-bg: #ffffff;
+  --field-border: #cfd7e3;
+  --field-border-focus: var(--brand);
+
+  --pos-bg: #dff3d2;
+  --pos-text: #23702c;
+  --neg-bg: #fbe2e2;
+  --neg-text: #b3292c;
+  --info-bg: #d8e7fa;
+  --info-text: #1f4ea0;
+  --warn-bg: #fcecc7;
+  --warn-text: #7d5a0c;
+  --neutral-bg: #eceff4;
+  --neutral-text: #4a5764;
+  --violet-bg: #ece3fd;
+  --violet-text: #5b21b6;
+
+  --status-ok: #22c55e;
+  --status-warn: #f5a623;
+  --status-crit: #e94646;
+
+  --shadow-sm: 0 1px 2px rgb(20 40 80 / 0.05);
+  --shadow-md: 0 2px 10px rgb(30 60 100 / 0.08);
+  --shadow-lg: 0 8px 28px rgb(30 50 100 / 0.14);
+
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --font: "Nunito Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 26px;
+
+  --topbar-h: 52px;
+  --sidebar-w: 248px;
+  --focus-ring: 0 0 0 3px rgb(42 107 224 / 0.35);
+  --transition: 150ms ease;
+
+  /* chart palette: validated for colour-vision deficiency (dataviz validator), fixed order, never cycled */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #4a3aa7;
+  --chart-8: #e34948;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --brand: #5b8ff0;
+  --brand-strong: #7aa5f5;
+  --brand-dark: #a9c4f8;
+  --brand-light: #1c2a44;
+  --brand-tint: #17223a;
+  --on-brand: #0b1220;
+
+  --bg: #0f141c;
+  --surface: #161d28;
+  --surface-2: #1b2330;
+  --surface-sunken: #121821;
+  --line: #2a3443;
+  --line-soft: #222b38;
+
+  --ink: #e6ebf2;
+  --ink-2: #b7c1cf;
+  --ink-3: #8d99a8;
+  --ink-4: #5d6878;
+
+  --row-hover: #1d283a;
+  --row-selected: #22324d;
+
+  --field-bg: #121821;
+  --field-border: #334055;
+
+  --pos-bg: #173a24;
+  --pos-text: #7ee2a0;
+  --neg-bg: #44191b;
+  --neg-text: #ff9c9c;
+  --info-bg: #1b2d4d;
+  --info-text: #9fc1ff;
+  --warn-bg: #3e3113;
+  --warn-text: #f3cf74;
+  --neutral-bg: #232c39;
+  --neutral-text: #b7c1cf;
+  --violet-bg: #2c2148;
+  --violet-text: #c9b3ff;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 2px 10px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 8px 28px rgb(0 0 0 / 0.55);
+
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+}

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Generated demo data / local volumes
+backend/demo-data/
+demo-data/
+.data/
+
+# Editors / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.swp
+ai-exam-report.md
+ai-exam-report.json

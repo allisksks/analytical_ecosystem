@@ -1,0 +1,73 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 2000;
+  background: var(--surface);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+}
+.skip:focus {
+  left: 8px;
+}
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) 48px;
+}
+.pageWide {
+  width: 100%;
+  padding: var(--space-6) var(--space-6) 48px;
+}
+.withSidebar {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: 0;
+}
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  overflow: auto;
+  max-height: calc(100vh - var(--topbar-h));
+  position: sticky;
+  top: var(--topbar-h);
+}
+.content {
+  min-width: 0;
+  padding: var(--space-6) var(--space-6) 48px;
+}
+@media (max-width: 960px) {
+  .withSidebar {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .page,
+  .pageWide,
+  .content {
+    padding: var(--space-4);
+  }
+}

@@ -1,0 +1,27 @@
+import type { components } from "./schema";
+
+export type Schemas = components["schemas"];
+export type Me = Schemas["MeOut"];
+export type Project = Schemas["ProjectOut"];
+export type UserOut = Schemas["UserOut"];
+export type RoleOut = Schemas["RoleOut"];
+export type Source = Schemas["SourceOut"];
+export type ConnectorType = Schemas["ConnectorType"];
+export type CatalogTable = Schemas["TableOut"];
+export type CatalogColumn = Schemas["ColumnOut"];
+export type RunResult = Schemas["RunOut"];
+export type SavedQuery = Schemas["SavedQueryOut"];
+export type Dashboard = Schemas["DashboardOut"];
+export type DashboardSummary = Schemas["DashboardSummary"];
+export type WidgetOut = Schemas["WidgetOut"];
+export type DataOut = Schemas["DataOut"];
+export type MetricOut = Schemas["MetricOut"];
+export type DimensionOut = Schemas["DimensionOut"];
+export type FilterIn = Schemas["FilterIn"];
+export type KbItem = Schemas["ItemOut"];
+export type KbSummary = Schemas["ItemSummary"];
+export type EmsEvent = Schemas["EventOut"];
+export type EmsEventSummary = Schemas["EventSummary"];
+export type EmsVersion = Schemas["EventVersionOut"];
+export type EmsAlert = Schemas["AlertOut"];
+export type ParamIn = Schemas["ParamIn"];

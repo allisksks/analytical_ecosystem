@@ -1,0 +1,587 @@
+# Golden set of the SQL assistant (TZ: 80–100 "question -> reference SQL" pairs, exam threshold 70%).
+# SQL is written in the neutral PostgreSQL dialect and transpiled to the source dialect by the query service.
+# Questions are asked inside one project: row rules of the project add the app filter automatically.
+# Relative periods are counted from CURRENT_DATE.
+dialect: postgres
+pairs:
+  # --- activity -------------------------------------------------------------------------------
+  - id: dau_yesterday
+    question: Сколько было активных пользователей вчера?
+    sql: SELECT COUNT(DISTINCT user_id) AS dau FROM events WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [activity]
+  - id: dau_by_day_7d
+    question: DAU по дням за последние 7 дней
+    sql: |
+      SELECT event_date, COUNT(DISTINCT user_id) AS dau FROM events
+      WHERE event_date >= CURRENT_DATE - INTERVAL '7 day' GROUP BY event_date ORDER BY event_date
+    tags: [activity, timeseries]
+  - id: dau_by_platform_yesterday
+    question: Сколько активных игроков было вчера на iOS и на Android?
+    sql: |
+      SELECT platform, COUNT(DISTINCT user_id) AS dau FROM events
+      WHERE event_date = CURRENT_DATE - INTERVAL '1 day' GROUP BY platform ORDER BY platform
+    tags: [activity, platform]
+  - id: wau
+    question: Сколько уникальных игроков заходили в игру за последние 7 дней?
+    sql: SELECT COUNT(DISTINCT user_id) AS wau FROM events WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [activity]
+  - id: mau
+    question: MAU за последние 30 дней
+    sql: SELECT COUNT(DISTINCT user_id) AS mau FROM events WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [activity]
+  - id: sessions_yesterday
+    question: Сколько сессий было вчера?
+    sql: SELECT COUNT(*) AS sessions FROM events WHERE event_name = 'session_start' AND event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [activity, sessions]
+  - id: sessions_per_user_7d
+    question: Среднее число сессий на активного игрока за последние 7 дней
+    sql: |
+      SELECT CAST(COUNT(*) AS DOUBLE PRECISION) / COUNT(DISTINCT user_id) AS sessions_per_user FROM events
+      WHERE event_name = 'session_start' AND event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [activity, sessions]
+  - id: dau_by_country_yesterday
+    question: Топ-5 стран по числу активных игроков вчера
+    sql: |
+      SELECT country, COUNT(DISTINCT user_id) AS dau FROM events WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY country ORDER BY dau DESC LIMIT 5
+    tags: [activity, country, top]
+  - id: events_by_name_yesterday
+    question: Сколько событий каждого типа пришло вчера?
+    sql: |
+      SELECT event_name, COUNT(*) AS events FROM events WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY event_name ORDER BY events DESC
+    tags: [events]
+  - id: events_total_30d
+    question: Общее число событий за последние 30 дней
+    sql: SELECT COUNT(*) AS events FROM events WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [events]
+  - id: dau_by_version_yesterday
+    question: Распределение активных игроков по версиям приложения вчера
+    sql: |
+      SELECT app_version, COUNT(DISTINCT user_id) AS dau FROM events WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY app_version ORDER BY app_version
+    tags: [activity, version]
+  - id: first_last_event_date
+    question: За какой период есть данные о событиях?
+    sql: SELECT MIN(event_date) AS first_date, MAX(event_date) AS last_date FROM events
+    tags: [events]
+  - id: dau_avg_30d
+    question: Средний DAU за последние 30 дней
+    sql: |
+      SELECT AVG(dau) AS avg_dau FROM (SELECT event_date, COUNT(DISTINCT user_id) AS dau FROM events
+      WHERE event_date >= CURRENT_DATE - INTERVAL '30 day' GROUP BY event_date) d
+    tags: [activity]
+  - id: dau_by_source_yesterday
+    question: Сколько активных игроков вчера пришло из каждого источника трафика?
+    sql: |
+      SELECT source, COUNT(DISTINCT user_id) AS dau FROM events WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY source ORDER BY dau DESC
+    tags: [activity, source]
+  - id: users_with_5_sessions_7d
+    question: Сколько игроков сыграли 5 и более сессий за последние 7 дней?
+    sql: |
+      SELECT COUNT(*) AS users FROM (SELECT user_id FROM events WHERE event_name = 'session_start'
+      AND event_date >= CURRENT_DATE - INTERVAL '7 day' GROUP BY user_id HAVING COUNT(*) >= 5) u
+    tags: [activity, sessions]
+  # --- installs ---------------------------------------------------------------------------------
+  - id: installs_yesterday
+    question: Сколько было установок вчера?
+    sql: SELECT COUNT(*) AS installs FROM users WHERE install_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [installs]
+  - id: installs_by_day_14d
+    question: Установки по дням за последние две недели
+    sql: |
+      SELECT install_date, COUNT(*) AS installs FROM users WHERE install_date >= CURRENT_DATE - INTERVAL '14 day'
+      GROUP BY install_date ORDER BY install_date
+    tags: [installs, timeseries]
+  - id: installs_by_source_30d
+    question: Установки по источникам за последние 30 дней
+    sql: |
+      SELECT source, COUNT(*) AS installs FROM users WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY source ORDER BY installs DESC
+    tags: [installs, source]
+  - id: installs_by_platform_30d
+    question: Сколько установок было на каждой платформе за последние 30 дней?
+    sql: |
+      SELECT platform, COUNT(*) AS installs FROM users WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY platform ORDER BY platform
+    tags: [installs, platform]
+  - id: organic_share_30d
+    question: Какая доля органических установок за последние 30 дней?
+    sql: |
+      SELECT AVG(CASE WHEN source = 'organic' THEN 1.0 ELSE 0.0 END) AS organic_share FROM users
+      WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [installs, source]
+  - id: installs_total
+    question: Сколько всего установок за весь период?
+    sql: SELECT COUNT(*) AS installs FROM users
+    tags: [installs]
+  - id: installs_top_countries_30d
+    question: Топ-3 страны по установкам за последний месяц
+    sql: |
+      SELECT country, COUNT(*) AS installs FROM users WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY country ORDER BY installs DESC LIMIT 3
+    tags: [installs, country, top]
+  - id: installs_by_campaign_30d
+    question: Установки по кампаниям за последние 30 дней, без органики
+    sql: |
+      SELECT campaign, COUNT(*) AS installs FROM users WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      AND source <> 'organic' GROUP BY campaign ORDER BY installs DESC
+    tags: [installs, campaign]
+  - id: installs_by_version_30d
+    question: На какой версии приложения устанавливали игру за последние 30 дней?
+    sql: |
+      SELECT app_version, COUNT(*) AS installs FROM users WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY app_version ORDER BY app_version
+    tags: [installs, version]
+  # --- monetisation -----------------------------------------------------------------------------
+  - id: iap_revenue_yesterday
+    question: Какая выручка от покупок была вчера?
+    sql: SELECT SUM(revenue_usd) AS revenue FROM payments WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [revenue, iap]
+  - id: iap_revenue_7d
+    question: Выручка от внутриигровых покупок за последние 7 дней
+    sql: SELECT SUM(revenue_usd) AS revenue FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [revenue, iap]
+  - id: iap_revenue_by_day_14d
+    question: Выручка от покупок по дням за последние 14 дней
+    sql: |
+      SELECT event_date, SUM(revenue_usd) AS revenue FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '14 day'
+      GROUP BY event_date ORDER BY event_date
+    tags: [revenue, iap, timeseries]
+  - id: revenue_by_product_30d
+    question: Выручка по продуктам магазина за 30 дней
+    sql: |
+      SELECT product_id, SUM(revenue_usd) AS revenue FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY product_id ORDER BY revenue DESC
+    tags: [revenue, product]
+  - id: purchases_by_product_30d
+    question: Сколько покупок каждого продукта было за последние 30 дней?
+    sql: |
+      SELECT product_id, COUNT(*) AS purchases FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY product_id ORDER BY purchases DESC
+    tags: [purchases, product]
+  - id: payers_7d
+    question: Сколько платящих игроков было за последние 7 дней?
+    sql: SELECT COUNT(DISTINCT user_id) AS payers FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [payers]
+  - id: avg_check_30d
+    question: Средний чек за последние 30 дней
+    sql: SELECT AVG(revenue_usd) AS avg_check FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [revenue, check]
+  - id: arppu_30d
+    question: ARPPU за последние 30 дней
+    sql: |
+      SELECT SUM(revenue_usd) / COUNT(DISTINCT user_id) AS arppu FROM payments
+      WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [revenue, arppu]
+  - id: iap_revenue_by_platform_30d
+    question: Выручка от покупок по платформам за месяц
+    sql: |
+      SELECT platform, SUM(revenue_usd) AS revenue FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY platform ORDER BY platform
+    tags: [revenue, platform]
+  - id: iap_revenue_by_country_top5_30d
+    question: Топ-5 стран по выручке от покупок за 30 дней
+    sql: |
+      SELECT country, SUM(revenue_usd) AS revenue FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY country ORDER BY revenue DESC LIMIT 5
+    tags: [revenue, country, top]
+  - id: top_payers_30d
+    question: Сколько потратили 10 самых платящих игроков за последние 30 дней? Покажи суммы по убыванию.
+    sql: |
+      SELECT SUM(revenue_usd) AS spent FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY user_id ORDER BY spent DESC LIMIT 10
+    tags: [revenue, top]
+  - id: starter_pack_buyers_total
+    question: Сколько игроков купили стартовый набор за всё время?
+    sql: SELECT COUNT(DISTINCT user_id) AS buyers FROM payments WHERE product_id = 'starter_pack'
+    tags: [purchases, product]
+  - id: purchases_total_7d
+    question: Сколько было покупок за последнюю неделю?
+    sql: SELECT COUNT(*) AS purchases FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [purchases]
+  - id: repeat_payers_30d
+    question: Сколько игроков совершили больше одной покупки за последние 30 дней?
+    sql: |
+      SELECT COUNT(*) AS repeat_payers FROM (SELECT user_id FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY user_id HAVING COUNT(*) > 1) p
+    tags: [payers]
+  - id: max_payment
+    question: Какая самая крупная покупка за всё время?
+    sql: SELECT MAX(revenue_usd) AS max_payment FROM payments
+    tags: [revenue]
+  - id: iap_revenue_by_version_30d
+    question: Выручка от покупок по версиям приложения за 30 дней
+    sql: |
+      SELECT app_version, SUM(revenue_usd) AS revenue FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY app_version ORDER BY app_version
+    tags: [revenue, version]
+  # --- monetisation mart ------------------------------------------------------------------------
+  - id: total_revenue_7d_mart
+    question: Общая выручка (покупки и реклама) за последние 7 дней
+    sql: SELECT SUM(revenue) AS revenue FROM mart_monetisation WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [revenue, mart]
+  - id: revenue_split_30d
+    question: Сколько за 30 дней заработали на покупках и сколько на рекламе?
+    sql: |
+      SELECT SUM(iap_revenue) AS iap_revenue, SUM(ad_revenue) AS ad_revenue FROM mart_monetisation
+      WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [revenue, mart]
+  - id: arpdau_7d
+    question: ARPDAU за последние 7 дней
+    sql: |
+      SELECT SUM(revenue) / SUM(dau) AS arpdau FROM mart_monetisation WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [revenue, arpdau, mart]
+  - id: revenue_by_day_mart_14d
+    question: Полная выручка по дням за две недели
+    sql: |
+      SELECT event_date, SUM(revenue) AS revenue FROM mart_monetisation WHERE event_date >= CURRENT_DATE - INTERVAL '14 day'
+      GROUP BY event_date ORDER BY event_date
+    tags: [revenue, mart, timeseries]
+  - id: ad_share_30d
+    question: Какая доля выручки приходится на рекламу за последние 30 дней?
+    sql: |
+      SELECT SUM(ad_revenue) / SUM(revenue) AS ad_share FROM mart_monetisation
+      WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [revenue, ads, mart]
+  - id: revenue_by_source_30d_mart
+    question: Выручка по источникам трафика за 30 дней
+    sql: |
+      SELECT source, SUM(revenue) AS revenue FROM mart_monetisation WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY source ORDER BY revenue DESC
+    tags: [revenue, source, mart]
+  - id: payer_share_yesterday
+    question: Какая доля активных игроков платила вчера?
+    sql: |
+      SELECT CAST(SUM(payers) AS DOUBLE PRECISION) / SUM(dau) AS payer_share FROM mart_monetisation
+      WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [payers, conversion, mart]
+  - id: best_revenue_day_30d
+    question: В какой день за последний месяц была максимальная выручка?
+    sql: |
+      SELECT event_date, SUM(revenue) AS revenue FROM mart_monetisation WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY event_date ORDER BY revenue DESC LIMIT 1
+    tags: [revenue, mart, top]
+  # --- ads ---------------------------------------------------------------------------------------
+  - id: ad_revenue_7d
+    question: Сколько заработали на рекламе за неделю?
+    sql: SELECT SUM(revenue_usd) AS ad_revenue FROM ad_revenue WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [ads, revenue]
+  - id: ad_revenue_by_network_30d
+    question: Рекламная выручка по сетям за 30 дней
+    sql: |
+      SELECT network, SUM(revenue_usd) AS revenue FROM ad_revenue WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY network ORDER BY revenue DESC
+    tags: [ads, network]
+  - id: impressions_yesterday
+    question: Сколько показов рекламы было вчера?
+    sql: SELECT SUM(impressions) AS impressions FROM ad_revenue WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [ads]
+  - id: ecpm_by_network_30d
+    question: eCPM по рекламным сетям за последние 30 дней
+    sql: |
+      SELECT network, SUM(revenue_usd) * 1000 / SUM(impressions) AS ecpm FROM ad_revenue
+      WHERE event_date >= CURRENT_DATE - INTERVAL '30 day' GROUP BY network ORDER BY ecpm DESC
+    tags: [ads, ecpm]
+  - id: impressions_per_viewer_7d
+    question: Сколько рекламы в среднем видит один игрок, который смотрел рекламу, за неделю?
+    sql: |
+      SELECT CAST(SUM(impressions) AS DOUBLE PRECISION) / COUNT(DISTINCT user_id) AS impressions_per_user FROM ad_revenue
+      WHERE event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [ads]
+  - id: ad_viewers_yesterday
+    question: Сколько игроков смотрели рекламу вчера?
+    sql: SELECT COUNT(DISTINCT user_id) AS viewers FROM ad_revenue WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [ads]
+  - id: ad_revenue_by_platform_30d
+    question: Рекламная выручка по платформам за месяц
+    sql: |
+      SELECT platform, SUM(revenue_usd) AS revenue FROM ad_revenue WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY platform ORDER BY platform
+    tags: [ads, platform]
+  # --- retention ----------------------------------------------------------------------------------
+  - id: retention_d1_30d
+    question: Retention D1 для установок последних 30 дней
+    sql: |
+      SELECT CAST(COUNT(DISTINCT CASE WHEN day_n = 1 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d1
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '30 day' AND install_date < CURRENT_DATE - INTERVAL '1 day'
+    tags: [retention]
+  - id: retention_d7_60d
+    question: Retention D7 для когорт за последние 60 дней
+    sql: |
+      SELECT CAST(COUNT(DISTINCT CASE WHEN day_n = 7 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d7
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '60 day' AND install_date < CURRENT_DATE - INTERVAL '7 day'
+    tags: [retention]
+  - id: retention_d1_by_platform_30d
+    question: Retention D1 по платформам за последние 30 дней
+    sql: |
+      SELECT platform, CAST(COUNT(DISTINCT CASE WHEN day_n = 1 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d1
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '30 day' AND install_date < CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY platform ORDER BY platform
+    tags: [retention, platform]
+  - id: retention_d1_by_source_30d
+    question: Retention D1 по источникам трафика за 30 дней
+    sql: |
+      SELECT source, CAST(COUNT(DISTINCT CASE WHEN day_n = 1 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d1
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '30 day' AND install_date < CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY source ORDER BY retention_d1 DESC
+    tags: [retention, source]
+  - id: retention_curve_30d
+    question: Кривая удержания с 0 по 14 день для установок последних 30 дней
+    sql: |
+      SELECT day_n, CAST(COUNT(DISTINCT user_id) AS DOUBLE PRECISION)
+        / (SELECT COUNT(DISTINCT user_id) FROM mart_retention WHERE day_n = 0 AND install_date >= CURRENT_DATE - INTERVAL '30 day') AS retention
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '30 day' AND day_n <= 14
+      GROUP BY day_n ORDER BY day_n
+    tags: [retention, curve]
+  - id: retention_d1_by_install_date_14d
+    question: Retention D1 по дням установки за последние 14 дней
+    sql: |
+      SELECT install_date, CAST(COUNT(DISTINCT CASE WHEN day_n = 1 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d1
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '14 day' AND install_date < CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY install_date ORDER BY install_date
+    tags: [retention, cohort, timeseries]
+  - id: retention_d7_by_country_60d
+    question: Retention D7 по странам для установок за 60 дней
+    sql: |
+      SELECT country, CAST(COUNT(DISTINCT CASE WHEN day_n = 7 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d7
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '60 day' AND install_date < CURRENT_DATE - INTERVAL '7 day'
+      GROUP BY country ORDER BY retention_d7 DESC
+    tags: [retention, country]
+  - id: retained_d1_count_yesterday_cohort
+    question: Сколько игроков, установивших игру позавчера, вернулись на следующий день?
+    sql: |
+      SELECT COUNT(DISTINCT user_id) AS retained FROM mart_retention
+      WHERE install_date = CURRENT_DATE - INTERVAL '2 day' AND day_n = 1
+    tags: [retention]
+  - id: retention_d1_by_version_60d
+    question: Сравни Retention D1 по версиям приложения для установок за 60 дней
+    sql: |
+      SELECT app_version, CAST(COUNT(DISTINCT CASE WHEN day_n = 1 THEN user_id END) AS DOUBLE PRECISION)
+        / COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END) AS retention_d1
+      FROM mart_retention WHERE install_date >= CURRENT_DATE - INTERVAL '60 day' AND install_date < CURRENT_DATE - INTERVAL '1 day'
+      GROUP BY app_version ORDER BY app_version
+    tags: [retention, version]
+  - id: avg_active_days_first_week_60d
+    question: Сколько дней в среднем игрок активен в первую неделю (дни 0–6) для установок последних 60 дней?
+    sql: |
+      SELECT AVG(days) AS avg_active_days FROM (SELECT user_id, COUNT(DISTINCT day_n) AS days FROM mart_retention
+      WHERE install_date >= CURRENT_DATE - INTERVAL '60 day' AND install_date < CURRENT_DATE - INTERVAL '7 day' AND day_n < 7
+      GROUP BY user_id) u
+    tags: [retention, engagement]
+  # --- UA -----------------------------------------------------------------------------------------
+  - id: ua_spend_30d
+    question: Сколько потратили на закупку трафика за последние 30 дней?
+    sql: SELECT SUM(spend_usd) AS spend FROM mart_ua WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [ua, spend]
+  - id: cpi_by_source_30d
+    question: CPI по источникам за 30 дней
+    sql: |
+      SELECT source, SUM(spend_usd) / SUM(installs) AS cpi FROM mart_ua WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      AND source <> 'organic' GROUP BY source ORDER BY cpi DESC
+    tags: [ua, cpi]
+  - id: roas_d7_by_source_60d
+    question: ROAS D7 по источникам для установок за последние 60 дней
+    sql: |
+      SELECT source, SUM(revenue_d7_usd) / SUM(spend_usd) AS roas_d7 FROM mart_ua
+      WHERE install_date >= CURRENT_DATE - INTERVAL '60 day' AND install_date < CURRENT_DATE - INTERVAL '7 day'
+      AND source <> 'organic' GROUP BY source ORDER BY roas_d7 DESC
+    tags: [ua, roas]
+  - id: spend_by_day_14d
+    question: Расходы на трафик по дням за две недели
+    sql: |
+      SELECT install_date, SUM(spend_usd) AS spend FROM mart_ua WHERE install_date >= CURRENT_DATE - INTERVAL '14 day'
+      GROUP BY install_date ORDER BY install_date
+    tags: [ua, spend, timeseries]
+  - id: cpi_by_country_30d
+    question: Средний CPI по странам за 30 дней, самые дорогие сверху
+    sql: |
+      SELECT country, SUM(spend_usd) / SUM(installs) AS cpi FROM mart_ua WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      AND source <> 'organic' GROUP BY country ORDER BY cpi DESC
+    tags: [ua, cpi, country]
+  - id: top_campaigns_by_spend_30d
+    question: Топ-5 кампаний по расходам за месяц
+    sql: |
+      SELECT campaign, SUM(spend_usd) AS spend FROM mart_ua WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY campaign ORDER BY spend DESC LIMIT 5
+    tags: [ua, campaign, top]
+  - id: paid_installs_30d
+    question: Сколько платных установок было за 30 дней?
+    sql: |
+      SELECT SUM(installs) AS paid_installs FROM mart_ua WHERE install_date >= CURRENT_DATE - INTERVAL '30 day'
+      AND source <> 'organic'
+    tags: [ua, installs]
+  # --- gameplay and funnels ---------------------------------------------------------------------
+  - id: tutorial_funnel_7d
+    question: Воронка туториала по шагам за последние 7 дней (уникальные игроки на каждом шаге)
+    sql: |
+      SELECT CAST(CAST(params AS JSON) ->> 'step' AS INT) AS step, COUNT(DISTINCT user_id) AS users FROM events
+      WHERE event_name = 'tutorial_step' AND event_date >= CURRENT_DATE - INTERVAL '7 day'
+      GROUP BY step ORDER BY step
+    tags: [funnel, tutorial]
+  - id: levels_completed_yesterday
+    question: Сколько уровней прошли игроки вчера?
+    sql: |
+      SELECT COUNT(*) AS levels_completed FROM events WHERE event_name = 'level_complete'
+      AND event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [progression]
+  - id: level_completion_rate_7d
+    question: Доля завершённых уровней от начатых за неделю
+    sql: |
+      SELECT CAST(SUM(CASE WHEN event_name = 'level_complete' THEN 1 ELSE 0 END) AS DOUBLE PRECISION)
+        / SUM(CASE WHEN event_name = 'level_start' THEN 1 ELSE 0 END) AS completion_rate
+      FROM events WHERE event_name IN ('level_start', 'level_complete') AND event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [progression]
+  - id: max_level_reached
+    question: Какой максимальный уровень прошли игроки?
+    sql: |
+      SELECT MAX(CAST(CAST(params AS JSON) ->> 'level' AS INT)) AS max_level FROM events WHERE event_name = 'level_complete'
+    tags: [progression]
+  - id: matches_by_mode_7d
+    question: Сколько боёв в каждом режиме сыграли за последние 7 дней?
+    sql: |
+      SELECT CAST(params AS JSON) ->> 'mode' AS mode, COUNT(*) AS matches FROM events
+      WHERE event_name = 'match_start' AND event_date >= CURRENT_DATE - INTERVAL '7 day' GROUP BY mode ORDER BY matches DESC
+    tags: [gameplay]
+  - id: chests_by_type_30d
+    question: Сколько сундуков каждого типа открыли за 30 дней?
+    sql: |
+      SELECT CAST(params AS JSON) ->> 'chest' AS chest, COUNT(*) AS opened FROM events
+      WHERE event_name = 'chest_open' AND event_date >= CURRENT_DATE - INTERVAL '30 day' GROUP BY chest ORDER BY opened DESC
+    tags: [economy]
+  - id: tutorial_completion_30d
+    question: Сколько игроков дошли до последнего (10-го) шага туториала за 30 дней?
+    sql: |
+      SELECT COUNT(DISTINCT user_id) AS users FROM events WHERE event_name = 'tutorial_step'
+      AND CAST(CAST(params AS JSON) ->> 'step' AS INT) = 10 AND event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [funnel, tutorial]
+  - id: iap_events_by_platform_yesterday
+    question: Сколько событий iap_purchase пришло вчера с каждой платформы?
+    sql: |
+      SELECT platform, COUNT(*) AS events FROM events WHERE event_name = 'iap_purchase'
+      AND event_date = CURRENT_DATE - INTERVAL '1 day' GROUP BY platform ORDER BY platform
+    tags: [events, tracking, platform]
+  - id: iap_events_by_version_7d
+    question: Сколько событий покупки по версиям приложения пришло за неделю?
+    sql: |
+      SELECT app_version, COUNT(*) AS events FROM events WHERE event_name = 'iap_purchase'
+      AND event_date >= CURRENT_DATE - INTERVAL '7 day' GROUP BY app_version ORDER BY app_version
+    tags: [events, tracking, version]
+  - id: tracked_vs_server_payments_7d
+    question: Сравни число событий iap_purchase в трекинге с числом платежей на сервере за последние 7 дней
+    sql: |
+      SELECT (SELECT COUNT(*) FROM events WHERE event_name = 'iap_purchase' AND event_date >= CURRENT_DATE - INTERVAL '7 day') AS tracked,
+             (SELECT COUNT(*) FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '7 day') AS server
+    tags: [events, tracking]
+  - id: levels_per_player_7d
+    question: Сколько уровней в среднем начинает активный игрок за 7 дней?
+    sql: |
+      SELECT CAST(COUNT(*) AS DOUBLE PRECISION) / COUNT(DISTINCT user_id) AS levels_per_player FROM events
+      WHERE event_name = 'level_start' AND event_date >= CURRENT_DATE - INTERVAL '7 day'
+    tags: [progression]
+  # --- cohorts and conversion --------------------------------------------------------------------
+  - id: payer_conversion_d7_60d
+    question: Какая доля установок за последние 60 дней совершила покупку в первые 7 дней?
+    sql: |
+      SELECT AVG(CASE WHEN p.user_id IS NULL THEN 0.0 ELSE 1.0 END) AS conversion_d7 FROM users u
+      LEFT JOIN (SELECT DISTINCT pp.user_id FROM payments pp JOIN users uu ON uu.user_id = pp.user_id
+                 WHERE pp.event_date < uu.install_date + INTERVAL '7 day') p ON p.user_id = u.user_id
+      WHERE u.install_date >= CURRENT_DATE - INTERVAL '60 day' AND u.install_date < CURRENT_DATE - INTERVAL '7 day'
+    tags: [conversion, cohort]
+  - id: revenue_per_install_by_source_60d
+    question: Выручка от покупок на одну установку по источникам для установок последних 60 дней
+    sql: |
+      SELECT u.source, COALESCE(SUM(p.revenue_usd), 0) / COUNT(DISTINCT u.user_id) AS revenue_per_install
+      FROM users u LEFT JOIN payments p ON p.user_id = u.user_id
+      WHERE u.install_date >= CURRENT_DATE - INTERVAL '60 day' GROUP BY u.source ORDER BY revenue_per_install DESC
+    tags: [revenue, cohort, source]
+  - id: payers_by_country_30d
+    question: Число платящих игроков по странам за 30 дней
+    sql: |
+      SELECT country, COUNT(DISTINCT user_id) AS payers FROM payments WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      GROUP BY country ORDER BY payers DESC
+    tags: [payers, country]
+  - id: new_payers_30d
+    question: Сколько игроков совершили первую покупку за последние 30 дней?
+    sql: |
+      SELECT COUNT(*) AS new_payers FROM (SELECT user_id, MIN(event_date) AS first_pay FROM payments GROUP BY user_id) f
+      WHERE first_pay >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [payers]
+  - id: days_to_first_purchase
+    question: Через сколько дней после установки в среднем совершается первая покупка?
+    sql: |
+      SELECT AVG(f.first_pay - u.install_date) AS days_to_first_purchase
+      FROM (SELECT user_id, MIN(event_date) AS first_pay FROM payments GROUP BY user_id) f
+      JOIN users u ON u.user_id = f.user_id
+    tags: [payers, cohort]
+  # --- experiments ------------------------------------------------------------------------------
+  - id: ab_groups_size
+    question: Сколько игроков в каждой группе эксперимента tutorial_v2?
+    sql: |
+      SELECT variant, COUNT(DISTINCT user_id) AS users FROM ab_assignments WHERE experiment_key = 'tutorial_v2'
+      GROUP BY variant ORDER BY variant
+    tags: [ab]
+  - id: ab_experiments_list
+    question: Какие эксперименты есть в таблице назначений и сколько в них игроков?
+    sql: |
+      SELECT experiment_key, COUNT(DISTINCT user_id) AS users FROM ab_assignments GROUP BY experiment_key ORDER BY experiment_key
+    tags: [ab]
+  - id: ab_retention_d1_tutorial
+    question: Retention D1 по группам эксперимента tutorial_v2
+    sql: |
+      SELECT a.variant, AVG(CASE WHEN r.user_id IS NULL THEN 0.0 ELSE 1.0 END) AS retention_d1
+      FROM ab_assignments a LEFT JOIN (SELECT DISTINCT user_id FROM mart_retention WHERE day_n = 1) r ON r.user_id = a.user_id
+      WHERE a.experiment_key = 'tutorial_v2' GROUP BY a.variant ORDER BY a.variant
+    tags: [ab, retention]
+  - id: ab_revenue_starter_pack
+    question: Выручка на игрока по группам эксперимента starter_pack_price за всё время
+    sql: |
+      SELECT a.variant, COALESCE(SUM(p.revenue_usd), 0) / COUNT(DISTINCT a.user_id) AS revenue_per_user
+      FROM ab_assignments a LEFT JOIN payments p ON p.user_id = a.user_id
+      WHERE a.experiment_key = 'starter_pack_price' GROUP BY a.variant ORDER BY a.variant
+    tags: [ab, revenue]
+  - id: ab_groups_by_platform
+    question: Размеры групп эксперимента starter_pack_price по платформам
+    sql: |
+      SELECT platform, variant, COUNT(DISTINCT user_id) AS users FROM ab_assignments
+      WHERE experiment_key = 'starter_pack_price' GROUP BY platform, variant ORDER BY platform, variant
+    tags: [ab, platform]
+  # --- portfolio mart ---------------------------------------------------------------------------
+  - id: portfolio_dau_yesterday
+    question: Какой был DAU вчера по данным портфельной витрины?
+    sql: SELECT SUM(dau) AS dau FROM mart_portfolio WHERE event_date = CURRENT_DATE - INTERVAL '1 day'
+    tags: [portfolio]
+  - id: portfolio_revenue_30d
+    question: Выручка за 30 дней по портфельной витрине
+    sql: SELECT SUM(revenue) AS revenue FROM mart_portfolio WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+    tags: [portfolio, revenue]
+  - id: portfolio_installs_by_week
+    question: Установки по неделям за последние 8 недель (портфельная витрина)
+    sql: |
+      SELECT DATE_TRUNC('week', event_date) AS week, SUM(installs) AS installs FROM mart_portfolio
+      WHERE event_date >= CURRENT_DATE - INTERVAL '56 day' GROUP BY week ORDER BY week
+    tags: [portfolio, installs, timeseries]
+  - id: portfolio_avg_d1_30d
+    question: Средний Retention D1 по портфельной витрине за 30 дней
+    sql: |
+      SELECT AVG(d1_retention) AS avg_d1 FROM mart_portfolio WHERE event_date >= CURRENT_DATE - INTERVAL '30 day'
+      AND d1_retention IS NOT NULL
+    tags: [portfolio, retention]
+  - id: revenue_by_month
+    question: Выручка от покупок по месяцам
+    sql: |
+      SELECT DATE_TRUNC('month', event_date) AS month, SUM(revenue_usd) AS revenue FROM payments GROUP BY month ORDER BY month
+    tags: [revenue, timeseries]
+  - id: dau_by_week
+    question: Средний DAU по неделям за последние 8 недель
+    sql: |
+      SELECT DATE_TRUNC('week', event_date) AS week, AVG(dau) AS avg_dau FROM (SELECT event_date, COUNT(DISTINCT user_id) AS dau
+      FROM events WHERE event_date >= CURRENT_DATE - INTERVAL '56 day' GROUP BY event_date) d GROUP BY week ORDER BY week
+    tags: [activity, timeseries]

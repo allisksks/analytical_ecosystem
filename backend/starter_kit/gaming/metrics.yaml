@@ -1,0 +1,209 @@
+# Domain pack "mobile games": metric definitions over the VKR marts.
+# expression: aggregate SQL in a neutral dialect (transpiled to the source dialect by sqlglot)
+# time_column: column used by date filters and time grain; maturity_days: cohorts younger than N days are excluded
+# format: number | percent | currency | decimal
+pack: gaming
+version: 1
+dimensions:
+  - {key: app_id, name: Игра, column: app_id, description: Проект / игра}
+  - {key: platform, name: Платформа, column: platform}
+  - {key: country, name: Страна, column: country, description: ISO-3166 alpha-2}
+  - {key: source, name: Источник трафика, column: source}
+  - {key: campaign, name: Кампания, column: campaign}
+  - {key: app_version, name: Версия приложения, column: app_version}
+  - {key: day_n, name: День жизни, column: day_n, description: День от установки (0 — день установки)}
+  - {key: event_name, name: Событие, column: event_name}
+  - {key: product_id, name: Товар, column: product_id}
+metrics:
+  # ---- audience
+  - key: dau
+    name: DAU
+    description: Среднее число активных пользователей в день за период
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(dau) * 1.0 / NULLIF(COUNT(DISTINCT event_date), 0)
+    format: number
+  - key: active_users
+    name: Уникальные пользователи (MAU для месяца)
+    description: Число уникальных игроков, активных в периоде; при помесячной разбивке — MAU
+    table: mart_retention
+    time_column: activity_date
+    expression: COUNT(DISTINCT user_id)
+    format: number
+  - key: installs
+    name: Установки
+    table: mart_ua
+    time_column: install_date
+    expression: SUM(installs)
+    format: number
+  - key: sessions_per_user
+    name: Сессий на пользователя в день
+    table: events
+    time_column: event_date
+    expression: COUNT(DISTINCT CASE WHEN event_name = 'session_start' THEN session_id END) * 1.0 / NULLIF(COUNT(DISTINCT user_id), 0)
+    format: decimal
+  - key: events_count
+    name: Количество событий
+    table: events
+    time_column: event_date
+    expression: COUNT(*)
+    format: number
+  # ---- retention
+  - key: cohort_size
+    name: Размер когорты
+    table: mart_retention
+    time_column: install_date
+    expression: COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END)
+    format: number
+  - key: retention_d1
+    name: Retention D1
+    description: Доля игроков когорты, вернувшихся на 1-й день после установки
+    table: mart_retention
+    time_column: install_date
+    maturity_days: 1
+    expression: COUNT(DISTINCT CASE WHEN day_n = 1 THEN user_id END) * 1.0 / NULLIF(COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END), 0)
+    format: percent
+  - key: retention_d7
+    name: Retention D7
+    table: mart_retention
+    time_column: install_date
+    maturity_days: 7
+    expression: COUNT(DISTINCT CASE WHEN day_n = 7 THEN user_id END) * 1.0 / NULLIF(COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END), 0)
+    format: percent
+  - key: retention_d30
+    name: Retention D30
+    table: mart_retention
+    time_column: install_date
+    maturity_days: 30
+    expression: COUNT(DISTINCT CASE WHEN day_n = 30 THEN user_id END) * 1.0 / NULLIF(COUNT(DISTINCT CASE WHEN day_n = 0 THEN user_id END), 0)
+    format: percent
+  - key: retention_curve
+    name: Кривая удержания
+    description: Доля когорты, активная в день N; используйте с измерением «День жизни»
+    table: mart_retention
+    time_column: install_date
+    expression: COUNT(DISTINCT user_id) * 1.0 / NULLIF(MAX(COUNT(DISTINCT user_id)) OVER (), 0)
+    filters: day_n <= 30
+    default_dimensions: [day_n]
+    format: percent
+  # ---- monetisation
+  - key: revenue
+    name: Выручка
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(revenue)
+    format: currency
+  - key: iap_revenue
+    name: Выручка от покупок
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(iap_revenue)
+    format: currency
+  - key: ad_revenue
+    name: Рекламная выручка
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(ad_revenue)
+    format: currency
+  - key: arpdau
+    name: ARPDAU
+    description: Выручка на активного пользователя в день
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(revenue) * 1.0 / NULLIF(SUM(dau), 0)
+    format: currency
+  - key: payers
+    name: Платящие (в день, сумма)
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(payers)
+    format: number
+  - key: payer_conversion
+    name: Конверсия в платёж (дневная)
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(payers) * 1.0 / NULLIF(SUM(dau), 0)
+    format: percent
+  - key: arppu
+    name: ARPPU
+    description: Выручка от покупок на платящего
+    table: mart_monetisation
+    time_column: event_date
+    expression: SUM(iap_revenue) * 1.0 / NULLIF(SUM(payers), 0)
+    format: currency
+  - key: purchases
+    name: Покупки
+    table: payments
+    time_column: event_date
+    expression: COUNT(*)
+    format: number
+  - key: avg_check
+    name: Средний чек
+    table: payments
+    time_column: event_date
+    expression: AVG(revenue_usd)
+    format: currency
+  # ---- acquisition
+  - key: spend
+    name: Расходы на привлечение
+    table: mart_ua
+    time_column: install_date
+    expression: SUM(spend_usd)
+    format: currency
+  - key: cpi
+    name: CPI
+    description: Стоимость установки платного трафика
+    table: mart_ua
+    time_column: install_date
+    expression: SUM(spend_usd) * 1.0 / NULLIF(SUM(installs), 0)
+    filters: source <> 'organic'
+    format: currency
+  - key: ltv_d7
+    name: LTV D7
+    description: Выручка первой недели на установку
+    table: mart_ua
+    time_column: install_date
+    maturity_days: 7
+    expression: SUM(revenue_d7_usd) * 1.0 / NULLIF(SUM(installs), 0)
+    format: currency
+  - key: roas_d7
+    name: ROAS D7
+    table: mart_ua
+    time_column: install_date
+    maturity_days: 7
+    expression: SUM(revenue_d7_usd) * 1.0 / NULLIF(SUM(spend_usd), 0)
+    filters: source <> 'organic'
+    format: percent
+  # ---- portfolio
+  - key: portfolio_dau
+    name: DAU (портфель)
+    table: mart_portfolio
+    time_column: event_date
+    expression: SUM(dau) * 1.0 / NULLIF(COUNT(DISTINCT event_date), 0)
+    format: number
+  - key: portfolio_revenue
+    name: Выручка (портфель)
+    table: mart_portfolio
+    time_column: event_date
+    expression: SUM(revenue)
+    format: currency
+  - key: portfolio_installs
+    name: Установки (портфель)
+    table: mart_portfolio
+    time_column: event_date
+    expression: SUM(installs)
+    format: number
+  - key: portfolio_d1
+    name: Retention D1 (портфель)
+    table: mart_portfolio
+    time_column: event_date
+    maturity_days: 1
+    expression: SUM(d1_retention * installs) / NULLIF(SUM(installs), 0)
+    format: percent
+  - key: portfolio_d7
+    name: Retention D7 (портфель)
+    table: mart_portfolio
+    time_column: event_date
+    maturity_days: 7
+    expression: SUM(d7_retention * installs) / NULLIF(SUM(installs), 0)
+    format: percent

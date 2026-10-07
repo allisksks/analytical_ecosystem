@@ -1,0 +1,242 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(380px, 5fr) minmax(0, 7fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.toolbar {
+  display: flex;
+  gap: var(--space-2);
+  padding: 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.list {
+  max-height: calc(100vh - 290px);
+  overflow: auto;
+}
+.row {
+  cursor: pointer;
+}
+.row td {
+  padding: 9px 12px;
+}
+.rowSelected td {
+  background: var(--row-selected) !important;
+}
+.rowWarning td:first-child {
+  box-shadow: inset 3px 0 0 var(--status-warn);
+}
+.rowCritical td:first-child {
+  box-shadow: inset 3px 0 0 var(--status-crit);
+}
+.eventName {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+}
+.detailHead {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.detailName {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+.sectionTitle {
+  font-size: var(--fs-sm);
+  font-weight: 800;
+  color: var(--accent-kb);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: var(--space-4) 0 var(--space-2);
+}
+.pending {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.paramRow {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 60px 1.6fr 1.2fr auto;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.diffAdded {
+  color: var(--pos-text);
+}
+.diffRemoved {
+  color: var(--neg-text);
+  text-decoration: line-through;
+}
+.diffChanged {
+  color: var(--warn-text);
+}
+.alertCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.alertTitle {
+  font-weight: 800;
+}
+.alertMeta {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+.govGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+.chart {
+  height: 280px;
+}
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .list {
+    max-height: 420px;
+  }
+}
+.aiDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.dropZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+  font: inherit;
+}
+.dropZone:hover,
+.dropZoneActive {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: var(--brand-tint);
+}
+.draftList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.draftRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.draftRow:hover {
+  background: var(--brand-tint);
+}
+.draftRowActive {
+  background: var(--row-selected);
+  box-shadow: inset 3px 0 0 var(--accent-ems);
+}
+.draftTitle {
+  font-weight: 600;
+}
+.draftDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.sourceText {
+  white-space: pre-wrap;
+  max-height: 320px;
+  overflow: auto;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--brand-tint);
+  font-size: 12px;
+}
+.itemCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.itemDone {
+  opacity: 0.75;
+}
+.itemHead {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.gqm {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.gqm dt {
+  color: var(--ink-3);
+}
+.gqm dd {
+  margin: 0;
+}
+.quote {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent-ems);
+  background: var(--brand-tint);
+  border-radius: 0 8px 8px 0;
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--ink-2);
+}
+.warning {
+  font-size: 12px;
+  color: var(--status-warn-ink, var(--ink-2));
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--status-warn) 12%, transparent);
+}
+.itemActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

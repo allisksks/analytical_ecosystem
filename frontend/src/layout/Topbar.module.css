@@ -1,0 +1,123 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--topbar-h);
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  background: #2a6be0;
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] .topbar {
+  background: #142443;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: var(--space-5);
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  text-decoration: none !important;
+}
+.mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #ffffff 0%, #c8e0ff 100%);
+  color: #1f5dd4;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.18);
+}
+.search {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(440px, 40vw);
+  height: 36px;
+  padding: 0 8px 0 12px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 0.12);
+  color: rgb(255 255 255 / 0.85);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-align: left;
+}
+.search:hover {
+  background: rgb(255 255 255 / 0.2);
+  color: #fff;
+}
+.searchText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.searchKbd {
+  display: flex;
+  gap: 3px;
+  opacity: 0.85;
+}
+.searchKbd kbd {
+  color: var(--ink);
+}
+.burger {
+  display: none !important;
+  align-self: center;
+}
+.spacer {
+  flex: 1;
+}
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.iconBtn {
+  color: #fff !important;
+  background: rgb(255 255 255 / 0.13) !important;
+}
+.iconBtn:hover {
+  background: rgb(255 255 255 / 0.24) !important;
+}
+@media (max-width: 960px) {
+  .burger {
+    display: inline-flex !important;
+  }
+  .brandName,
+  .searchText,
+  .searchKbd {
+    display: none;
+  }
+  .search {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+@media (max-width: 600px) {
+  .topbar {
+    padding: 0 var(--space-2);
+    gap: 6px;
+  }
+  .brand {
+    padding-right: 0;
+  }
+  /* language and theme stay reachable on larger screens; on phones the header keeps only essentials */
+  .right .iconBtn {
+    display: none !important;
+  }
+  .right {
+    gap: 6px;
+    min-width: 0;
+  }
+}
